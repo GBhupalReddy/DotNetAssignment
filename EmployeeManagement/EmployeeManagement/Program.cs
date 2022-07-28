@@ -31,7 +31,7 @@ internal class Program
 
         //Without input parameters: return all departments  
 
-        Console.WriteLine(" return all departments  ");
+        Console.WriteLine(" all departments  ");
         Console.WriteLine();
         var deparmentyData = employeeManagementService.GetDepartmentData();
         employeeManagementService.Displaydepartment(deparmentyData);
@@ -52,7 +52,7 @@ internal class Program
 
         Console.WriteLine(" the list of projects there for the Department Name  ");
         Console.WriteLine();
-        var ProjectData = employeeManagementService.GetProjectsData();
+        var ProjectData = employeeManagementService.GetProjectsData("Marketing");
         employeeManagementService.DisplayProjectData(ProjectData);
         Console.WriteLine();
 
@@ -60,7 +60,7 @@ internal class Program
 
         Console.WriteLine(" all projects for each department ");
         Console.WriteLine();
-        var getProject = employeeManagementService.GetProjectsData("Marketing");
+        var getProject = employeeManagementService.GetProjectsData();
         employeeManagementService.DisplayProjectData(getProject);
         Console.WriteLine();
 
@@ -83,12 +83,12 @@ internal class Program
         employeeManagementService.DisplayEmployee(employeeData);
         Console.WriteLine();
 
-        // the number of employees working for each department.de 
-        Console.WriteLine("the number of employees working for each department.de ");
+        // the number of employees working for each department 
+        Console.WriteLine("the number of employees working for each department");
         Console.WriteLine();
         //employeeManagementService.GetDepartmentCount();
-        var s = employeeManagementService.GetDepartmentCount();
-        foreach (var department in s)
+        var employeCount = employeeManagementService.GetEmployeeCount();
+        foreach (var department in employeCount)
         {
             Console.WriteLine($"{department.ToString()}");
         }
@@ -97,7 +97,12 @@ internal class Program
         //the total salary paid for each department.
         Console.WriteLine();
         Console.WriteLine("The total salary paid for each department");
-        employeeManagementService.GetDepartmentSalary();
+        Console.WriteLine();
+        var departmentSalary=employeeManagementService.GetDepartmentSalary();
+        foreach(var salary in departmentSalary)
+        {
+            Console.WriteLine($"{salary.ToString()}");
+        }
 
 
 

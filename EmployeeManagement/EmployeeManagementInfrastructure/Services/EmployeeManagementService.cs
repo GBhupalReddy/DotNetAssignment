@@ -28,7 +28,7 @@ namespace EmployeeManagement.Infrastructure.Services
         {
             foreach (var v in dept)
             {
-                Console.WriteLine($"{v.DepartmentId} {v.DepartmentName} {v.PhoneNumber}");
+                Console.WriteLine($"\t{v.DepartmentId} \t {v.DepartmentName} \t {v.PhoneNumber}");
             }
         }
 
@@ -52,7 +52,7 @@ namespace EmployeeManagement.Infrastructure.Services
         {
             foreach (var projectItem in project)
             {
-                Console.WriteLine($"{projectItem.ProjectId}  {projectItem.ProjectName}  {projectItem.DepartmentId}  {projectItem.MaxHours}  {projectItem.StartDate}  {projectItem.EndDate}");
+                Console.WriteLine($"{projectItem.ProjectId}  \t {projectItem.DepartmentId} \t {projectItem.MaxHours} \t {projectItem.StartDate} \t {projectItem.EndDate} \t {projectItem.ProjectName}");
             }
         }
 
@@ -75,7 +75,7 @@ namespace EmployeeManagement.Infrastructure.Services
         }
 
         // the number of employees working for each department.de 
-        public IEnumerable GetDepartmentCount()
+        public IEnumerable GetEmployeeCount()
         {
             
             var result = (from employee in employeeManagementDataInMemory.GetEmployee() group employee by employee.DepartmentId into EmpCount select new { DapartmentId = EmpCount.Key, EmployeeCount = EmpCount.Count() }).ToList();
@@ -100,7 +100,7 @@ namespace EmployeeManagement.Infrastructure.Services
         {
             foreach (var employee in employees)
             {
-                Console.WriteLine($"{employee.EmployeeNumber} {employee.EmployeeName}  {employee.FirstName} {employee.LastName} {employee.DepartmentId} {employee.Phone}  {employee.Email} {employee.Salary}");
+                Console.WriteLine($"{employee.EmployeeNumber}\t {employee.EmployeeName} \t {employee.FirstName} \t {employee.LastName} \t {employee.DepartmentId} \t {employee.Phone} \t  {employee.Email} \t {employee.Salary}");
             }
 
         }
