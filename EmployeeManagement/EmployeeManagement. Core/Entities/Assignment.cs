@@ -7,6 +7,7 @@
 
         public int HoursWorked { get; set; }
 
-        
+        public string? AssignmentName { get; set; }
+
     }
 }

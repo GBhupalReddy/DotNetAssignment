@@ -6,6 +6,11 @@
         public string? DepartmentName{ get; set; }
         public double  PhoneNumber{ get; set; }
 
+        public  override string? ToString()
+        {
+            return $"{DepartmentId}\t {DepartmentName}\t {PhoneNumber}";
+        }
+
         
 
     }

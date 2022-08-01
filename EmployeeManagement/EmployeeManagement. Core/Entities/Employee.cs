@@ -11,7 +11,12 @@
         public string? Email { get; set; }
         public double Salary { get; set; }
 
-      
+        public override string? ToString()
+        {
+            return $"{EmployeeNumber}\t { EmployeeName} \t { FirstName} \t {LastName} \t { DepartmentId} \t {Phone} \t  { Email} \t { Salary}";
+        }
+
+
 
     }
 }

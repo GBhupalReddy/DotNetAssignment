@@ -1,84 +1,74 @@
-﻿using EmployeeManagement._Core.Entities;
-using EmployeeManagementInfrastructure.Data;
+﻿using EmployeeManagement._Core.Contracts;
+using EmployeeManagement._Core.Entities;
+using EmployeeManagement._Core.Model;
 using System.Collections;
 using System.Collections.Generic;
+using static EmployeeManagementInfrastructure.Data.EmployeeManagementDataInMemory;
+
 
 namespace EmployeeManagement.Infrastructure.Services
 {
-    public class EmployeeManagementService
+    public class EmployeeManagementService : IEmployeeManagementInterface
     {
+
         //Department Service
-
-        EmployeeManagementDataInMemory employeeManagementDataInMemory = new EmployeeManagementDataInMemory();
-
-        public IEnumerable<Department> GetDepartmentData()
+        public IEnumerable<Department> GetDepartmentDeta(int? deptId = null, string? deptName = null)
         {
-            return (from department in employeeManagementDataInMemory.GetDepartments() select department);
-        }
-        public IEnumerable<Department> GetDepartmentData(int deptId)
-        {
-            return (from department in employeeManagementDataInMemory.GetDepartments() where department.DepartmentId == deptId select department);
-        }
-        public IEnumerable<Department> GetDepartmentData(string deptName)
-        {
-            return from department in employeeManagementDataInMemory.GetDepartments() where department.DepartmentName == deptName select department;
-        }
-
-        public void Displaydepartment(IEnumerable<Department> dept)
-        {
-            foreach (var v in dept)
+            if (deptId != null || deptName != null)
             {
-                Console.WriteLine($"\t{v.DepartmentId} \t {v.DepartmentName} \t {v.PhoneNumber}");
+                var departmentData = from department in departments
+                                     where (deptId == null || department.DepartmentId == deptId)
+                                     && (deptName == null || department.DepartmentName == deptName)
+                                      select department;
+                return departmentData;
             }
+
+            return departments;
+
         }
+
 
         //Project Service
-        public IEnumerable<Project> GetProjectsData(int deptId)
+        public IEnumerable<Project> GetProjectsData(int? deptId = null, string? deptName = null)
         {
-            return (from project in employeeManagementDataInMemory.GetProjects() where project.DepartmentId == deptId select project);
-
-        }
-        public IEnumerable<Project> GetProjectsData()
-        {
-            return (from project in employeeManagementDataInMemory.GetProjects() select project);
-
-        }
-        public IEnumerable<Project> GetProjectsData(string deptName)
-        {
-            return (from project in employeeManagementDataInMemory.GetProjects() join department in employeeManagementDataInMemory.GetDepartments() on project.DepartmentId equals department.DepartmentId where department.DepartmentName == deptName select project);
-
-        }
-        public void DisplayProjectData(IEnumerable<Project> project)
-        {
-            foreach (var projectItem in project)
+            if (deptId != null || deptName != null)
             {
-                Console.WriteLine($"{projectItem.ProjectId}  \t {projectItem.DepartmentId} \t {projectItem.MaxHours} \t {projectItem.StartDate} \t {projectItem.EndDate} \t {projectItem.ProjectName}");
-            }
-        }
+                var projectData= from project in projects
+                                 join department in departments
+                                 on project.DepartmentId equals department.DepartmentId
+                                 where (deptId == null || department.DepartmentId == deptId)
+                                 && (deptName == null || department.DepartmentName == deptName)
+                                select project;
 
+                return projectData;
+            }
+
+            return projects;
+        }
 
         //Employee Service
-        public IEnumerable<Employee> GetEmployeeData()
+        public IEnumerable<Employee> GetEmployeeData(int? deptId = null, int? empNumber = null)
         {
-            return from employee in employeeManagementDataInMemory.GetEmployee() select employee;
-        }
-        public IEnumerable<Employee> GetEmployeeData(int Number)
-        {
-            if (Number < 5)
+            if (deptId != null || empNumber != null)
             {
-                return from employee in employeeManagementDataInMemory.GetEmployee() where employee.DepartmentId == Number select employee;
+                var employeeData = from employee in employees
+                                  where (deptId == null || employee.DepartmentId == deptId)
+                                  && (empNumber == null || employee.EmployeeNumber == empNumber)
+                                  select employee;
+                return employeeData;
             }
-            else
-            {
-                return from employee in employeeManagementDataInMemory.GetEmployee() where employee.EmployeeNumber == Number select employee;
-            }
+            return employees;
         }
 
+    
+
         // the number of employees working for each department.de 
-        public IEnumerable GetEmployeeCount()
+        public IEnumerable<EmployeeCount> GetEmployeeCount()
         {
             
-            var result = (from employee in employeeManagementDataInMemory.GetEmployee() group employee by employee.DepartmentId into EmpCount select new { DapartmentId = EmpCount.Key, EmployeeCount = EmpCount.Count() }).ToList();
+            var result = from employee in employees
+                          group employee by employee.DepartmentId into EmpCount 
+                          select new EmployeeCount() { DepartmentId = EmpCount.Key, TotalEmployee = EmpCount.Count() };
             
             return result;
 
@@ -86,24 +76,41 @@ namespace EmployeeManagement.Infrastructure.Services
 
         //the total salary paid for each department.
 
-        public IEnumerable GetDepartmentSalary()
+        public IEnumerable<DepartmentSalary> GetDepartmentSalary()
         {
-            var result = (from employee in employeeManagementDataInMemory.GetEmployee() group employee by employee.DepartmentId into EmpCount select new { DapartmentId = EmpCount.Key, Deptsalary = EmpCount.Sum(sal => sal.Salary) }).ToList();
+            var result = from employee in employees
+                          group employee by employee.DepartmentId into EmpCount
+                          select new DepartmentSalary (){ DepartmentId = EmpCount.Key, DepartmentTotalSalary = (decimal)EmpCount.Sum(sal => sal.Salary) };
              return result;
             
                             
         }
-
-
-
-        public void DisplayEmployee(IEnumerable<Employee> employees)
+        public IEnumerable<CombineEntities> Getdeatils()
         {
-            foreach (var employee in employees)
-            {
-                Console.WriteLine($"{employee.EmployeeNumber}\t {employee.EmployeeName} \t {employee.FirstName} \t {employee.LastName} \t {employee.DepartmentId} \t {employee.Phone} \t  {employee.Email} \t {employee.Salary}");
-            }
+            var result = (from department in departments
+                         join employee in employees
+                         on department.DepartmentId equals employee.DepartmentId
+                         join project in projects
+                         on employee.DepartmentId equals project.DepartmentId
+                         join assignment in assignments
+                         on employee.EmployeeNumber equals assignment.EmployeeNumber
+                         //where (deptId==null || employee.DepartmentId == deptId) && (deptname== null || department.DepartmentName.Contains(deptname))
+                         select new CombineEntities()
+                         { DepartmentName = department.DepartmentName, EmployeeName = employee.EmployeeName, ProjectName = project.ProjectName, AssignmentName = assignment.AssignmentName }).Distinct();
 
+
+           return result;
+            
         }
+     
+        public void DisplayData<t>(IEnumerable<t> collections)
+        {
+            foreach(var data in collections)
+            {
+                Console.WriteLine(data?.ToString());
+            }
+        }
+       
     }
 }
 

@@ -1,23 +1,18 @@
-﻿
-using EmployeeManagement._Core.Contracts;
-using EmployeeManagement._Core.Entities;
+﻿using EmployeeManagement._Core.Entities;
 
 namespace EmployeeManagementInfrastructure.Data
 {
-    public class EmployeeManagementDataInMemory : EmployeeManagementInterface
+    public static class EmployeeManagementDataInMemory
 
     {
-        public List<Department> GetDepartments()
+        public static List<Department> departments = new()
         {
-            return new List<Department> {
-             new Department{DepartmentId = 1,DepartmentName = "Marketing",PhoneNumber = 9292929292 },
-             new Department{DepartmentId = 2,DepartmentName = "Finance",PhoneNumber = 9292929293 },
-             new Department{DepartmentId = 3,DepartmentName = "Accounting",PhoneNumber = 9292929294 }
-             };
-        }
-        public List<Employee> GetEmployee()
+             new() {DepartmentId = 1,DepartmentName = "Marketing",PhoneNumber = 9292929292 },
+             new() {DepartmentId = 2,DepartmentName = "Finance",PhoneNumber = 9292929293 },
+             new() {DepartmentId = 3,DepartmentName = "Accounting",PhoneNumber = 9292929294 }
+         };
+        public static List<Employee> employees = new()
         {
-            return new List<Employee> {
              new () {EmployeeNumber=111,EmployeeName="RahulKumar",FirstName="Rahul",LastName="Kumar",DepartmentId=1,Phone=123456789,Email="test@gmail.com",Salary=10000},
              new () {EmployeeNumber=112,EmployeeName="SunilKumar",FirstName="Sunil",LastName="Kumar",DepartmentId=1,Phone=223456789,Email="test@gmail.com",Salary=15000},
              new () {EmployeeNumber=113,EmployeeName="ManiBupal",FirstName="Mani",LastName="Bupal",DepartmentId=1,Phone=323456789,Email="test2@gmail.com",Salary=20000},
@@ -37,67 +32,65 @@ namespace EmployeeManagementInfrastructure.Data
              new (){EmployeeNumber = 127,EmployeeName = "Shanvi",FirstName = "Shanvi",LastName ="Pilla", DepartmentId =3,Phone=127456789,Email = "test77@gmail.com", Salary=10000 },
              new (){EmployeeNumber = 128,EmployeeName = "Vedha",FirstName = "Vedha",LastName ="Pilla", DepartmentId =1,Phone=226456789,Email = "test78@gmail.com", Salary=15000 },
              new (){EmployeeNumber = 129,EmployeeName = "Jeshna",FirstName = "Jeshna",LastName ="Polimera", DepartmentId =2,Phone=325456789,Email = "test99@gmail.com", Salary=20000 },
-             new (){EmployeeNumber = 130,EmployeeName = "Rama",FirstName = "Rama",LastName ="Polimera", DepartmentId =3,Phone=424456789,Email = "test79@gmail.com", Salary=15000 }, };
-        }
+             new (){EmployeeNumber = 130,EmployeeName = "Rama",FirstName = "Rama",LastName ="Polimera", DepartmentId =3,Phone=424456789,Email = "test79@gmail.com", Salary=15000 }
+        };
 
-        public List<Project> GetProjects()
+        public static List<Project> projects = new()
         {
-            return new List<Project> {
-            new Project{ProjectId = 1000,ProjectName="2022 Q1 Product Plan",DepartmentId=1, MaxHours = 500, StartDate = new DateOnly(2022,1,1), EndDate = new DateOnly(2022,3,31) },
-            new Project{ProjectId = 1001,ProjectName="2022 Q2 Product Plan",DepartmentId=1, MaxHours = 600, StartDate = new DateOnly(2022,4,1), EndDate = new DateOnly(2022,7,31) },
-            new Project{ProjectId = 1002,ProjectName="2022 Q3 Product Plan",DepartmentId=1, MaxHours = 700, StartDate = new DateOnly(2022,7,1), EndDate = new DateOnly(2022,10,31) },
-            new Project{ProjectId = 1003,ProjectName="2022 Q4 Product Plan",DepartmentId=1, MaxHours = 800, StartDate = new DateOnly(2022,10,1),EndDate =new DateOnly(2022,12,31) },
-            new Project{ProjectId = 1004,ProjectName="2022 Q1 Portfolio Analysis",DepartmentId=2, MaxHours = 300, StartDate = new DateOnly(2022,1,1), EndDate =new DateOnly(2022,3,31) },
-            new Project{ProjectId = 1005,ProjectName="2022 Q2 Portfolio Analysis",DepartmentId=2, MaxHours = 400, StartDate = new DateOnly(2022,4,1), EndDate =new DateOnly(2022,7,31) },
-            new Project{ProjectId = 1006,ProjectName="2022 Q3 Portfolio Analysis",DepartmentId=2, MaxHours = 900, StartDate = new DateOnly(2022,7,1), EndDate =new DateOnly(2022,10,31) },
-            new Project{ProjectId = 1007,ProjectName="2022 Q4 Portfolio Analysis",DepartmentId=2, MaxHours = 800, StartDate = new DateOnly(2022,10,1),EndDate = new DateOnly(2022,12,31) },
-            new Project{ProjectId = 1008,ProjectName="2022 Q1 Tax Preparation",DepartmentId=3, MaxHours = 700, StartDate = new DateOnly(2022,1,1), EndDate =new DateOnly(2022,3,31) },
-            new Project{ProjectId = 1009,ProjectName="2022 Q2 Tax Preparation",DepartmentId=3, MaxHours = 850, StartDate = new DateOnly(2022,4,1), EndDate =new DateOnly(2022,7,31) },
-            new Project{ProjectId = 1010,ProjectName="2022 Q3 Tax Preparation",DepartmentId=3, MaxHours = 900, StartDate = new DateOnly(2022,7,1), EndDate =new DateOnly(2022,10,31) },
-            new Project{ProjectId = 1011,ProjectName="2022 Q4 Tax Preparation",DepartmentId=3, MaxHours = 800, StartDate = new DateOnly(2022,10,1),EndDate =new DateOnly(2022,12,31) }
-            };
-        }
-        public List<Assignment> GetAssignments()
+            new (){ProjectId = 1000,ProjectName="2022 Q1 Product Plan",DepartmentId=1, MaxHours = 500, StartDate = new DateOnly(2022,1,1), EndDate = new DateOnly(2022,3,31) },
+            new (){ProjectId = 1001,ProjectName="2022 Q2 Product Plan",DepartmentId=1, MaxHours = 600, StartDate = new DateOnly(2022,4,1), EndDate = new DateOnly(2022,7,31) },
+            new (){ProjectId = 1002,ProjectName="2022 Q3 Product Plan",DepartmentId=1, MaxHours = 700, StartDate = new DateOnly(2022,7,1), EndDate = new DateOnly(2022,10,31) },
+            new (){ProjectId = 1003,ProjectName="2022 Q4 Product Plan",DepartmentId=1, MaxHours = 800, StartDate = new DateOnly(2022,10,1),EndDate =new DateOnly(2022,12,31) },
+            new (){ProjectId = 1004,ProjectName="2022 Q1 Portfolio Analysis",DepartmentId=2, MaxHours = 300, StartDate = new DateOnly(2022,1,1), EndDate =new DateOnly(2022,3,31) },
+            new (){ProjectId = 1005,ProjectName="2022 Q2 Portfolio Analysis",DepartmentId=2, MaxHours = 400, StartDate = new DateOnly(2022,4,1), EndDate =new DateOnly(2022,7,31) },
+            new (){ProjectId = 1006,ProjectName="2022 Q3 Portfolio Analysis",DepartmentId=2, MaxHours = 900, StartDate = new DateOnly(2022,7,1), EndDate =new DateOnly(2022,10,31) },
+            new (){ProjectId = 1007,ProjectName="2022 Q4 Portfolio Analysis",DepartmentId=2, MaxHours = 800, StartDate = new DateOnly(2022,10,1),EndDate = new DateOnly(2022,12,31) },
+            new (){ProjectId = 1008,ProjectName="2022 Q1 Tax Preparation",DepartmentId=3, MaxHours = 700, StartDate = new DateOnly(2022,1,1), EndDate =new DateOnly(2022,3,31) },
+            new (){ProjectId = 1009,ProjectName="2022 Q2 Tax Preparation",DepartmentId=3, MaxHours = 850, StartDate = new DateOnly(2022,4,1), EndDate =new DateOnly(2022,7,31) },
+            new (){ProjectId = 1010,ProjectName="2022 Q3 Tax Preparation",DepartmentId=3, MaxHours = 900, StartDate = new DateOnly(2022,7,1), EndDate =new DateOnly(2022,10,31) },
+            new (){ProjectId = 1011,ProjectName="2022 Q4 Tax Preparation",DepartmentId=3, MaxHours = 800, StartDate = new DateOnly(2022,10,1),EndDate =new DateOnly(2022,12,31) }
+         };
+        public static List<Assignment> assignments = new()
         {
-            return new List<Assignment> {
-            new Assignment{ProjectId=1000,EmployeeNumber=111,HoursWorked=50},
-            new Assignment{ProjectId=1000,EmployeeNumber=112,HoursWorked=100},
-            new Assignment{ProjectId=1000,EmployeeNumber=113,HoursWorked=50},
-            new Assignment{ProjectId=1001,EmployeeNumber=114,HoursWorked=150},
-            new Assignment{ProjectId=1001,EmployeeNumber=112,HoursWorked=100},
-            new Assignment{ProjectId=1001,EmployeeNumber=111,HoursWorked=140},
-            new Assignment{ProjectId=1002,EmployeeNumber=113,HoursWorked=95},
-            new Assignment{ProjectId=1002,EmployeeNumber=112,HoursWorked=85},
-            new Assignment{ProjectId=1002,EmployeeNumber=111,HoursWorked=78},
-            new Assignment{ProjectId=1003,EmployeeNumber=112,HoursWorked=250},
-            new Assignment{ProjectId=1003,EmployeeNumber=114,HoursWorked=125},
-            new Assignment{ProjectId=1003,EmployeeNumber=111,HoursWorked=150},
-            new Assignment{ProjectId=1004,EmployeeNumber=115,HoursWorked=80},
-            new Assignment{ProjectId=1004,EmployeeNumber=116,HoursWorked=70},
-            new Assignment{ProjectId=1004,EmployeeNumber=117,HoursWorked=90},
-            new Assignment{ProjectId=1004,EmployeeNumber=118,HoursWorked=90},
-            new Assignment{ProjectId=1005,EmployeeNumber=115,HoursWorked=50},
-            new Assignment{ProjectId=1005,EmployeeNumber=116,HoursWorked=300},
-            new Assignment{ProjectId=1005,EmployeeNumber=117,HoursWorked=100},
-            new Assignment{ProjectId=1005,EmployeeNumber=115,HoursWorked=140},
-            new Assignment{ProjectId=1006,EmployeeNumber=116,HoursWorked=85},
-            new Assignment{ProjectId=1006,EmployeeNumber=118,HoursWorked=95},
-            new Assignment{ProjectId=1006,EmployeeNumber=117,HoursWorked=78},
-            new Assignment{ProjectId=1006,EmployeeNumber=116,HoursWorked=250},
-            new Assignment{ProjectId=1007,EmployeeNumber=119,HoursWorked=125},
-            new Assignment{ProjectId=1007,EmployeeNumber=120,HoursWorked=150},
-            new Assignment{ProjectId=1007,EmployeeNumber=121,HoursWorked=80},
-            new Assignment{ProjectId=1007,EmployeeNumber=122,HoursWorked=140},
-            new Assignment{ProjectId=1008,EmployeeNumber=119,HoursWorked=85},
-            new Assignment{ProjectId=1008,EmployeeNumber=120,HoursWorked=95},
-            new Assignment{ProjectId=1008,EmployeeNumber=121,HoursWorked=78},
-            new Assignment{ProjectId=1009,EmployeeNumber=119,HoursWorked=250},
-            new Assignment{ProjectId=1009,EmployeeNumber=120,HoursWorked=125},
-            new Assignment{ProjectId=1009,EmployeeNumber=121,HoursWorked=150},
-            new Assignment{ProjectId=1010,EmployeeNumber=119,HoursWorked=80},
-            new Assignment{ProjectId=1010,EmployeeNumber=120,HoursWorked=60},
-            new Assignment{ProjectId=1011,EmployeeNumber=121,HoursWorked=80},
+            new (){ProjectId=1000,EmployeeNumber=111,HoursWorked=50,AssignmentName="Reports"},
+            new (){ProjectId=1000,EmployeeNumber=112,HoursWorked=100,AssignmentName="case study"},
+            new (){ProjectId=1000,EmployeeNumber=113,HoursWorked=50, AssignmentName = "FileSystem"},
+            new (){ProjectId=1001,EmployeeNumber=114,HoursWorked=150,AssignmentName="Linq"},
+            new (){ProjectId=1001,EmployeeNumber=112,HoursWorked=100, AssignmentName = "case study"},
+            new (){ProjectId=1001,EmployeeNumber=111,HoursWorked=140, AssignmentName = "Reports"},
+            new (){ProjectId=1002,EmployeeNumber=113,HoursWorked=95, AssignmentName = "FileSystem"},
+            new (){ProjectId=1002,EmployeeNumber=112,HoursWorked=85, AssignmentName = "case study"},
+            new (){ProjectId=1002,EmployeeNumber=111,HoursWorked=78, AssignmentName = "Reports"},
+            new (){ProjectId=1003,EmployeeNumber=112,HoursWorked=250, AssignmentName = "case study"},
+            new (){ProjectId=1003,EmployeeNumber=114,HoursWorked=125, AssignmentName = "Linq"},
+            new (){ProjectId=1003,EmployeeNumber=111,HoursWorked=150, AssignmentName = "Reports"},
+            new (){ProjectId=1004,EmployeeNumber=115,HoursWorked=80, AssignmentName = "Collections"},
+            new (){ProjectId=1004,EmployeeNumber=116,HoursWorked=70, AssignmentName = "ASP"},
+            new (){ProjectId=1004,EmployeeNumber=117,HoursWorked=90, AssignmentName = "Directory"},
+            new (){ProjectId=1004,EmployeeNumber=118,HoursWorked=90, AssignmentName = "Testing"},
+            new (){ProjectId=1005,EmployeeNumber=115,HoursWorked=50,AssignmentName="Collections"},
+            new (){ProjectId=1005,EmployeeNumber=116,HoursWorked=300,AssignmentName="ASP"},
+            new (){ProjectId=1005,EmployeeNumber=117,HoursWorked=100,AssignmentName="Directory"},
+            new (){ProjectId=1005,EmployeeNumber=115,HoursWorked=140,AssignmentName="Collections"},
+            new (){ProjectId=1006,EmployeeNumber=116,HoursWorked=85,AssignmentName="ASP"},
+            new (){ProjectId=1006,EmployeeNumber=118,HoursWorked=95,AssignmentName="Testing"},
+            new (){ProjectId=1006,EmployeeNumber=117,HoursWorked=78,AssignmentName="Directory"},
+            new (){ProjectId=1006,EmployeeNumber=116,HoursWorked=250,AssignmentName="ASP"},
+            new (){ProjectId=1007,EmployeeNumber=119,HoursWorked=125,AssignmentName="Typing"},
+            new (){ProjectId=1007,EmployeeNumber=120,HoursWorked=150,AssignmentName="Network"},
+            new (){ProjectId=1007,EmployeeNumber=121,HoursWorked=80,AssignmentName="Design"},
+            new (){ProjectId=1007,EmployeeNumber=122,HoursWorked=140,AssignmentName="Database"},
+            new (){ProjectId=1008,EmployeeNumber=119,HoursWorked=85,AssignmentName="Typing"},
+            new (){ProjectId=1008,EmployeeNumber=120,HoursWorked=95,AssignmentName="Network"},
+            new (){ProjectId=1008,EmployeeNumber=121,HoursWorked=78,AssignmentName="Design"},
+            new (){ProjectId=1009,EmployeeNumber=119,HoursWorked=250,AssignmentName="Typing"},
+            new (){ProjectId=1009,EmployeeNumber=120,HoursWorked=125,AssignmentName="Network"},
+            new (){ProjectId=1009,EmployeeNumber=121,HoursWorked=150,AssignmentName="Design"},
+            new (){ProjectId=1010,EmployeeNumber=119,HoursWorked=80,AssignmentName="Typing"},
+            new (){ProjectId=1010,EmployeeNumber=120,HoursWorked=60,AssignmentName="Network"},
+            new (){ProjectId=1011,EmployeeNumber=121,HoursWorked=80,AssignmentName="Design"},
             };
-        }
-    }
+        
+          
+         }
 }
