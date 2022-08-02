@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmployeeManagement", "EmployeeManagement\EmployeeManagement.csproj", "{D987DC30-B815-466C-A662-F127C5979C4D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectManagement", "EmployeeManagement\ProjectManagement.csproj", "{D987DC30-B815-466C-A662-F127C5979C4D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmployeeManagement. Core", "EmployeeManagement. Core\EmployeeManagement. Core.csproj", "{1E8F9D4E-5D43-4021-85D5-D33A86C933E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectManagement. Core", "EmployeeManagement. Core\ProjectManagement. Core.csproj", "{1E8F9D4E-5D43-4021-85D5-D33A86C933E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmployeeManagement.Infrastructure", "EmployeeManagementInfrastructure\EmployeeManagement.Infrastructure.csproj", "{7A7C39D9-E978-40D7-B1E5-582F385640C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectManagement.Infrastructure", "EmployeeManagementInfrastructure\ProjectManagement.Infrastructure.csproj", "{7A7C39D9-E978-40D7-B1E5-582F385640C6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

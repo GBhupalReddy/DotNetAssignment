@@ -1,6 +1,5 @@
 ﻿using EmployeeManagement._Core.Entities;
 using EmployeeManagement._Core.Model;
-using System.Collections;
 
 namespace EmployeeManagement._Core.Contracts
 {
@@ -11,7 +10,10 @@ namespace EmployeeManagement._Core.Contracts
         public IEnumerable<Employee> GetEmployeeData(int? deptId = null, int? empNumber = null);
         public IEnumerable<EmployeeCount> GetEmployeeCount();
         public IEnumerable<DepartmentSalary> GetDepartmentSalary();
-        public IEnumerable<CombineEntities> Getdeatils();
+        public IEnumerable<CombineEntities> GetDeatils();
+        public IEnumerable<CombineEntities> GetData(int? deptId = null, string? deptName = null);
+        public IEnumerable<CombineEntities> GetSearchData(string Text);
+        public void CheckData<t>(IEnumerable<t> collections);
         public void DisplayData<t>(IEnumerable<t> collections);
 
     }

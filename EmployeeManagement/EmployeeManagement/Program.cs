@@ -1,5 +1,4 @@
-﻿using EmployeeManagement._Core.Entities;
-using EmployeeManagement.Infrastructure.Services;
+﻿using EmployeeManagement.Infrastructure.Services;
 
 
 public class Program
@@ -12,6 +11,7 @@ public class Program
         EmployeeManagementService employeeManagementService = new EmployeeManagementService();
 
         // Department 
+
         // Pass Department Id(optional): return department details for the department Id. 
 
         Console.WriteLine("The department details for the department Id." ) ;
@@ -84,9 +84,12 @@ public class Program
         Console.WriteLine();
 
         // the number of employees working for each department 
+
         Console.WriteLine("the number of employees working for each department");
         Console.WriteLine();
+
         //employeeManagementService.GetDepartmentCount();
+
         var employeCount = employeeManagementService.GetEmployeeCount();
         employeeManagementService.DisplayData(employeCount);
         Console.WriteLine();
@@ -98,11 +101,38 @@ public class Program
         var departmentSalary=employeeManagementService.GetDepartmentSalary();
         employeeManagementService.DisplayData(departmentSalary);
         Console.WriteLine();
-       var combinedata= employeeManagementService.Getdeatils();
-       
-        Console.WriteLine();
-        employeeManagementService.DisplayData(combinedata);
 
+        // return the  result(DepartmentName, Project Name, Assignment Name, Employee Name) 
+
+        var combinedata = employeeManagementService.GetDeatils();
+        Console.WriteLine();
+
+        //  Department wise using DepartmentId
+
+        Console.WriteLine("Enter Department Id  which Department data you want");
+        int deptId = Convert.ToInt32(Console.ReadLine());
+        Console.WriteLine($"Department wise using DepartmentId is {deptId}");
+        var combinedataId=employeeManagementService.GetData (deptId: deptId);
+
+        employeeManagementService.CheckData(combinedataId);
+        Console.WriteLine();
+
+        // Department wise using DepartmentName Text
+
+        Console.WriteLine("Enter The text which Department data you want");
+        string? deptName=Console.ReadLine();
+        Console.WriteLine($"Department wise using DepartmentName Text is {deptName}");
+        var combinedataName = employeeManagementService.GetData (deptName: deptName);
+        employeeManagementService.CheckData(combinedataName);
+        Console.WriteLine();
+
+        // search the result by text
+
+        Console.WriteLine("Enter Text");
+        string searcText = Console.ReadLine();
+        Console.WriteLine($"search the result by {searcText} text");
+        var searchData = employeeManagementService.GetSearchData(searcText);
+        employeeManagementService.CheckData(searchData);
 
 
 

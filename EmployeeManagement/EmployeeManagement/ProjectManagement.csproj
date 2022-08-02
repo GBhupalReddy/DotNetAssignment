@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EmployeeManagement. Core\EmployeeManagement. Core.csproj" />
-    <ProjectReference Include="..\EmployeeManagementInfrastructure\EmployeeManagement.Infrastructure.csproj" />
+    <ProjectReference Include="..\EmployeeManagement. Core\ProjectManagement. Core.csproj" />
+    <ProjectReference Include="..\EmployeeManagementInfrastructure\ProjectManagement.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
