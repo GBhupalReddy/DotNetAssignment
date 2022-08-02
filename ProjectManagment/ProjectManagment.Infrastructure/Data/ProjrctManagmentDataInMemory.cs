@@ -87,7 +87,7 @@ namespace ProjectManagment.Infrastructure.Data
             new (){ProjectId=1009,EmployeeNumber=121,HoursWorked=150,AssignmentName="Design"},
             new (){ProjectId=1010,EmployeeNumber=119,HoursWorked=80,AssignmentName="Typing"},
             new (){ProjectId=1010,EmployeeNumber=120,HoursWorked=60,AssignmentName="Network"},
-            new (){ProjectId=1011,EmployeeNumber=121,HoursWorked=80,AssignmentName="Design"},
+            new (){ProjectId=1011,EmployeeNumber=121,HoursWorked=80,AssignmentName="Design"}
             };
     }
 }

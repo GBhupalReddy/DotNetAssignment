@@ -1,6 +1,6 @@
 ﻿namespace ProjectManagment.Core.Model
 {
-    public class CombineEntities
+    public class ProjectResourseDetails
     {
         public string? DepartmentName { get; set; }
         public string? EmployeeName { get; set; }

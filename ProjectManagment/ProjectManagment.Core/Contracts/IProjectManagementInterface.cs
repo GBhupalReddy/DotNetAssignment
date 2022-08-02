@@ -10,9 +10,9 @@ namespace ProjectManagment.Core.Contracts
         public IEnumerable<Employee> GetEmployeeData(int? deptId = null, int? empNumber = null);
         public IEnumerable<EmployeeCount> GetEmployeeCount();
         public IEnumerable<DepartmentSalary> GetDepartmentSalary();
-        public IEnumerable<CombineEntities> GetDeatils();
-        public IEnumerable<CombineEntities> GetData(int? deptId = null, string? deptName = null);
-        public IEnumerable<CombineEntities> GetSearchData(string Text);
+        public IEnumerable<ProjectResourseDetails> GetDeatils();
+        public IEnumerable<ProjectResourseDetails> GetCombineData(int? deptId = null, string? deptName = null);
+        public IEnumerable<ProjectResourseDetails> GetSearchData(string Text);
         public void CheckData<t>(IEnumerable<t> collections);
         public void DisplayData<t>(IEnumerable<t> collections);
     }
