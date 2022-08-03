@@ -1,5 +1,6 @@
 ﻿
 using ProjectManagment.Infrastructure.Services;
+using System.Collections;
 
 public class Program
 {
@@ -12,94 +13,92 @@ public class Program
 
         // Department 
 
-        // Pass Department Id(optional): return department details for the department Id. 
+        // The department details for the department Id. 
 
         Console.WriteLine("The department details for the department Id.");
         Console.WriteLine();
-        var getDeparmentData = projectManagementService.GetDepartmentDeta(2);
+        var getDeparmentData = projectManagementService.GetDepartmentDeta(6);
 
-        projectManagementService.DisplayData(getDeparmentData);
+        projectManagementService.CheckData(getDeparmentData);
         Console.WriteLine();
 
-        //Pass Department Name(optional): return department details for the Department Name 
+        //The department details for the Department Name
 
         Console.WriteLine("The department details for the Department Name ");
         Console.WriteLine();
         var getDeparment = projectManagementService.GetDepartmentDeta(deptName: "Marketing");
-        projectManagementService.DisplayData(getDeparment);
+        projectManagementService.CheckData(getDeparment);
         Console.WriteLine();
 
-        //Without input parameters: return all departments  
+        // all Departments  
 
         Console.WriteLine(" all departments  ");
         Console.WriteLine();
         var deparmentyData = projectManagementService.GetDepartmentDeta();
-        projectManagementService.DisplayData(deparmentyData);
+        projectManagementService.CheckData(deparmentyData);
         Console.WriteLine();
 
 
         //Project
 
-        //Pass Department Id(optional): return the list of projects there for the department Id. 
+        //the list of projects there for the department Id. 
 
         Console.WriteLine(" the list of projects there for the department Id. ");
         Console.WriteLine();
         var getProjectData = projectManagementService.GetProjectsData(3);
-        projectManagementService.DisplayData(getProjectData);
+        projectManagementService.CheckData(getProjectData);
         Console.WriteLine();
 
-        //Pass Department Name(optional): return the list of projects there for the Department Name  
+        //the list of projects there for the Department Name  
 
         Console.WriteLine(" the list of projects there for the Department Name  ");
         Console.WriteLine();
         var ProjectData = projectManagementService.GetProjectsData(deptName: "Marketing");
-        projectManagementService.DisplayData(ProjectData);
+        projectManagementService.CheckData(ProjectData);
         Console.WriteLine();
 
-        //Without input parameters: return all projects for each department 
+        //all projects for each department 
 
         Console.WriteLine(" all projects for each department ");
         Console.WriteLine();
         var getProject = projectManagementService.GetProjectsData();
-        projectManagementService.DisplayData(getProject);
+        projectManagementService.CheckData(getProject);
         Console.WriteLine();
 
 
         //Employee
 
-        //Pass Department Id(optional): returns the list of employees there for the department Id. 
+        //the list of employees there for the department Id
 
         Console.WriteLine(" the list of employees there for the department Id. ");
         Console.WriteLine();
         var getEmployeeData = projectManagementService.GetEmployeeData(deptId: 3);
-        projectManagementService.DisplayData(getEmployeeData);
+        projectManagementService.CheckData(getEmployeeData);
         Console.WriteLine();
 
-        // Pass Employee Id(optional): returns the employees details for the Employee Id 
+        // the employees details for the Employee Id 
 
         Console.WriteLine(" the employees details for the Employee Id ");
         Console.WriteLine();
-        var employeeData = projectManagementService.GetEmployeeData(empNumber: 126);
-        projectManagementService.DisplayData(employeeData);
+        var employeeData = projectManagementService.GetEmployeeData(121);
+        projectManagementService.CheckData(employeeData);
         Console.WriteLine();
 
         // the number of employees working for each department 
 
         Console.WriteLine("the number of employees working for each department");
         Console.WriteLine();
-
-        //employeeManagementService.GetDepartmentCount();
-
         var employeCount = projectManagementService.GetEmployeeCount();
-        projectManagementService.DisplayData(employeCount);
+        projectManagementService.CheckData(employeCount);
         Console.WriteLine();
 
         //the total salary paid for each department.
+
         Console.WriteLine();
         Console.WriteLine("The total salary paid for each department");
         Console.WriteLine();
         var departmentSalary = projectManagementService.GetDepartmentSalary();
-        projectManagementService.DisplayData(departmentSalary);
+        projectManagementService.CheckData(departmentSalary);
         Console.WriteLine();
 
         // return the  result(DepartmentName, Project Name, Assignment Name, Employee Name) 
@@ -110,33 +109,41 @@ public class Program
         //  Department wise using DepartmentId
 
         Console.WriteLine("Enter Department Id  which Department data you want");
-        int deptId = Convert.ToInt32(Console.ReadLine());
-        Console.WriteLine($"Department wise using DepartmentId is {deptId}");
-        var combinedataId = projectManagementService.GetData(deptId: deptId);
+        try
+        {
+            int deptId = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine($"Department wise using DepartmentId is {deptId}");
+            Console.WriteLine();
+            var combineDataId = projectManagementService.GetCombineData(deptId: deptId);
+            projectManagementService.CheckData(combineDataId);
+            Console.WriteLine();
 
-        projectManagementService.CheckData(combinedataId);
-        Console.WriteLine();
-
+        }
+        catch(FormatException ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+       
         // Department wise using DepartmentName Text
 
         Console.WriteLine("Enter The text which Department data you want");
         string? deptName = Console.ReadLine();
         Console.WriteLine($"Department wise using DepartmentName Text is {deptName}");
-        var combinedataName = projectManagementService.GetData(deptName: deptName);
+        Console.WriteLine();
+        var combinedataName = projectManagementService.GetCombineData(deptName: deptName);
         projectManagementService.CheckData(combinedataName);
         Console.WriteLine();
 
         // search the result by text
 
-        Console.WriteLine("Enter Text");
-        string searcText = Console.ReadLine();
+        Console.WriteLine("Enter searching  Text");
+        string? searcText = Console.ReadLine();
         Console.WriteLine($"search the result by {searcText} text");
+        Console.WriteLine();
         var searchData = projectManagementService.GetSearchData(searcText);
         projectManagementService.CheckData(searchData);
 
-
-
-
+       
     }
 
 
