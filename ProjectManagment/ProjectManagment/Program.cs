@@ -1,5 +1,7 @@
 ﻿
 using ProjectManagment.Infrastructure.Services;
+using Serilog;
+using Serilog.Formatting.Json;
 using System.Collections;
 
 public class Program
@@ -7,9 +9,16 @@ public class Program
 
     static void Main(string[] args)
     {
+        Log.Logger = new LoggerConfiguration()
+                     .MinimumLevel.Debug()
+                    
+                     .WriteTo.File(new JsonFormatter(), "logs/ProjectManagmentlogging.txt", rollingInterval: RollingInterval.Day)
+                     .CreateLogger();
+
         // Service  object Creation
 
         ProjectManagmentService projectManagementService = new ProjectManagmentService();
+
 
         // Department 
 
@@ -17,9 +26,8 @@ public class Program
 
         Console.WriteLine("The department details for the department Id.");
         Console.WriteLine();
-        var getDeparmentData = projectManagementService.GetDepartmentDeta(6);
-
-        projectManagementService.CheckData(getDeparmentData);
+        var getDeparmentData = projectManagementService.GetDepartmentDeta(-2);
+        CheckData(getDeparmentData);
         Console.WriteLine();
 
         //The department details for the Department Name
@@ -27,7 +35,7 @@ public class Program
         Console.WriteLine("The department details for the Department Name ");
         Console.WriteLine();
         var getDeparment = projectManagementService.GetDepartmentDeta(deptName: "Marketing");
-        projectManagementService.CheckData(getDeparment);
+        CheckData(getDeparment);
         Console.WriteLine();
 
         // all Departments  
@@ -35,7 +43,7 @@ public class Program
         Console.WriteLine(" all departments  ");
         Console.WriteLine();
         var deparmentyData = projectManagementService.GetDepartmentDeta();
-        projectManagementService.CheckData(deparmentyData);
+        CheckData(deparmentyData);
         Console.WriteLine();
 
 
@@ -46,7 +54,7 @@ public class Program
         Console.WriteLine(" the list of projects there for the department Id. ");
         Console.WriteLine();
         var getProjectData = projectManagementService.GetProjectsData(3);
-        projectManagementService.CheckData(getProjectData);
+        CheckData(getProjectData);
         Console.WriteLine();
 
         //the list of projects there for the Department Name  
@@ -54,7 +62,7 @@ public class Program
         Console.WriteLine(" the list of projects there for the Department Name  ");
         Console.WriteLine();
         var ProjectData = projectManagementService.GetProjectsData(deptName: "Marketing");
-        projectManagementService.CheckData(ProjectData);
+        CheckData(ProjectData);
         Console.WriteLine();
 
         //all projects for each department 
@@ -62,7 +70,7 @@ public class Program
         Console.WriteLine(" all projects for each department ");
         Console.WriteLine();
         var getProject = projectManagementService.GetProjectsData();
-        projectManagementService.CheckData(getProject);
+        CheckData(getProject);
         Console.WriteLine();
 
 
@@ -73,23 +81,24 @@ public class Program
         Console.WriteLine(" the list of employees there for the department Id. ");
         Console.WriteLine();
         var getEmployeeData = projectManagementService.GetEmployeeData(deptId: 3);
-        projectManagementService.CheckData(getEmployeeData);
+       CheckData(getEmployeeData);
         Console.WriteLine();
 
         // the employees details for the Employee Id 
 
         Console.WriteLine(" the employees details for the Employee Id ");
         Console.WriteLine();
-        var employeeData = projectManagementService.GetEmployeeData(121);
-        projectManagementService.CheckData(employeeData);
+        var employeeData = projectManagementService.GetEmployeeData(empNumber:112);
+      CheckData(employeeData);
         Console.WriteLine();
 
+       
         // the number of employees working for each department 
 
         Console.WriteLine("the number of employees working for each department");
         Console.WriteLine();
         var employeCount = projectManagementService.GetEmployeeCount();
-        projectManagementService.CheckData(employeCount);
+         CheckData(employeCount);
         Console.WriteLine();
 
         //the total salary paid for each department.
@@ -98,7 +107,7 @@ public class Program
         Console.WriteLine("The total salary paid for each department");
         Console.WriteLine();
         var departmentSalary = projectManagementService.GetDepartmentSalary();
-        projectManagementService.CheckData(departmentSalary);
+       CheckData(departmentSalary);
         Console.WriteLine();
 
         // return the  result(DepartmentName, Project Name, Assignment Name, Employee Name) 
@@ -115,35 +124,115 @@ public class Program
             Console.WriteLine($"Department wise using DepartmentId is {deptId}");
             Console.WriteLine();
             var combineDataId = projectManagementService.GetCombineData(deptId: deptId);
-            projectManagementService.CheckData(combineDataId);
+            CheckData(combineDataId);
             Console.WriteLine();
 
         }
-        catch(FormatException ex)
+        catch(FormatException)
         {
-            Console.WriteLine(ex.Message);
+            Console.WriteLine("please enter only integer values");
+            Log.Error("you are trying with string are null values ");
         }
-       
-        // Department wise using DepartmentName Text
+        catch(Exception aex)
+        {
+            Console.WriteLine(aex.Message);
+            Log.Error("you are trying with string are null values ");
+        }
+
+        //  Department wise using Department
 
         Console.WriteLine("Enter The text which Department data you want");
-        string? deptName = Console.ReadLine();
-        Console.WriteLine($"Department wise using DepartmentName Text is {deptName}");
-        Console.WriteLine();
-        var combinedataName = projectManagementService.GetCombineData(deptName: deptName);
-        projectManagementService.CheckData(combinedataName);
-        Console.WriteLine();
+        try {
+            string? departmentName = Console.ReadLine();
+            if (String.IsNullOrEmpty(departmentName))
+            {
+                throw new InvalidDataException("with out enter  any string it is not possible to search department data ");
+            }
+            
+                Console.WriteLine($"Department wise using DepartmentName Text is {departmentName}");
+                Console.WriteLine();
+                var combineDataName = projectManagementService.GetCombineData(deptName: departmentName);
+               CheckData(combineDataName);
+                Console.WriteLine();
+           
+        }
+        catch(InvalidDataException idex)
+        {
+            Console.WriteLine(idex.Message);
+            Console.WriteLine();
+            Log.Error("with out enter  any string it is not possible to search department data ");
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            Log.Error("with out enter  any string it is not possible to search department data ");
+        }
+
 
         // search the result by text
 
-        Console.WriteLine("Enter searching  Text");
-        string? searcText = Console.ReadLine();
-        Console.WriteLine($"search the result by {searcText} text");
-        Console.WriteLine();
-        var searchData = projectManagementService.GetSearchData(searcText);
-        projectManagementService.CheckData(searchData);
+        try
+        {
+            Console.WriteLine("Enter searching  Text");
+            string? searchText = Console.ReadLine();
+            if (String.IsNullOrEmpty(searchText))
+            {
+                throw new Exception("with out enter  any string it is not possible to search data ");
 
-       
+            }
+                Console.WriteLine($"search the result by {searchText} text");
+                Console.WriteLine();
+                var searchData = projectManagementService.GetSearchData(searchText);
+                CheckData(searchData);
+          
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            Console.WriteLine();
+            Log.Error("with out enter  any string it is not possible to search data ");
+        }
+        finally
+        {
+            Log.CloseAndFlush();
+        }
+
+        // Checking Method for return Result is empty or not
+
+        void CheckData<t>(IEnumerable<t> CollecatedData)
+        {
+            
+
+                try
+                {
+                    if (CollecatedData is null)
+                    {
+                        throw new ArgumentNullException(nameof(CollecatedData));
+                    }
+                    if (CollecatedData.Any())
+                    {
+                        projectManagementService.DisplayData(CollecatedData);
+                    }
+                    else
+                    {
+
+                        Console.WriteLine("data not found");
+                    }
+
+                }
+                catch (ArgumentNullException)
+                {
+                    Console.WriteLine("  please enter valid Input");
+
+                }
+
+
+           
+
+        }
+
+
     }
 
 
