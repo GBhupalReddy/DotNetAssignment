@@ -8,51 +8,88 @@ namespace ProjectManagment.Infrastructure.Services
 {
     public class ProjectManagmentService : IProjectManagementInterface
     {
+        
+
         //Department Service
         public IEnumerable<Department> GetDepartmentDeta(int? deptId = null, string? deptName = null)
         {
-            if (deptId.HasValue || deptName != null)
+            try
             {
-                var departmentData = from department in departments
-                                     where (deptId == null || department.DepartmentId == deptId)
-                                     && (deptName == null || department.DepartmentName == deptName)
-                                     select department;
-                return departmentData;
-            }
+                if(deptId < 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(deptId));
+                }
+                if (deptId.HasValue || deptName != null)
+                {
+                    var departmentData = from department in departments
+                                         where (deptId == null || department.DepartmentId == deptId)
+                                         && (deptName == null || department.DepartmentName == deptName)
+                                         select department;
+                    return departmentData;
+                }
 
-            return departments;
+                return departments;
+            }
+            catch(ArgumentOutOfRangeException)
+            {
+                return null;
+            }
         }
 
         //Project Service
         public IEnumerable<Project> GetProjectsData(int? deptId = null, string? deptName = null)
         {
-            if (deptId.HasValue || deptName != null)
+            try
             {
-                var projectData = from project in projects
-                                  join department in departments
-                                  on project.DepartmentId equals department.DepartmentId
-                                  where (deptId == null || department.DepartmentId == deptId)
-                                  && (deptName == null || department.DepartmentName == deptName)
-                                  select project;
+                if (deptId < 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(deptId));
+                }
+                if (deptId.HasValue || deptName != null)
+                {
+                    var projectData = from project in projects
+                                      join department in departments
+                                      on project.DepartmentId equals department.DepartmentId
+                                      where (deptId == null || department.DepartmentId == deptId)
+                                      && (deptName == null || department.DepartmentName == deptName)
+                                      select project;
 
-                return projectData;
+                    return projectData;
+                }
+                return projects;
+            }
+            catch(ArgumentOutOfRangeException)
+            {
+                return null;
             }
 
-            return projects;
+            
         }
 
         //Employee Service
         public IEnumerable<Employee> GetEmployeeData(int? deptId = null, int? empNumber = null)
         {
-            if (deptId.HasValue || empNumber.HasValue)
+            try
             {
-                var employeeData = from employee in employees
-                                   where (deptId == null || employee.DepartmentId == deptId)
-                                   && (empNumber == null || employee.EmployeeNumber == empNumber)
-                                   select employee;
-                return employeeData;
+                if (deptId < 0 || empNumber < 0 )
+                {
+                    throw new ArgumentOutOfRangeException(nameof(deptId));
+                }
+                if (deptId.HasValue || empNumber.HasValue)
+                {
+                    var employeeData = from employee in employees
+                                       where (deptId == null || employee.DepartmentId == deptId)
+                                       && (empNumber == null || employee.EmployeeNumber == empNumber)
+                                       select employee;
+                    return employeeData;
+                }
+                return employees;
             }
-            return employees;
+            catch (ArgumentOutOfRangeException)
+            {
+                return null;
+            }
+            
         }
 
         // the number of employees working for each department.de 
@@ -60,8 +97,8 @@ namespace ProjectManagment.Infrastructure.Services
         {
 
             var employeeCounts = from employee in employees
-                                 group employee by employee.DepartmentId into EmpCount
-                                 select new EmployeeCount() { DepartmentId = EmpCount.Key, TotalEmployee = EmpCount.Count() };
+                                 group employee by employee.DepartmentId into empCount
+                                 select new EmployeeCount() { DepartmentId = empCount.Key, TotalEmployee = empCount.Count() };
 
             return employeeCounts;
 
@@ -106,13 +143,25 @@ namespace ProjectManagment.Infrastructure.Services
         //  Department wise using DepartmentId And DepartmentName Text
         public IEnumerable<ProjectResourseDetails> GetCombineData(int? deptId = null, string? deptName = null)
         {
-            var departmentWiseData = from combine in GetDeatils()
-                                     join department in departments
-                                     on combine.DepartmentName equals department.DepartmentName
-                                     where (deptId == null || department.DepartmentId == deptId)
-                                     && (deptName == null || combine.DepartmentName.Contains(deptName))
-                                     select combine;
-            return departmentWiseData;
+            try
+            {
+                if (deptId < 0 )
+                {
+                    throw new ArgumentOutOfRangeException(nameof(deptId));
+                }
+                var departmentWiseData = from combine in GetDeatils()
+                                         join department in departments
+                                         on combine.DepartmentName equals department.DepartmentName
+                                         where (deptId == null || department.DepartmentId == deptId)
+                                         && (deptName == null || combine.DepartmentName.Contains(deptName))
+                                         select combine;
+                return departmentWiseData;
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return null;
+            }
+            
         }
 
         //  search the result by text
@@ -129,32 +178,40 @@ namespace ProjectManagment.Infrastructure.Services
 
         public void CheckData<t>(IEnumerable<t> CollecatedData)
         {
-           
+                try
+                {
+                    if (CollecatedData is null)
+                    {
+                        throw new ArgumentNullException(nameof(CollecatedData));
+                    }
+                    if (CollecatedData.Any())
+                    {
+                         DisplayData(CollecatedData);
+                    }
+                    else
+                    {
 
-            if (CollecatedData.Any())
-            {
-                DisplayData(CollecatedData);
-            }
-            else
-            {
-                Console.WriteLine();
-                Console.WriteLine("  Data Not  Found ");
-            }
+                         Console.WriteLine("data not found");
+                    }
+
+                }
+                catch (ArgumentNullException)
+                {
+                    Console.WriteLine("  please enter valid Input");
+                
+              }
+
         }
-
-      
-   
+        
 
         //Display data Using Generic Method
         
         public void DisplayData<t>(IEnumerable<t> collections)
         {
-           
                 foreach (var data in collections)
                 {
                     Console.WriteLine(data?.ToString());
                 }
-           
         }
     
     }

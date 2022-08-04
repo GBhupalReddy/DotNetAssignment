@@ -13,7 +13,7 @@ namespace ProjectManagment.Core.Contracts
         public IEnumerable<ProjectResourseDetails> GetDeatils();
         public IEnumerable<ProjectResourseDetails> GetCombineData(int? deptId = null, string? deptName = null);
         public IEnumerable<ProjectResourseDetails> GetSearchData(string Text);
-        public void CheckData<t>(IEnumerable<t> collections);
+       
         public void DisplayData<t>(IEnumerable<t> collections);
     }
 }
