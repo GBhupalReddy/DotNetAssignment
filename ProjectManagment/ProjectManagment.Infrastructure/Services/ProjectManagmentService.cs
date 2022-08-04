@@ -1,94 +1,50 @@
 ﻿using ProjectManagment.Core.Contracts;
 using ProjectManagment.Core.Entities;
 using ProjectManagment.Core.Model;
-using System.Collections;
 using static ProjectManagment.Infrastructure.Data.ProjrctManagmentDataInMemory;
 
 namespace ProjectManagment.Infrastructure.Services
 {
     public class ProjectManagmentService : IProjectManagementInterface
     {
-        
 
         //Department Service
         public IEnumerable<Department> GetDepartmentDeta(int? deptId = null, string? deptName = null)
         {
-            try
-            {
-                if(deptId < 0)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(deptId));
-                }
-                if (deptId.HasValue || deptName != null)
-                {
+           
                     var departmentData = from department in departments
                                          where (deptId == null || department.DepartmentId == deptId)
-                                         && (deptName == null || department.DepartmentName == deptName)
+                                         && (deptName == null || department.DepartmentName?.ToLower() == deptName)
                                          select department;
                     return departmentData;
-                }
-
-                return departments;
-            }
-            catch(ArgumentOutOfRangeException)
-            {
-                return null;
-            }
+            
         }
 
         //Project Service
         public IEnumerable<Project> GetProjectsData(int? deptId = null, string? deptName = null)
         {
-            try
-            {
-                if (deptId < 0)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(deptId));
-                }
-                if (deptId.HasValue || deptName != null)
-                {
+           
                     var projectData = from project in projects
                                       join department in departments
                                       on project.DepartmentId equals department.DepartmentId
                                       where (deptId == null || department.DepartmentId == deptId)
-                                      && (deptName == null || department.DepartmentName == deptName)
+                                      && (deptName == null || department.DepartmentName?.ToLower() == deptName)
                                       select project;
 
                     return projectData;
-                }
-                return projects;
-            }
-            catch(ArgumentOutOfRangeException)
-            {
-                return null;
-            }
-
-            
+               
         }
 
         //Employee Service
         public IEnumerable<Employee> GetEmployeeData(int? deptId = null, int? empNumber = null)
         {
-            try
-            {
-                if (deptId < 0 || empNumber < 0 )
-                {
-                    throw new ArgumentOutOfRangeException(nameof(deptId));
-                }
-                if (deptId.HasValue || empNumber.HasValue)
-                {
+           
                     var employeeData = from employee in employees
                                        where (deptId == null || employee.DepartmentId == deptId)
                                        && (empNumber == null || employee.EmployeeNumber == empNumber)
                                        select employee;
                     return employeeData;
-                }
-                return employees;
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                return null;
-            }
+                
             
         }
 
@@ -143,24 +99,14 @@ namespace ProjectManagment.Infrastructure.Services
         //  Department wise using DepartmentId And DepartmentName Text
         public IEnumerable<ProjectResourseDetails> GetCombineData(int? deptId = null, string? deptName = null)
         {
-            try
-            {
-                if (deptId < 0 )
-                {
-                    throw new ArgumentOutOfRangeException(nameof(deptId));
-                }
+          
                 var departmentWiseData = from combine in GetDeatils()
                                          join department in departments
                                          on combine.DepartmentName equals department.DepartmentName
                                          where (deptId == null || department.DepartmentId == deptId)
-                                         && (deptName == null || combine.DepartmentName.Contains(deptName))
+                                         && (deptName == null || combine.DepartmentName.ToLower().Contains(deptName))
                                          select combine;
                 return departmentWiseData;
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                return null;
-            }
             
         }
 
@@ -168,41 +114,11 @@ namespace ProjectManagment.Infrastructure.Services
         public IEnumerable<ProjectResourseDetails> GetSearchData(string Text)
         {
             var searchData = from combineData in GetDeatils()
-                             where combineData.DepartmentName.Contains(Text) || combineData.EmployeeName.Contains(Text)
-                             || combineData.ProjectName.Contains(Text) || combineData.AssignmentName.Contains(Text)
+                             where combineData.DepartmentName.ToLower().Contains(Text) || combineData.EmployeeName.ToLower().Contains(Text)
+                             || combineData.ProjectName.ToLower().Contains(Text) || combineData.AssignmentName.ToLower().Contains(Text)
                              select combineData;
             return searchData;
         }
-
-        //Check the  searching data found or not
-
-        public void CheckData<t>(IEnumerable<t> CollecatedData)
-        {
-                try
-                {
-                    if (CollecatedData is null)
-                    {
-                        throw new ArgumentNullException(nameof(CollecatedData));
-                    }
-                    if (CollecatedData.Any())
-                    {
-                         DisplayData(CollecatedData);
-                    }
-                    else
-                    {
-
-                         Console.WriteLine("data not found");
-                    }
-
-                }
-                catch (ArgumentNullException)
-                {
-                    Console.WriteLine("  please enter valid Input");
-                
-              }
-
-        }
-        
 
         //Display data Using Generic Method
         
