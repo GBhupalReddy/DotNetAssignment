@@ -3,9 +3,11 @@
     public class ProjectManagmentServiceValidation
     {
         ProjectManagmentService projectManagementService = new ProjectManagmentService();
+
+        // The department details 
         public void DepartmentData()
         {
-            // The department details for the department Id. 
+
             Console.WriteLine(" PRESS 1 : The department details using department Id  : ");
             Console.WriteLine(" PRESS 2 : The department details using department Name  ");
             Console.WriteLine(" PRESS 3 : The All department details  3 : ");
@@ -15,12 +17,16 @@
             {
                 throw new ArgumentNullException();
             }
+
             switch (departmentSearch)
             {
                 case 1:
+
+                     // The department details for using Department Id
+
                     Console.WriteLine("Enter  department id ");
                     int? deptId = Convert.ToInt32(Console.ReadLine());
-                    if (deptId < 0)
+                    if (deptId <= 0)
                     {
                         throw new InvalidDataException("please enter valid input");
                     }
@@ -36,7 +42,9 @@
                     break;
 
                 case 2:
-                    //The department details for the Department Name
+
+                    // The department details for using Department Name
+
                     Console.WriteLine(" Enter Department Name (Marketing,Finance,Accounting) ");
                     Console.WriteLine();
                     string? deptName = Console.ReadLine()?.ToLower();
@@ -49,7 +57,9 @@
                     CheckData(getDeparment);
                     Console.WriteLine();
                     break;
+
                 case 3:
+
                     // all Departments  
 
                     Console.WriteLine(" all departments  ");
@@ -60,10 +70,11 @@
                     break;
 
                 default: throw new ArgumentOutOfRangeException("Please Enter on 1 to 3 numbers only");
+
             }
         }
 
-        //Employee
+        // Employee
 
         public void EmployeeData()
         {
@@ -79,13 +90,16 @@
             switch (employeesearch)
             {
                 case 1:
+
+                    // The employee details for using department id
+
                     Console.WriteLine("Enter  department id ");
                     int? deptId = Convert.ToInt32(Console.ReadLine());
-                    if (deptId < 0)
+                    if (deptId <= 0)
                     {
                         throw new InvalidDataException("please enter valid input");
                     }
-                    if (deptId == null)
+                    if (deptId.HasValue)
                     {
                         throw new ArgumentNullException();
                     }
@@ -97,10 +111,12 @@
                     break;
 
                 case 2:
-                    //The department details for the Department Name
+
+                    // The employee details for using employee number
+
                     Console.WriteLine("Enter which  employees number");
                     int? empNumber = Convert.ToInt32(Console.ReadLine());
-                    if (empNumber < 0)
+                    if (empNumber <= 0)
                     {
                         throw new InvalidDataException("please enter valid input");
                     }
@@ -114,8 +130,10 @@
                     CheckData(employeeData);
                     Console.WriteLine();
                     break;
+
                 case 3:
-                    // all Departments  
+
+                    // All  employee details  
 
                     Console.WriteLine(" the all employees details  ");
                     Console.WriteLine();
@@ -125,6 +143,7 @@
                     break;
 
                 default: throw new ArgumentOutOfRangeException("Please Enter on 1 to 3 numbers only");
+
             }
         }
 
@@ -136,7 +155,6 @@
             Console.WriteLine(" PRESS 2 : The Project details using department Name  ");
             Console.WriteLine(" PRESS 3 : The All Project details  3 : ");
 
-
             int? projectSearch = Convert.ToInt32(Console.ReadLine());
             if (projectSearch == null)
             {
@@ -145,10 +163,12 @@
             switch (projectSearch)
             {
                 case 1:
+
                     //the list of projects there for the department Id. 
+
                     Console.WriteLine("Enter department id");
                     int? deptId = Convert.ToInt32(Console.ReadLine());
-                    if (deptId < 0)
+                    if (deptId <= 0)
                     {
                         throw new InvalidDataException("please enter valid input");
                     }
@@ -164,7 +184,8 @@
                     break;
 
                 case 2:
-                    //the list of projects there for the Department Name  
+
+                    //The list of projects there for the Department Name  
 
                     Console.WriteLine(" Enter Department Name (Marketing,Finance,Accounting) ");
                     Console.WriteLine();
@@ -178,8 +199,10 @@
                     CheckData(ProjectData);
                     Console.WriteLine();
                     break;
+
                 case 3:
-                    //all projects for each department 
+
+                    //All projects for each department 
 
                     Console.WriteLine(" all projects for each department ");
                     Console.WriteLine();
@@ -189,6 +212,7 @@
                     break;
 
                 default: throw new ArgumentOutOfRangeException("Please Enter on 1 to 3 numbers only");
+
             }
         }
 
@@ -196,6 +220,7 @@
 
         public void EmployeeCount()
         {
+
             Console.WriteLine("the number of employees working for each department");
             Console.WriteLine();
             var employeCount = projectManagementService.GetEmployeeCount();
@@ -207,15 +232,17 @@
 
         public void DepartmentSalary()
         {
+
             Console.WriteLine();
             Console.WriteLine("The total salary paid for each department");
             Console.WriteLine();
             var departmentSalary = projectManagementService.GetDepartmentSalary();
             CheckData(departmentSalary);
             Console.WriteLine();
+
         }
 
-        // return the  result(DepartmentName, Project Name, Assignment Name, Employee Name) 
+        // ProjectResourseDetails(DepartmentName, Project Name, Assignment Name, Employee Name) 
         public void ProjectResourseDetails()
         {
             Console.WriteLine(" PRESS 1 : The  ProjectResourse details using department ");
@@ -230,7 +257,10 @@
             switch (projectResoursesearch)
             {
                 case 1:
-                    Console.WriteLine("Enter Department Id  which Department data you want");
+
+                   // ProjectResourseDetails using department id
+
+                    Console.WriteLine("Enter Department Id  which Department  ProjectResourseDetails you want");
                     int? deptId = Convert.ToInt32(Console.ReadLine());
                     if (deptId < 0)
                     {
@@ -248,6 +278,10 @@
                     break;
 
                 case 2:
+
+                    // ProjectResourseDetails using department name
+
+                    Console.WriteLine("Enter Department name  which Department  ProjectResourseDetails you want");
                     string? departmentName = Console.ReadLine()?.ToLower();
                     if (String.IsNullOrEmpty(departmentName))
                     {
@@ -260,7 +294,11 @@
                     CheckData(combineDataName);
                     Console.WriteLine();
                     break;
+
                 case 3:
+
+                    // ProjectResourseDetails using text
+
                     Console.WriteLine("Enter searching  Text");
                     string? searchText = Console.ReadLine()?.ToLower();
                     if (String.IsNullOrEmpty(searchText))
@@ -273,12 +311,18 @@
                     var searchData = projectManagementService.GetSearchData(searchText);
                     CheckData(searchData);
                     break;
+
                 case 4:
+
+                    // ALL ProjectResourseDetails 
+
                     var projectResoursedata = projectManagementService.GetDeatils();
                     Console.WriteLine();
                     CheckData(projectResoursedata);
                     break;
+
                 default: throw new ArgumentOutOfRangeException("Please Enter on 1 to 4 numbers only");
+
             }
         }
 
