@@ -44,7 +44,6 @@ namespace ProjectManagment.Infrastructure.Services
                                        && (empNumber == null || employee.EmployeeNumber == empNumber)
                                        select employee;
                     return employeeData;
-                
             
         }
 
@@ -55,13 +54,11 @@ namespace ProjectManagment.Infrastructure.Services
             var employeeCounts = from employee in employees
                                  group employee by employee.DepartmentId into empCount
                                  select new EmployeeCount() { DepartmentId = empCount.Key, TotalEmployee = empCount.Count() };
-
             return employeeCounts;
 
         }
 
         //the total salary paid for each department.
-
         public IEnumerable<DepartmentSalary> GetDepartmentSalary()
         {
             var departmentSalaries = from employee in employees
@@ -91,7 +88,6 @@ namespace ProjectManagment.Infrastructure.Services
             var combineData = from data in combineDetails
                               select new ProjectResourseDetails() { DepartmentName = data.departmentName, EmployeeName = data.employeeName,
                                   ProjectName = data.projectName, AssignmentName = data.assignmentName };
-
             return combineData;
 
         }

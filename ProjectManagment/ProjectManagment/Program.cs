@@ -10,7 +10,8 @@ Log.Logger = new LoggerConfiguration()
                 .WriteTo.File(new JsonFormatter(), "logs/ProjectManagmentlogging.txt", rollingInterval: RollingInterval.Day)
                 .CreateLogger();
  
-  Log.Information("This is ProjectManagment logging on console and file \n ");
+  Log.Information("This is ProjectManagment logging on console and file \n" +
+      " ");
 
 const string compareString = "yes";
 string? value;
@@ -33,55 +34,58 @@ do
         int? deatils = Convert.ToInt32(Console.ReadLine());
         
         switch (deatils)
-            {
-                case 1:
-                    projectManagmentServiceValidation.DepartmentData();
-                    break;
+        {
+           case 1:
+               projectManagmentServiceValidation.DepartmentData();
+               break;
 
-                case 2:
-                    projectManagmentServiceValidation.EmployeeData();
-                    break;
-                case 3:
-                    projectManagmentServiceValidation.ProjectData();
-                    break;
-                case 4:
-                    projectManagmentServiceValidation. EmployeeCount();
-                    break;
-                case 5:
-                    projectManagmentServiceValidation.DepartmentSalary();
-                    break;
-                case 6:
-                    projectManagmentServiceValidation.ProjectResourseDetails();
-                    break;
-                default: throw new ArgumentOutOfRangeException("Please Enter on 1 to 6 numbers only");
-            }
+           case 2:
+               projectManagmentServiceValidation.EmployeeData();
+               break;
+
+           case 3:
+               projectManagmentServiceValidation.ProjectData();
+               break;
+
+           case 4:
+               projectManagmentServiceValidation. EmployeeCount();
+               break;
+
+           case 5:
+               projectManagmentServiceValidation.DepartmentSalary();
+               break;
+
+           case 6:
+               projectManagmentServiceValidation.ProjectResourseDetails();
+               break;
+
+           default:
+           throw new ArgumentOutOfRangeException("Please Enter on 1 to 6 numbers only");
+
+        }
     }
    
     catch(ArgumentOutOfRangeException arex)
     {
-        
         Log.Error(arex.Message);
     }
     catch(InvalidDataException invalidex)
     {
-      
         Log.Error(invalidex.Message);
     }
     catch(ArgumentNullException)
     {
-        
         Log.Error("whit out enter anything it is not possible to search data ");
     }
     catch (FormatException)
     {
-       
         Log.Error("you are trying with string are null values it is not possible");
     }
     catch(Exception ex)
     {
-        
         Log.Error(ex.Message);
     }
+
     Console.WriteLine();
     Console.WriteLine("Do want again search data please enter yes ");
     value = Console.ReadLine()?.ToLower();

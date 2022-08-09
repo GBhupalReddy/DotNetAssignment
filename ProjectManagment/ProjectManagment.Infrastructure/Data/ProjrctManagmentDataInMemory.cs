@@ -22,16 +22,16 @@ namespace ProjectManagment.Infrastructure.Data
              new () {EmployeeNumber=118,EmployeeName="Siva",FirstName="Siva",LastName="Karri",DepartmentId=2,Phone=923456789,Email="test7@gmail.com",Salary=15000},
              new () {EmployeeNumber=119,EmployeeName="Hemanth",FirstName="Hemanth",LastName="Pilla",DepartmentId=3,Phone=133456789,Email="test8@gmail.com",Salary=10000},
              new () {EmployeeNumber=120,EmployeeName="Venkat",FirstName="Venkat",LastName="Pilla",DepartmentId=3,Phone=243456789,Email="test9@gmail.com",Salary=15000},
-             new (){EmployeeNumber = 121,EmployeeName = "Vanakar",FirstName = "Vanakar",LastName ="Pilla", DepartmentId =3,Phone=353456789,Email = "test71@gmail.com", Salary=20000 },
-             new (){EmployeeNumber = 122,EmployeeName = "Chinna",FirstName = "Chinna",LastName ="Pilla", DepartmentId =3,Phone=463456789,Email = "test72@gmail.com", Salary=15000 },
-             new (){EmployeeNumber = 123,EmployeeName = "Kishore",FirstName = "Kishore",LastName ="Karri", DepartmentId =3,Phone=873456789,Email = "test73@gmail.com", Salary=10000 },
-             new (){EmployeeNumber = 124,EmployeeName = "Harish",FirstName = "Harish",LastName ="Karri", DepartmentId =3,Phone=683456789,Email = "test74@gmail.com", Salary=15000 },
-             new (){EmployeeNumber = 125,EmployeeName = "Thusanth",FirstName = "Thusanth",LastName ="Pilla", DepartmentId =1,Phone=729456789,Email = "test75@gmail.com", Salary=15000 },
-             new (){EmployeeNumber = 126,EmployeeName = "Hanvika",FirstName = "Hanvika",LastName ="Pilla", DepartmentId =2,Phone=928456789,Email = "test76@gmail.com", Salary=10000 },
-             new (){EmployeeNumber = 127,EmployeeName = "Shanvi",FirstName = "Shanvi",LastName ="Pilla", DepartmentId =3,Phone=127456789,Email = "test77@gmail.com", Salary=10000 },
-             new (){EmployeeNumber = 128,EmployeeName = "Vedha",FirstName = "Vedha",LastName ="Pilla", DepartmentId =1,Phone=226456789,Email = "test78@gmail.com", Salary=15000 },
-             new (){EmployeeNumber = 129,EmployeeName = "Jeshna",FirstName = "Jeshna",LastName ="Polimera", DepartmentId =2,Phone=325456789,Email = "test99@gmail.com", Salary=20000 },
-             new (){EmployeeNumber = 130,EmployeeName = "Rama",FirstName = "Rama",LastName ="Polimera", DepartmentId =3,Phone=424456789,Email = "test79@gmail.com", Salary=15000 }
+             new () {EmployeeNumber = 121,EmployeeName = "Vanakar",FirstName = "Vanakar",LastName ="Pilla", DepartmentId =3,Phone=353456789,Email = "test71@gmail.com", Salary=20000 },
+             new () {EmployeeNumber = 122,EmployeeName = "Chinna",FirstName = "Chinna",LastName ="Pilla", DepartmentId =3,Phone=463456789,Email = "test72@gmail.com", Salary=15000 },
+             new () {EmployeeNumber = 123,EmployeeName = "Kishore",FirstName = "Kishore",LastName ="Karri", DepartmentId =3,Phone=873456789,Email = "test73@gmail.com", Salary=10000 },
+             new () {EmployeeNumber = 124,EmployeeName = "Harish",FirstName = "Harish",LastName ="Karri", DepartmentId =3,Phone=683456789,Email = "test74@gmail.com", Salary=15000 },
+             new () {EmployeeNumber = 125,EmployeeName = "Thusanth",FirstName = "Thusanth",LastName ="Pilla", DepartmentId =1,Phone=729456789,Email = "test75@gmail.com", Salary=15000 },
+             new () {EmployeeNumber = 126,EmployeeName = "Hanvika",FirstName = "Hanvika",LastName ="Pilla", DepartmentId =2,Phone=928456789,Email = "test76@gmail.com", Salary=10000 },
+             new () {EmployeeNumber = 127,EmployeeName = "Shanvi",FirstName = "Shanvi",LastName ="Pilla", DepartmentId =3,Phone=127456789,Email = "test77@gmail.com", Salary=10000 },
+             new () {EmployeeNumber = 128,EmployeeName = "Vedha",FirstName = "Vedha",LastName ="Pilla", DepartmentId =1,Phone=226456789,Email = "test78@gmail.com", Salary=15000 },
+             new () {EmployeeNumber = 129,EmployeeName = "Jeshna",FirstName = "Jeshna",LastName ="Polimera", DepartmentId =2,Phone=325456789,Email = "test99@gmail.com", Salary=20000 },
+             new () {EmployeeNumber = 130,EmployeeName = "Rama",FirstName = "Rama",LastName ="Polimera", DepartmentId =3,Phone=424456789,Email = "test79@gmail.com", Salary=15000 }
         };
 
         public static List<Project> projects = new()
@@ -51,7 +51,7 @@ namespace ProjectManagment.Infrastructure.Data
          };
         public static List<Assignment> assignments = new()
         {
-            new (){ProjectId=1000,EmployeeNumber=111,HoursWorked=50,AssignmentName="Reports"},
+            new (){ProjectId=1000,EmployeeNumber=111,HoursWorked=50, AssignmentName="Reports"},
             new (){ProjectId=1000,EmployeeNumber=112,HoursWorked=100,AssignmentName="case study"},
             new (){ProjectId=1000,EmployeeNumber=113,HoursWorked=50, AssignmentName = "FileSystem"},
             new (){ProjectId=1001,EmployeeNumber=114,HoursWorked=150,AssignmentName="Linq"},
