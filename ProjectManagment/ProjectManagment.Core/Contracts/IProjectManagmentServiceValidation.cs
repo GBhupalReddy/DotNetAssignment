@@ -2,13 +2,13 @@
 {
     public interface IProjectManagmentServiceValidation
     {
-        void CheckData<t>(IEnumerable<t> CollecatedData);
-        void DepartmentData();
-        void DepartmentSalary();
-        void EmployeeCount();
-        void EmployeeData();
-        void Mainmenu();
-        void ProjectData();
-        void ProjectResourseDetails();
+        public bool CheckData<t>(IEnumerable<t> CollecatedData);
+        public void DepartmentData();
+        public void DepartmentSalary();
+        public void EmployeeCount();
+        public void EmployeeData();
+        public void Mainmenu();
+        public void ProjectData();
+        public void ProjectResourseDetails();
     }
 }
