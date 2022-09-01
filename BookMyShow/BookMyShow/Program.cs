@@ -24,6 +24,15 @@ builder.Services.AddSwaggerGen();
 
 IDbConnection connection = new SqlConnection(@"Server= (localDb)\MSSQLLocalDB; DataBase=BookMyShow;Trusted_Connection=True;");
 builder.Services.AddSingleton<IDbConnection>(connection);
+builder.Services.AddTransient<IBookingRepository, BookingRepository>();
+builder.Services.AddTransient<ICinemaHallRepository, CinemaHallRepository>();
+builder.Services.AddTransient<ICinemaRepository, CinemaRepository>();
+builder.Services.AddTransient<ICinemaSeatRepository, CinemaSeatRepository>();
+builder.Services.AddTransient<ICityRepository, CityRepository>();
+builder.Services.AddTransient<IMovieRepository, MovieRepository>();
+builder.Services.AddTransient<IPaymentRepository, PaymentRepository>();
+builder.Services.AddTransient<IShowseatRepository, ShowseatRepository>();
+builder.Services.AddTransient<IShowRepository, ShowRepository>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 
 var app = builder.Build();

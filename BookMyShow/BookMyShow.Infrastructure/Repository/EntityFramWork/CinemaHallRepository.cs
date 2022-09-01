@@ -5,7 +5,7 @@ using BookMyShow.Core.Contracts.Infrastructure.Repository;
 
 namespace BookMyShow.Infrastructure.Repository.EntityFramWork
 {
-    internal class CinemaHallRepository : ICinemaHallRepository
+    public class CinemaHallRepository : ICinemaHallRepository
     {
         private readonly BookMyShowContext _bookMyShowContext;
         public CinemaHallRepository()

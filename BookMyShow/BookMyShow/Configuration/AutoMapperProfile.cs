@@ -9,6 +9,15 @@ namespace BookMyShow.Configuration
     {
         internal AutoMapperProfile()
         {
+            CreateMap<BookingVm, Booking>();
+            CreateMap<CinemaHallVm, CinemaHall>();
+            CreateMap<CinemaVm, Cinema>();
+            CreateMap<CinemaSeatVm, CinemaSeat>();
+            CreateMap<CityVm, City>();
+            CreateMap<MovieVm, Movie>();
+            CreateMap<PaymentVm, Payment>();
+            CreateMap<ShowSeatVm, ShowSeat>();
+            CreateMap<ShowVm, Show>();
             CreateMap<UserVm, User>();
             CreateMap<User, UserDto>();
         }
