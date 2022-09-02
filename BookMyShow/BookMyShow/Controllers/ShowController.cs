@@ -14,16 +14,19 @@ namespace BookMyShow.Controllers
     {
 
         private readonly IShowRepository _showRepository;
+        private readonly ILogger<ShowController> _logger;
         private readonly IMapper _mapper;
-        public ShowController(IShowRepository showRepository, IMapper mapper)
+        public ShowController(IShowRepository showRepository, ILogger<ShowController> logger, IMapper mapper)
         {
             _showRepository = showRepository;
+            _logger = logger;
             _mapper = mapper;
         }
         // GET: api/<ShowController>
         [HttpGet]
         public async Task<ActionResult> Get()
         {
+            _logger.LogInformation("Getting list of all Shows");
             var result = await _showRepository.GetShowsAsync();
             return Ok(result);
         }
@@ -32,6 +35,7 @@ namespace BookMyShow.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(int id)
         {
+            _logger.LogInformation($"Getting Id : {id} Show");
             var result = await _showRepository.GetShowAsync(id);
             return Ok(result);
         }
@@ -40,6 +44,7 @@ namespace BookMyShow.Controllers
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] ShowVm showVm)
         {
+            _logger.LogInformation("add new Show");
             var show=_mapper.Map<ShowVm,Show>(showVm);
             var result = await _showRepository.AddShowAsync(show);
             return Ok(result);
@@ -49,6 +54,7 @@ namespace BookMyShow.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> Put(int id, [FromBody] ShowVm showVm)
         {
+            _logger.LogInformation($"Update Id: {id} Show");
             var show = _mapper.Map<ShowVm, Show>(showVm);
             var result = await _showRepository.UpdateShowAsynce(id,show);
             return Ok(result);
@@ -58,7 +64,8 @@ namespace BookMyShow.Controllers
         [HttpDelete("{id}")]
         public async Task Delete(int id)
         {
-           await _showRepository.DeleteShowAsync(id);
+            _logger.LogInformation($"Deleted Id :  {id}  Show");
+            await _showRepository.DeleteShowAsync(id);
         }
     }
 }

@@ -14,10 +14,12 @@ namespace BookMyShow.Controllers
     {
 
         private readonly IMovieRepository _movieRepository;
+        private readonly ILogger<MovieController> _logger;
         private readonly IMapper _mapper;
-        public MovieController(IMovieRepository movieRepository, IMapper mapper)
+        public MovieController(IMovieRepository movieRepository, ILogger<MovieController> logger, IMapper mapper)
         {
             _movieRepository = movieRepository;
+            _logger = logger;
             _mapper = mapper;
         }
 
@@ -25,6 +27,7 @@ namespace BookMyShow.Controllers
         [HttpGet]
         public async Task<ActionResult> Get()
         {
+            _logger.LogInformation("Getting list of all Movies");
             var result = await _movieRepository.GetMoviesAsync();
             return Ok(result);
         }
@@ -33,6 +36,7 @@ namespace BookMyShow.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(int id)
         {
+            _logger.LogInformation($"Getting Id {id} Movie");
             var result = await _movieRepository.GetMovieAsync(id);
             return Ok(result);
         }
@@ -41,6 +45,7 @@ namespace BookMyShow.Controllers
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] MovieVm movieVm)
         {
+            _logger.LogInformation("add new Movie");
             var movie=_mapper.Map<MovieVm,Movie>(movieVm);
             var result=await _movieRepository.AddMovieAsync(movie);
             return Ok(result);
@@ -50,6 +55,7 @@ namespace BookMyShow.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> Put(int id, [FromBody] MovieVm movieVm)
         {
+            _logger.LogInformation($"Update Id: {id} Movie");
             var movie = _mapper.Map<MovieVm, Movie>(movieVm);
             var result = await _movieRepository.UpdateMovieAsynce(id,movie);
             return Ok(result);
@@ -59,7 +65,8 @@ namespace BookMyShow.Controllers
         [HttpDelete("{id}")]
         public async Task Delete(int id)
         {
-             await _movieRepository.DeleteMovieAsync(id);
+            _logger.LogInformation($"Deleted  {id}  Movie");
+            await _movieRepository.DeleteMovieAsync(id);
         }
     }
 }

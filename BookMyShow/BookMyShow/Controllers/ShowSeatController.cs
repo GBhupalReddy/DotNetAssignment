@@ -14,10 +14,12 @@ namespace BookMyShow.Controllers
     {
 
         private readonly IShowseatRepository _showseatRepository;
+        private readonly ILogger<ShowSeatController> _logger;
         private readonly IMapper _mapper;
-        public ShowSeatController(IShowseatRepository showseatRepository, IMapper mapper)
+        public ShowSeatController(IShowseatRepository showseatRepository, ILogger<ShowSeatController> logger, IMapper mapper)
         {
             _showseatRepository = showseatRepository;
+            _logger = logger;
             _mapper = mapper;
         }
 
@@ -25,6 +27,7 @@ namespace BookMyShow.Controllers
         [HttpGet]
         public async Task<ActionResult> Get()
         {
+            _logger.LogInformation("Getting list of all ShowSeats");
             var result = await _showseatRepository.GetShowSeatsAsync();
             return Ok(result);
         }
@@ -33,6 +36,7 @@ namespace BookMyShow.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(int id)
         {
+            _logger.LogInformation($"Getting Id : {id} ShowSeat");
             var result = await _showseatRepository.GetShowSaetAsync(id);
             return Ok(result);
         }
@@ -41,6 +45,7 @@ namespace BookMyShow.Controllers
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] ShowSeatVm showSeatVm)
         {
+            _logger.LogInformation("add new ShowSeat");
             var showSeat = _mapper.Map<ShowSeatVm, ShowSeat>(showSeatVm);
             var result = await _showseatRepository.AddShowSeatAsync(showSeat);
             return Ok(result);
@@ -50,6 +55,7 @@ namespace BookMyShow.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> Put(int id, [FromBody] ShowSeatVm showSeatVm)
         {
+            _logger.LogInformation($"Update Id: {id} ShowSeat");
             var showSeat = _mapper.Map<ShowSeatVm, ShowSeat>(showSeatVm);
             var result = await _showseatRepository.UpdateShowSeatAsynce(id,showSeat);
             return Ok(result);
@@ -59,7 +65,11 @@ namespace BookMyShow.Controllers
         [HttpDelete("{id}")]
         public async Task Delete(int id)
         {
+            _logger.LogInformation($"Deleted Id :  {id}  ShowSeat");
             await _showseatRepository.DeleteShowSeatAsync(id);
         }
     }
 }
+
+
+

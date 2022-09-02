@@ -14,10 +14,13 @@ namespace BookMyShow.Controllers
     {
 
         private readonly ICinemaSeatRepository _cinemaSeatRepository;
+        private readonly ILogger<CinemaSeatController> _logger;
         private readonly IMapper _mapper;
-        public CinemaSeatController(ICinemaSeatRepository cinemaSeatRepository, IMapper mapper)
+        public CinemaSeatController(ICinemaSeatRepository cinemaSeatRepository, ILogger<CinemaSeatController> logger, IMapper mapper)
         {
+            
             _cinemaSeatRepository = cinemaSeatRepository;
+            _logger = logger;
             _mapper = mapper;
         }
 
@@ -25,6 +28,7 @@ namespace BookMyShow.Controllers
         [HttpGet]
         public async Task<ActionResult> Get()
         {
+            _logger.LogInformation("Getting list of all CinemaSeats");
             var result=await _cinemaSeatRepository.GetCinemaSeatsAsync();
             return Ok(result);
         }
@@ -33,6 +37,7 @@ namespace BookMyShow.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(int id)
         {
+            _logger.LogInformation($"Getting Id {id} CinemaSeat");
             var result = await _cinemaSeatRepository.GetCinemaSeatAsync(id);
             return Ok(result);
         }
@@ -41,6 +46,7 @@ namespace BookMyShow.Controllers
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] CinemaSeatVm cinemaSeatVm)
         {
+            _logger.LogInformation("add new CinemaSeat");
             var cinemaSeat=_mapper.Map<CinemaSeatVm,CinemaSeat>(cinemaSeatVm);
             var result=await _cinemaSeatRepository.AddCinemaSeatAsync(cinemaSeat);
             return Ok(result);
@@ -50,6 +56,7 @@ namespace BookMyShow.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> Put(int id, [FromBody] CinemaSeatVm cinemaSeatVm)
         {
+            _logger.LogInformation($"Update Id: {id} CinemaSeat");
             var cinemaSeat = _mapper.Map<CinemaSeatVm, CinemaSeat>(cinemaSeatVm);
             var result = await _cinemaSeatRepository.UpdateCinemaSeatAsynce(id,cinemaSeat);
             return Ok(result);
@@ -59,6 +66,7 @@ namespace BookMyShow.Controllers
         [HttpDelete("{id}")]
         public async Task Delete(int id)
         {
+            _logger.LogInformation($"Deleted  {id}  CinemaSeat");
             await _cinemaSeatRepository.DeleteCinemaSeatAsync(id);
         }
     }
