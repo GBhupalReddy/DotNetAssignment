@@ -29,13 +29,7 @@ namespace BookMyShow.Infrastructure.Data
         public virtual DbSet<ShowSeat> ShowSeats { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer("Server= (localDb)\\MSSQLLocalDB; DataBase=BookMyShow;Trusted_Connection=True;");
-            }
-        }
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

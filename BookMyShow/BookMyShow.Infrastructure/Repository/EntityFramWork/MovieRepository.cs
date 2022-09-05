@@ -2,9 +2,11 @@
 using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
 using BookMyShow.Infrastructure.Data;
+using Dapper;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text;
@@ -15,42 +17,39 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
     public class MovieRepository : IMovieRepository
     {
         private readonly BookMyShowContext _bookMyShowContext;
-        public MovieRepository()
+        private readonly IDbConnection _dbConnection;
+        public MovieRepository(BookMyShowContext bookMyShowContext, IDbConnection dbConnection)
         {
-            _bookMyShowContext = new BookMyShowContext();
+            _bookMyShowContext = bookMyShowContext;
+            _dbConnection = dbConnection;
         }
 
-
+        // Get All Movies
         public async Task<IEnumerable<Movie>> GetMoviesAsync()
         {
-            return await (from movie in _bookMyShowContext.Movies
-
-                          select new Movie
-                          {
-                              MovieId = movie.MovieId,
-                              Tittle = movie.Tittle,
-                              Description = movie.Description,
-                              Duration = movie.Duration,
-                              Language = movie.Language,
-                              ReleaseDate = movie.ReleaseDate,
-                              Country = movie.Country,
-                              Genre = movie.Genre,
-
-                          }).ToListAsync();
+            var query = "select * from Movie";
+            var result = await _dbConnection.QueryAsync<Movie>(query);
+            return result;
 
         }
 
+        // Get movie using id
         public async Task<Movie> GetMovieAsync(int id)
         {
-            return await _bookMyShowContext.Movies.FindAsync(id);
+            var query = "select * from Movie where MovieId = @id";
+            var result = await _dbConnection.QueryFirstAsync<Movie>(query, new { id = id });
+            return result;
         }
 
+        // Add movie
         public async Task<Movie> AddMovieAsync(Movie movie)
         {
             _bookMyShowContext.Movies.Add(movie);
             await _bookMyShowContext.SaveChangesAsync();
             return movie;
         }
+
+        // Update movie using id
         public async Task<Movie> UpdateMovieAsynce(int id, Movie movie)
         {
             var movieToBeUpdated = await GetMovieAsync(id);
@@ -67,6 +66,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
 
         }
 
+        // delete movie using id
         public async Task DeleteMovieAsync(int id)
         {
             var movie = await GetMovieAsync(id);

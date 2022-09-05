@@ -1,46 +1,49 @@
 ﻿using BookMyShow.Core.Contracts.Infrastructure.Repository;
 using BookMyShow.Core.Entities;
 using BookMyShow.Infrastructure.Data;
+using Dapper;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
+using System.Data.Common;
 
 namespace BookMyShow.Infrastructure.Repository.EntityFramWork
 {
-    public class ShowseatRepository : IShowseatRepository
+    public class ShowSeatRepository : IShowSeatRepository
     {
         private readonly BookMyShowContext _bookMyShowContext;
-
-        public ShowseatRepository()
+        private readonly IDbConnection _dbConnection;
+        public ShowSeatRepository(BookMyShowContext bookMyShowContext, IDbConnection dbConnection)
         {
-            _bookMyShowContext = new BookMyShowContext();
+            _bookMyShowContext = bookMyShowContext;
+            _dbConnection = dbConnection;
         }
 
-
+        // Get all show seat seats
         public async Task<IEnumerable<ShowSeat>> GetShowSeatsAsync()
         {
-            return await (from showSeat in _bookMyShowContext.ShowSeats
-                          select new ShowSeat
-                          {
-                              ShowSeatId = showSeat.ShowSeatId,
-                              Status = showSeat.Status,
-                              Price = showSeat.Price,
-                              CinemaSeatId = showSeat.CinemaSeatId,
-                              ShowId = showSeat.ShowId,
-                              BookingId = showSeat.BookingId
-                          }).ToListAsync();
+            var query = "select * from ShowSeat";
+            var result = await _dbConnection.QueryAsync<ShowSeat>(query);
+            return result;
 
         }
 
+        //Get show seat using id
         public async Task<ShowSeat> GetShowSaetAsync(int id)
         {
-            return await _bookMyShowContext.ShowSeats.FindAsync(id);
+            var query = "select * from ShowSeat where ShowSeatId = @id";
+            var result = await _dbConnection.QueryFirstAsync<ShowSeat>(query, new { id = id });
+            return result;
         }
 
+        // add show seat
         public async Task<ShowSeat> AddShowSeatAsync(ShowSeat showSeat)
         {
             _bookMyShowContext.ShowSeats.Add(showSeat);
             await _bookMyShowContext.SaveChangesAsync();
             return showSeat;
         }
+
+        // Update show seat using id
         public async Task<ShowSeat> UpdateShowSeatAsynce(int id, ShowSeat showSeat)
         {
             var showSeatToBeUpdated = await GetShowSaetAsync(id);
@@ -57,6 +60,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
 
         }
 
+        // delete show seat using id 
         public async Task DeleteShowSeatAsync(int id)
         {
             var showSeat = await GetShowSaetAsync(id);

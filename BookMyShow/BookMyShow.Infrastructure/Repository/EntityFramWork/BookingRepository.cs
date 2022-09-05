@@ -1,46 +1,50 @@
 ﻿using BookMyShow.Core.Contracts.Infrastructure.Repository;
 using BookMyShow.Core.Entities;
 using BookMyShow.Infrastructure.Data;
+using Dapper;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
+using System.Data.Common;
 
 namespace BookMyShow.Infrastructure.Repository.EntityFramWork
 {
     public class BookingRepository : IBookingRepository
     {
         private readonly BookMyShowContext _bookMyShowContext;
-        public BookingRepository()
+        private readonly IDbConnection _dbConnection;
+        public BookingRepository(BookMyShowContext bookMyShowContext,IDbConnection dbConnection)
         {
-            _bookMyShowContext = new BookMyShowContext();
+            _bookMyShowContext = bookMyShowContext;
+            _dbConnection = dbConnection;
         }
 
 
+       // Get All Bookings
         public async Task<IEnumerable<Booking>> GetBookingsAsync()
         {
-            return await (from booking in _bookMyShowContext.Bookings
-
-                          select new Booking
-                          {
-                              BookingId = booking.BookingId,
-                              NumberOfSeats = booking.NumberOfSeats,
-                              Timestamp = booking.Timestamp,
-                              Status = booking.Status,
-                              UserId = booking.UserId,
-                              ShowId = booking.ShowId,
-                          }).ToListAsync();
-
+            var query = "select * from Booking";
+            var result = await _dbConnection.QueryAsync<Booking>(query);
+            return result;
         }
-
+        
+        // Get  Booking using booking id
         public async Task<Booking> GetBookingAsync(int id)
         {
-            return await _bookMyShowContext.Bookings.FindAsync(id);
+
+            var query = "select * from Booking where BookingId = @id";
+            var result = await _dbConnection.QueryFirstAsync<Booking>(query);
+            return result;
         }
 
+        // Add booking
         public async Task<Booking> AddBookingAsync(Booking user)
         {
             _bookMyShowContext.Bookings.Add(user);
             await _bookMyShowContext.SaveChangesAsync();
             return user;
         }
+
+        // Update booking using id
         public async Task<Booking> UpdateBookingAsynce(int id, Booking booking)
         {
             var bookingToBeUpdated = await GetBookingAsync(id);
@@ -55,6 +59,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
 
         }
 
+        //deleted booking using id
         public async Task DeleteBookingAsync(int id)
         {
             var booking = await GetBookingAsync(id);

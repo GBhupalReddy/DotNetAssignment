@@ -2,9 +2,12 @@
 using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
 using BookMyShow.Infrastructure.Data;
+using Dapper;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,38 +17,41 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
     public class UserRepository : IUserRepository
     {
         private readonly BookMyShowContext _bookMyShowContext;
-        public UserRepository()
+        private readonly IDbConnection _dbConnection;
+        public UserRepository(BookMyShowContext bookMyShowContext, IDbConnection dbConnection)
         {
-            _bookMyShowContext = new BookMyShowContext();
+            _bookMyShowContext = bookMyShowContext;
+            _dbConnection = dbConnection;
         }
         
-
-        public async Task<IEnumerable<UserDto>> GetUsersAsync()
+        // Get all users
+        public async Task<IEnumerable<User>> GetUsersAsync()
         {
-            return await (from user in _bookMyShowContext.Users
-
-                          select new UserDto
-                          {
-                              UserId = user.UserId,
-                              Name = user.Name,
-                              Email = user.Email,
-                              Passoword = user.Passoword,
-                              Phone = user.Phone
-                          }).ToListAsync();
+            var query = "select * from [User]";
+            var result = await _dbConnection.QueryAsync<User>(query);
+            return result;
+                
 
         }
 
+        // Get user using id
         public async Task<User> GetUserAsync(int id)
         {
-            return await _bookMyShowContext.Users.FindAsync(id);
+            var query = "select * from [User] where UserId=@id";
+            var result = await _dbConnection.QueryFirstAsync<User>(query,new { id = id });
+            return result;
+            
         }
 
+        // Add user
         public async Task<User> AddUserAsync(User user)
         {
             _bookMyShowContext.Users.Add(user);
             await _bookMyShowContext.SaveChangesAsync();
             return user;
         }
+
+        //Update user using id
         public async Task<User> UpdateUserAsynce(int id,User user)
         {
             var userToBeUpdated=await GetUserAsync(id);
@@ -59,6 +65,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
 
         }
 
+        //Delete user using id
         public async Task DeleteUserAsync(int id)
         {
             var user= await GetUserAsync(id);

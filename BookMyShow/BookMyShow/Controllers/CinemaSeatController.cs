@@ -8,9 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BookMyShow.Controllers
 {
-    [Route("[controller]")]
-    [ApiController]
-    public class CinemaSeatController : ControllerBase
+    
+    public class CinemaSeatController : ApiControllerBase
     {
 
         private readonly ICinemaSeatRepository _cinemaSeatRepository;
@@ -37,7 +36,12 @@ namespace BookMyShow.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(int id)
         {
-            _logger.LogInformation($"Getting Id {id} CinemaSeat");
+            if (id <= 0)
+            {
+                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
+                return BadRequest();
+            }
+            _logger.LogInformation("Getting Id {id} CinemaSeat",id);
             var result = await _cinemaSeatRepository.GetCinemaSeatAsync(id);
             return Ok(result);
         }
@@ -56,7 +60,12 @@ namespace BookMyShow.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> Put(int id, [FromBody] CinemaSeatVm cinemaSeatVm)
         {
-            _logger.LogInformation($"Update Id: {id} CinemaSeat");
+            if (id <= 0)
+            {
+                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}",id);
+                return BadRequest();
+            }
+            _logger.LogInformation("Update Id: {id} CinemaSeat",id);
             var cinemaSeat = _mapper.Map<CinemaSeatVm, CinemaSeat>(cinemaSeatVm);
             var result = await _cinemaSeatRepository.UpdateCinemaSeatAsynce(id,cinemaSeat);
             return Ok(result);
@@ -66,7 +75,12 @@ namespace BookMyShow.Controllers
         [HttpDelete("{id}")]
         public async Task Delete(int id)
         {
-            _logger.LogInformation($"Deleted  {id}  CinemaSeat");
+            if (id <= 0)
+            {
+                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
+               
+            }
+            _logger.LogInformation("Deleted  {id}  CinemaSeat",id);
             await _cinemaSeatRepository.DeleteCinemaSeatAsync(id);
         }
     }

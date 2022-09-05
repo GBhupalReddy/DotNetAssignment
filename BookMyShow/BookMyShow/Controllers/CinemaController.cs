@@ -8,9 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BookMyShow.Controllers
 {
-    [Route("[controller]")]
-    [ApiController]
-    public class CinemaController : ControllerBase
+    
+    public class CinemaController : ApiControllerBase
     {
         private readonly ICinemaRepository _cinemaRepository;
         private readonly ILogger<CinemaController> _logger;
@@ -35,7 +34,12 @@ namespace BookMyShow.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(int id)
         {
-            _logger.LogInformation($"Getting Id {id} Cinema");
+            if (id <= 0)
+            {
+                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}",id);
+                return BadRequest();
+            }
+            _logger.LogInformation("Getting Id {id} Cinema",id);
             var result = await _cinemaRepository.GetCinemaAsync(id);
             return Ok(result);
         }
@@ -54,7 +58,12 @@ namespace BookMyShow.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> Put(int id, [FromBody] CinemaVm cinemaVm)
         {
-            _logger.LogInformation($"Update Id: {id} Cinema");
+            if (id <= 0)
+            {
+                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}",id);
+                return BadRequest();
+            }
+            _logger.LogInformation("Update Id: {id} Cinema",id);
             var cinema=_mapper.Map<CinemaVm,Cinema>(cinemaVm);
             var result = await _cinemaRepository.UpdateCinemaAsynce(id, cinema);
             return Ok(result);
@@ -64,7 +73,8 @@ namespace BookMyShow.Controllers
         [HttpDelete("{id}")]
         public async Task Delete(int id)
         {
-            _logger.LogInformation($"Deleted Id : {id}  Cinema");
+
+            _logger.LogInformation("Deleted Id : {id}  Cinema",id);
             await _cinemaRepository.DeleteCinemaAsync(id);  
         }
     }

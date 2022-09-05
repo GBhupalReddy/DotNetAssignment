@@ -2,7 +2,7 @@
 
 namespace BookMyShow.Core.Contracts.Infrastructure.Repository
 {
-    public interface IShowseatRepository
+    public interface IShowSeatRepository
     {
         Task<ShowSeat> AddShowSeatAsync(ShowSeat showSeat);
         Task DeleteShowSeatAsync(int id);

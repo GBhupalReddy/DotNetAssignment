@@ -5,7 +5,7 @@ namespace BookMyShow.Core.Contracts.Infrastructure.Repository
 {
     public interface IUserRepository
     {
-        Task<IEnumerable<UserDto>> GetUsersAsync();
+        Task<IEnumerable<User>> GetUsersAsync();
         Task<User> GetUserAsync(int id);
         Task<User> AddUserAsync(User user);
         Task<User> UpdateUserAsynce(int id, User user);

@@ -9,9 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BookMyShow.Controllers
 {
-    [Route("[controller]")]
-    [ApiController]
-    public class UserController : ControllerBase
+  
+    public class UserController : ApiControllerBase
     {
         
         private readonly IUserRepository _userRepository;
@@ -29,7 +28,7 @@ namespace BookMyShow.Controllers
         /// <returns></returns>
         // GET: api/<UserController>
         [HttpGet]
-        public async  Task<ActionResult<IEnumerable<UserDto>>> Get()
+        public async  Task<ActionResult<IEnumerable<User>>> Get()
         {
             _logger.LogInformation("Getting list of all Users");
             var result = await _userRepository.GetUsersAsync();
@@ -42,7 +41,12 @@ namespace BookMyShow.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(int id)
         {
-            _logger.LogInformation($"Getting Id : {id} User");
+            if (id <= 0)
+            {
+                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
+                return BadRequest();
+            }
+            _logger.LogInformation("Getting Id : {id} User", id);
             return Ok( await _userRepository.GetUserAsync(id));
         }
 
@@ -61,7 +65,12 @@ namespace BookMyShow.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> Put(int id, [FromBody] UserVm userVm)
         {
-            _logger.LogInformation($"Update Id: {id} User");
+            if (id <= 0)
+            {
+                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's Id.");
+                return BadRequest();
+            }
+            _logger.LogInformation("Update Id: {id} User", id);
             var ok = await _userRepository.UpdateUserAsynce(id, _mapper.Map<UserVm, User>(userVm));
             var result = _mapper.Map<User,UserDto>(ok);
             return Ok(result);
@@ -71,7 +80,12 @@ namespace BookMyShow.Controllers
         [HttpDelete("{id}")]
         public async Task Delete(int id)
         {
-            _logger.LogInformation($"Deleted Id :  {id}  User");
+            if (id <= 0)
+            {
+                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
+                
+            }
+            _logger.LogInformation("Deleted Id :  {id}  User", id);
             await _userRepository.DeleteUserAsync(id);
         }
     }

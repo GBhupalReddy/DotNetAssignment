@@ -1,4 +1,6 @@
-﻿namespace BookMyShow.Extension
+﻿using Serilog;
+
+namespace BookMyShow.Extension
 {
     public static class WebAppExtension
     {
@@ -12,6 +14,7 @@
             }
 
             app.UseHttpsRedirection();
+            app.UseSerilogRequestLogging();
 
             app.UseAuthorization();
 

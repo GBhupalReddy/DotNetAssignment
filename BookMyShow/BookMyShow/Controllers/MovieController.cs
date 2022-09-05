@@ -8,9 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BookMyShow.Controllers
 {
-    [Route("[controller]")]
-    [ApiController]
-    public class MovieController : ControllerBase
+    
+    public class MovieController : ApiControllerBase
     {
 
         private readonly IMovieRepository _movieRepository;
@@ -36,7 +35,12 @@ namespace BookMyShow.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(int id)
         {
-            _logger.LogInformation($"Getting Id {id} Movie");
+            if (id <= 0)
+            {
+                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
+                return BadRequest();
+            }
+            _logger.LogInformation("Getting Id {id} Movie", id);
             var result = await _movieRepository.GetMovieAsync(id);
             return Ok(result);
         }
@@ -45,6 +49,7 @@ namespace BookMyShow.Controllers
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] MovieVm movieVm)
         {
+           
             _logger.LogInformation("add new Movie");
             var movie=_mapper.Map<MovieVm,Movie>(movieVm);
             var result=await _movieRepository.AddMovieAsync(movie);
@@ -55,7 +60,12 @@ namespace BookMyShow.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> Put(int id, [FromBody] MovieVm movieVm)
         {
-            _logger.LogInformation($"Update Id: {id} Movie");
+            if (id <= 0)
+            {
+                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {id}",id);
+                return BadRequest();
+            }
+            _logger.LogInformation("Update Id: {id} Movie",id);
             var movie = _mapper.Map<MovieVm, Movie>(movieVm);
             var result = await _movieRepository.UpdateMovieAsynce(id,movie);
             return Ok(result);
@@ -65,7 +75,12 @@ namespace BookMyShow.Controllers
         [HttpDelete("{id}")]
         public async Task Delete(int id)
         {
-            _logger.LogInformation($"Deleted  {id}  Movie");
+            if (id <= 0)
+            {
+                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
+               
+            }
+            _logger.LogInformation("Deleted  {id}  Movie",id);
             await _movieRepository.DeleteMovieAsync(id);
         }
     }
