@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace BookMyShow.Core.Entities
+﻿namespace BookMyShow.Core.Entities
 {
     public partial class Cinema
     {

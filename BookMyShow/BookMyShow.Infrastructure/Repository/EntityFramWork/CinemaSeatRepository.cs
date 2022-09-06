@@ -3,13 +3,7 @@ using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
 using BookMyShow.Infrastructure.Data;
 using Dapper;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BookMyShow.Infrastructure.Repository.EntityFramWork
 {
@@ -24,10 +18,10 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         }
 
         // Get all cinema seats
-        public async Task<IEnumerable<CinemaSeat>> GetCinemaSeatsAsync()
+        public async Task<IEnumerable<CinemaSeatDto>> GetCinemaSeatsAsync()
         {
             var query = "select * from CinemaSeat";
-            var result = await _dbConnection.QueryAsync<CinemaSeat>(query);
+            var result = await _dbConnection.QueryAsync<CinemaSeatDto>(query);
             return result;
         }
 
@@ -35,7 +29,8 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         public async Task<CinemaSeat> GetCinemaSeatAsync(int id)
         {
             var query = "select * from CinemaSeat where CinemaSeatId = @id";
-            var result = await _dbConnection.QueryFirstAsync<CinemaSeat>(query, new { id = id });
+            var result = (await _dbConnection.QueryAsync<CinemaSeat>(query, new { id })).FirstOrDefault();
+            //var result = await _dbConnection.QueryFirstAsync<CinemaSeat>(query, new { id = id });
             return result;
         }
 

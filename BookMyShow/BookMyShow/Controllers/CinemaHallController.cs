@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using BookMyShow.Core.Contracts.Infrastructure.Repository;
+using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
+using BookMyShow.Infrastructure.Specs;
 using BookMyShow.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BookMyShow.Controllers
 {
-    
+    [ApiConventionType(typeof(DefaultApiConventions))]
     public class CinemaHallController : ApiControllerBase
     {
         private readonly ICinemaHallRepository _cinemaHallRepository;
@@ -21,17 +23,21 @@ namespace BookMyShow.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/<CinemaHallController>
+        // GET: <CinemaHallController>
+        [Route("")]
         [HttpGet]
-        public async Task<ActionResult> Get()
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        public async Task<ActionResult<IEnumerable<CinemaHallDto>>> Get()
         {
             _logger.LogInformation("Getting list of all CinemaHalls");
             var result= await _cinemaHallRepository.GetCinemaHallsAsync();
             return Ok(result);
         }
 
-        // GET api/<CinemaHallController>/5
-        [HttpGet("{id}")]
+        // GET <CinemaHallController>/5
+        [Route("{id}")]
+        [HttpGet]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult> Get(int id)
         {
             if (id <= 0)
@@ -40,24 +46,32 @@ namespace BookMyShow.Controllers
                 return BadRequest();
             }
             _logger.LogInformation("Getting Id {id} CinemaHall",id);
-            var result = await _cinemaHallRepository.GetCinemaHallAsync(id);
+            var cinemaHall = await _cinemaHallRepository.GetCinemaHallAsync(id);
+            var result = _mapper.Map<CinemaHall, CinemaHallDto>(cinemaHall);
+            if (result is null)
+                return NotFound();
             return Ok(result);
         }
 
-        // POST api/<CinemaHallController>
+        // POST <CinemaHallController>
+        [Route("")]
         [HttpPost]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
         public async Task<ActionResult> Post([FromBody] CinemaHallVm cinemaHallVm)
         {
             
             _logger.LogInformation("add new CinemaHall");
             var cinemaHall = _mapper.Map<CinemaHallVm, CinemaHall>(cinemaHallVm);
-            var result = await _cinemaHallRepository.AddCinemaHallAsync(cinemaHall);
+            var cinemaHallResult = await _cinemaHallRepository.AddCinemaHallAsync(cinemaHall);
+            var result = _mapper.Map<CinemaHall, CinemaHallDto>(cinemaHallResult);
             return Ok(result);
 
         }
 
-        // PUT api/<CinemaHallController>/5
-        [HttpPut("{id}")]
+        // PUT <CinemaHallController>/5
+        [Route("{id}")]
+        [HttpPut]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
         public async Task<ActionResult> Put(int id, [FromBody] CinemaHallVm cinemaHallVm)
         {
             if (id <= 0)
@@ -67,13 +81,16 @@ namespace BookMyShow.Controllers
             }
             _logger.LogInformation("Update Id: {id} CinemaHall",id);
             var cinemaHall = _mapper.Map<CinemaHallVm, CinemaHall>(cinemaHallVm);
-            var result = await _cinemaHallRepository.UpdateCinemaHallAsynce(id,cinemaHall);
+            var cinemaHallResult = await _cinemaHallRepository.UpdateCinemaHallAsynce(id,cinemaHall);
+            var result = _mapper.Map<CinemaHall, CinemaHallDto>(cinemaHallResult);
             return Ok(result);
 
         }
 
-        // DELETE api/<CinemaHallController>/5
-        [HttpDelete("{id}")]
+        // DELETE <CinemaHallController>/5
+        [Route("{id}")]
+        [HttpDelete]
+        [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
         public async Task Delete(int id)
         {
             if (id <= 0)

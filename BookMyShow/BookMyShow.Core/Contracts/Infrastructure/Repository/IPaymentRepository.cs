@@ -1,4 +1,5 @@
-﻿using BookMyShow.Core.Entities;
+﻿using BookMyShow.Core.Dto;
+using BookMyShow.Core.Entities;
 
 namespace BookMyShow.Core.Contracts.Infrastructure.Repository
 {
@@ -7,7 +8,7 @@ namespace BookMyShow.Core.Contracts.Infrastructure.Repository
         Task<Payment> AddPaymentAsync(Payment payment);
         Task DeletePaymentAsync(int id);
         Task<Payment> GetPaymentAsync(int id);
-        Task<IEnumerable<Payment>> GetPaymentsAsync();
+        Task<IEnumerable<PaymentDto>> GetPaymentsAsync();
         Task<Payment> UpdatePaymentAsynce(int id, Payment payment);
     }
 }

@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using BookMyShow.Core.Contracts.Infrastructure.Repository;
+using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
+using BookMyShow.Infrastructure.Specs;
 using BookMyShow.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BookMyShow.Controllers
 {
-   
+    [ApiConventionType(typeof(DefaultApiConventions))]
     public class CityController : ApiControllerBase
     {
         private readonly ICityRepository _cityRepository;
@@ -21,17 +23,21 @@ namespace BookMyShow.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/<CityController>
+        // GET: <CityController>
+        [Route("")]
         [HttpGet]
-        public async Task<ActionResult> Get()
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        public async Task<ActionResult<IEnumerable<CityDto>>> Get()
         {
             _logger.LogInformation("Getting list of all City's");
             var result = await _cityRepository.GetCitysAsync();
             return Ok(result);
         }
 
-        // GET api/<CityController>/5
-        [HttpGet("{id}")]
+        // GET <CityController>/5
+        [Route("{id}")]
+        [HttpGet]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult> Get(int id)
         {
             if (id <= 0)
@@ -40,22 +46,30 @@ namespace BookMyShow.Controllers
                 return BadRequest();
             }
             _logger.LogInformation("Getting Id {id} City",id);
-            var result= await _cityRepository.GetCityAsync(id);
+            var city= await _cityRepository.GetCityAsync(id);
+            var result = _mapper.Map<City,CityDto>(city);
+            if (result is null)
+                return NotFound();
             return Ok(result);  
         }
 
-        // POST api/<CityController>
+        // POST <CityController>
+        [Route("")]
         [HttpPost]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
         public async Task<ActionResult> Post([FromBody] CityVm cityVm)
         {
             _logger.LogInformation("add new City");
             var city=_mapper.Map<CityVm,City>(cityVm);
-            var result = await _cityRepository.AddCityAsync(city);
+            var cityResult = await _cityRepository.AddCityAsync(city);
+            var result = _mapper.Map<City, CityDto>(cityResult);
             return Ok(result);
         }
 
-        // PUT api/<CityController>/5
-        [HttpPut("{id}")]
+        // PUT <CityController>/5
+        [Route("{id}")]
+        [HttpPut]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
         public async Task<ActionResult> Put(int id, [FromBody] CityVm cityVm)
         {
             if (id <= 0)
@@ -65,12 +79,15 @@ namespace BookMyShow.Controllers
             }
             _logger.LogInformation("Update Id: {id} City",id);
             var city = _mapper.Map<CityVm, City>(cityVm);
-            var result = await _cityRepository.UpdateCityAsynce(id,city);
+            var cityResult = await _cityRepository.UpdateCityAsynce(id,city);
+            var result = _mapper.Map<City, CityDto>(cityResult);
             return Ok(result);
         }
 
-        // DELETE api/<CityController>/5
-        [HttpDelete("{id}")]
+        // DELETE <CityController>/5
+        [Route("{id}")]
+        [HttpDelete]
+        [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
         public async Task Delete(int id)
         {
             if (id <= 0)

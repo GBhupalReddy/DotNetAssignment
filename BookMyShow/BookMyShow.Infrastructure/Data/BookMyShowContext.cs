@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using BookMyShow.Core.Entities;
+﻿using BookMyShow.Core.Entities;
 using BookMyShow.Infrastructure.Extension;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace BookMyShow.Infrastructure.Data
 {

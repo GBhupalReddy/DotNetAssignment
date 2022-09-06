@@ -1,6 +1,4 @@
-﻿
-
-namespace  BookMyShow.ViewModel
+﻿namespace BookMyShow.ViewModel
 {
     public  class BookingVm
     {

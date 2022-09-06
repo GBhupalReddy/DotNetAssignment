@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using BookMyShow.Core.Contracts.Infrastructure.Repository;
+using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
+using BookMyShow.Infrastructure.Specs;
 using BookMyShow.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BookMyShow.Controllers
 {
-    
+    [ApiConventionType(typeof(DefaultApiConventions))]
     public class MovieController : ApiControllerBase
     {
 
@@ -22,17 +24,21 @@ namespace BookMyShow.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/<MovieController>
+        // GET: <MovieController>
+        [Route("")]
         [HttpGet]
-        public async Task<ActionResult> Get()
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        public async Task<ActionResult<IEnumerable<MovieDto>>> Get()
         {
             _logger.LogInformation("Getting list of all Movies");
             var result = await _movieRepository.GetMoviesAsync();
             return Ok(result);
         }
 
-        // GET api/<MovieController>/5
-        [HttpGet("{id}")]
+        // GET <MovieController>/5
+        [Route("{id}")]
+        [HttpGet]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult> Get(int id)
         {
             if (id <= 0)
@@ -41,23 +47,31 @@ namespace BookMyShow.Controllers
                 return BadRequest();
             }
             _logger.LogInformation("Getting Id {id} Movie", id);
-            var result = await _movieRepository.GetMovieAsync(id);
+            var movie = await _movieRepository.GetMovieAsync(id);
+            var result = _mapper.Map<Movie,MovieDto>(movie);
+            if (result is null)
+                return NotFound();
             return Ok(result);
         }
 
-        // POST api/<MovieController>
+        // POST <MovieController>
+        [Route("")]
         [HttpPost]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
         public async Task<ActionResult> Post([FromBody] MovieVm movieVm)
         {
            
             _logger.LogInformation("add new Movie");
             var movie=_mapper.Map<MovieVm,Movie>(movieVm);
-            var result=await _movieRepository.AddMovieAsync(movie);
+            var movieResult = await _movieRepository.AddMovieAsync(movie);
+            var result = _mapper.Map<Movie, MovieDto>(movieResult);
             return Ok(result);
         }
 
-        // PUT api/<MovieController>/5
-        [HttpPut("{id}")]
+        // PUT <MovieController>/5
+        [Route("{id}")]
+        [HttpPut]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
         public async Task<ActionResult> Put(int id, [FromBody] MovieVm movieVm)
         {
             if (id <= 0)
@@ -67,12 +81,15 @@ namespace BookMyShow.Controllers
             }
             _logger.LogInformation("Update Id: {id} Movie",id);
             var movie = _mapper.Map<MovieVm, Movie>(movieVm);
-            var result = await _movieRepository.UpdateMovieAsynce(id,movie);
+            var movieResult = await _movieRepository.UpdateMovieAsynce(id,movie);
+            var result = _mapper.Map<Movie, MovieDto>(movieResult);
             return Ok(result);
         }
 
-        // DELETE api/<MovieController>/5
-        [HttpDelete("{id}")]
+        // DELETE <MovieController>/5
+        [Route("{id}")]
+        [HttpDelete]
+        [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
         public async Task Delete(int id)
         {
             if (id <= 0)

@@ -1,12 +1,6 @@
 ﻿using BookMyShow.Core.Entities;
-using BookMyShow.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BookMyShow.Infrastructure.EntityConfiguration
 {

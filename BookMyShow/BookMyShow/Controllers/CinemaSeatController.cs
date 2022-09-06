@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using BookMyShow.Core.Contracts.Infrastructure.Repository;
+using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
+using BookMyShow.Infrastructure.Specs;
 using BookMyShow.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BookMyShow.Controllers
 {
-    
+    [ApiConventionType(typeof(DefaultApiConventions))]
     public class CinemaSeatController : ApiControllerBase
     {
 
@@ -23,17 +25,21 @@ namespace BookMyShow.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/<ValuesController>
+        // GET: <ValuesController>
+        [Route("")]
         [HttpGet]
-        public async Task<ActionResult> Get()
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        public async Task<ActionResult<IEnumerable<CinemaSeatDto>>> Get()
         {
             _logger.LogInformation("Getting list of all CinemaSeats");
             var result=await _cinemaSeatRepository.GetCinemaSeatsAsync();
             return Ok(result);
         }
 
-        // GET api/<ValuesController>/5
-        [HttpGet("{id}")]
+        // GET <ValuesController>/5
+        [Route("{id}")]
+        [HttpGet]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult> Get(int id)
         {
             if (id <= 0)
@@ -42,22 +48,30 @@ namespace BookMyShow.Controllers
                 return BadRequest();
             }
             _logger.LogInformation("Getting Id {id} CinemaSeat",id);
-            var result = await _cinemaSeatRepository.GetCinemaSeatAsync(id);
+            var cinemaSeat = await _cinemaSeatRepository.GetCinemaSeatAsync(id);
+            var result =  _mapper.Map<CinemaSeat,CinemaSeatDto>(cinemaSeat);
+            if (result is null)
+                return NotFound();
             return Ok(result);
         }
 
-        // POST api/<ValuesController>
+        // POST <ValuesController>
+        [Route("")]
         [HttpPost]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
         public async Task<ActionResult> Post([FromBody] CinemaSeatVm cinemaSeatVm)
         {
             _logger.LogInformation("add new CinemaSeat");
             var cinemaSeat=_mapper.Map<CinemaSeatVm,CinemaSeat>(cinemaSeatVm);
-            var result=await _cinemaSeatRepository.AddCinemaSeatAsync(cinemaSeat);
+            var cinemaSeatResult = await _cinemaSeatRepository.AddCinemaSeatAsync(cinemaSeat);
+            var result = _mapper.Map<CinemaSeat, CinemaSeatDto>(cinemaSeat);
             return Ok(result);
         }
 
-        // PUT api/<ValuesController>/5
-        [HttpPut("{id}")]
+        // PUT <ValuesController>/5
+        [Route("{id}")]
+        [HttpPut]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
         public async Task<ActionResult> Put(int id, [FromBody] CinemaSeatVm cinemaSeatVm)
         {
             if (id <= 0)
@@ -67,12 +81,15 @@ namespace BookMyShow.Controllers
             }
             _logger.LogInformation("Update Id: {id} CinemaSeat",id);
             var cinemaSeat = _mapper.Map<CinemaSeatVm, CinemaSeat>(cinemaSeatVm);
-            var result = await _cinemaSeatRepository.UpdateCinemaSeatAsynce(id,cinemaSeat);
+            var cinemaSeatResult = await _cinemaSeatRepository.UpdateCinemaSeatAsynce(id,cinemaSeat);
+            var result = _mapper.Map<CinemaSeat, CinemaSeatDto>(cinemaSeat);
             return Ok(result);
         }
 
-        // DELETE api/<ValuesController>/5
-        [HttpDelete("{id}")]
+        // DELETE <ValuesController>/5
+        [Route("{id}")]
+        [HttpDelete]
+        [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
         public async Task Delete(int id)
         {
             if (id <= 0)

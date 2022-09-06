@@ -1,6 +1,6 @@
 using AutoMapper;
-using BookMyShow.Configuration;
 using BookMyShow.Extension;
+using BookMyShow.Infrastructure.Configuration;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);

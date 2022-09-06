@@ -1,8 +1,6 @@
-﻿using BookMyShow.Configuration;
-using BookMyShow.Core.Contracts.Infrastructure.Repository;
+﻿using BookMyShow.Core.Contracts.Infrastructure.Repository;
 using BookMyShow.Infrastructure.Data;
 using BookMyShow.Infrastructure.Repository.EntityFramWork;
-using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Data;

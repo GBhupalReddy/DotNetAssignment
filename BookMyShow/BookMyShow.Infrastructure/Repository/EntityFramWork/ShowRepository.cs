@@ -1,8 +1,8 @@
 ﻿using BookMyShow.Core.Contracts.Infrastructure.Repository;
+using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
 using BookMyShow.Infrastructure.Data;
 using Dapper;
-using Microsoft.EntityFrameworkCore;
 using System.Data;
 
 namespace BookMyShow.Infrastructure.Repository.EntityFramWork
@@ -20,10 +20,10 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         }
 
         // Get all Shows
-        public async Task<IEnumerable<Show>> GetShowsAsync()
+        public async Task<IEnumerable<ShowDto>> GetShowsAsync()
         {
             var query = "select * from Show";
-            var result = await _dbConnection.QueryAsync<Show>(query);
+            var result = await _dbConnection.QueryAsync<ShowDto>(query);
             return result;
 
         }
@@ -32,7 +32,8 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         public async Task<Show> GetShowAsync(int id)
         {
             var query = "select * from Show where ShowId = @id";
-            var result = await _dbConnection.QueryFirstAsync<Show>(query, new { id = id });
+            var result = (await _dbConnection.QueryAsync<Show>(query, new { id })).FirstOrDefault();
+            //var result = await _dbConnection.QueryFirstAsync<Show>(query, new { id = id });
             return result;
         }
 

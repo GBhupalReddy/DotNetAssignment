@@ -3,13 +3,7 @@ using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
 using BookMyShow.Infrastructure.Data;
 using Dapper;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BookMyShow.Infrastructure.Repository.EntityFramWork
 {
@@ -26,10 +20,10 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         }
 
         // Get all payments
-        public async Task<IEnumerable<Payment>> GetPaymentsAsync()
+        public async Task<IEnumerable<PaymentDto>> GetPaymentsAsync()
         {
             var query = "select * from Payment";
-            var result = await _dbConnection.QueryAsync<Payment>(query);
+            var result = await _dbConnection.QueryAsync<PaymentDto>(query);
             return result;
 
         }
@@ -38,7 +32,8 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         public async Task<Payment> GetPaymentAsync(int id)
         {
             var query = "select * from Payment where PaymentId = @id";
-            var result = await _dbConnection.QueryFirstAsync<Payment>(query, new { id = id });
+            var result = (await _dbConnection.QueryAsync<Payment>(query, new { id })).FirstOrDefault();
+           // var result = await _dbConnection.QueryFirstAsync<Payment>(query, new {id = id });
             return result;
         }
 

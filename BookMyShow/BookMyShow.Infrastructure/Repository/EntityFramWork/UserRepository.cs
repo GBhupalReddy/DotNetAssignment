@@ -3,14 +3,7 @@ using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
 using BookMyShow.Infrastructure.Data;
 using Dapper;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Data.Common;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BookMyShow.Infrastructure.Repository.EntityFramWork
 {
@@ -25,10 +18,10 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         }
         
         // Get all users
-        public async Task<IEnumerable<User>> GetUsersAsync()
+        public async Task<IEnumerable<UserDto>> GetUsersAsync()
         {
             var query = "select * from [User]";
-            var result = await _dbConnection.QueryAsync<User>(query);
+            var result = await _dbConnection.QueryAsync<UserDto>(query);
             return result;
                 
 
@@ -38,9 +31,11 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         public async Task<User> GetUserAsync(int id)
         {
             var query = "select * from [User] where UserId=@id";
-            var result = await _dbConnection.QueryFirstAsync<User>(query,new { id = id });
+            var result = (await _dbConnection.QueryAsync<User>(query, new { id })).FirstOrDefault();
+          //  var result = await _dbConnection.QueryFirstAsync<User>(query,new { id = id });
             return result;
             
+        
         }
 
         // Add user

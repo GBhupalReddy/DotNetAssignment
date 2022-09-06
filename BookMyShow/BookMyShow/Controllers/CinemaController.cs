@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using BookMyShow.Core.Contracts.Infrastructure.Repository;
+using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
+using BookMyShow.Infrastructure.Specs;
 using BookMyShow.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BookMyShow.Controllers
 {
-    
+    [ApiConventionType(typeof(DefaultApiConventions))]
     public class CinemaController : ApiControllerBase
     {
         private readonly ICinemaRepository _cinemaRepository;
@@ -21,17 +23,22 @@ namespace BookMyShow.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/<CinemaController>
+        // GET: <CinemaController>
+
+        [Route("")]
         [HttpGet]
-        public async Task<ActionResult> Get()
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        public async Task<ActionResult<IEnumerable<CinemaDto>>> Get()
         {
             _logger.LogInformation("Getting list of all Cinemas");
             var result= await _cinemaRepository.GetCinemasAsync();
             return Ok(result);  
         }
 
-        // GET api/<CinemaController>/5
-        [HttpGet("{id}")]
+        // GET <CinemaController>/5
+        [Route("{id}")]
+        [HttpGet]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult> Get(int id)
         {
             if (id <= 0)
@@ -40,22 +47,30 @@ namespace BookMyShow.Controllers
                 return BadRequest();
             }
             _logger.LogInformation("Getting Id {id} Cinema",id);
-            var result = await _cinemaRepository.GetCinemaAsync(id);
+            var cinema = await _cinemaRepository.GetCinemaAsync(id);
+            var result = _mapper.Map<Cinema,CinemaDto>(cinema);
+            if (result is null)
+                return NotFound();
             return Ok(result);
         }
 
-        // POST api/<CinemaController>
+        // POST <CinemaController>
+        [Route("")]
         [HttpPost]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
         public async Task<ActionResult> Post([FromBody] CinemaVm cinemaVm)
         {
             _logger.LogInformation("add new Cinema");
             var cinema=_mapper.Map<CinemaVm,Cinema>(cinemaVm);
-            var result=await _cinemaRepository.AddCinemaAsync(cinema);
+            var cinemaResult = await _cinemaRepository.AddCinemaAsync(cinema);
+            var result = _mapper.Map<Cinema, CinemaDto>(cinemaResult);
             return Ok(result);
         }
 
-        // PUT api/<CinemaController>/5
-        [HttpPut("{id}")]
+        // PUT <CinemaController>/5
+        [Route("{id}")]
+        [HttpPut]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
         public async Task<ActionResult> Put(int id, [FromBody] CinemaVm cinemaVm)
         {
             if (id <= 0)
@@ -65,12 +80,15 @@ namespace BookMyShow.Controllers
             }
             _logger.LogInformation("Update Id: {id} Cinema",id);
             var cinema=_mapper.Map<CinemaVm,Cinema>(cinemaVm);
-            var result = await _cinemaRepository.UpdateCinemaAsynce(id, cinema);
+            var cinemaResult = await _cinemaRepository.UpdateCinemaAsynce(id, cinema);
+            var result = _mapper.Map<Cinema, CinemaDto>(cinemaResult);
             return Ok(result);
         }
 
-        // DELETE api/<CinemaController>/5
-        [HttpDelete("{id}")]
+        // DELETE <CinemaController>/5
+        [Route("{id}")]
+        [HttpDelete]
+        [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
         public async Task Delete(int id)
         {
 

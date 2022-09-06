@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using BookMyShow.Core.Contracts.Infrastructure.Repository;
+using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
+using BookMyShow.Infrastructure.Specs;
 using BookMyShow.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BookMyShow.Controllers
 {
-    
+    [ApiConventionType(typeof(DefaultApiConventions))]
     public class ShowSeatController :  ApiControllerBase
     
     {
@@ -23,17 +25,23 @@ namespace BookMyShow.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/<ShoeSeatController>
+        // GET: <ShoeSeatController>
+        [Route("")]
         [HttpGet]
-        public async Task<ActionResult> Get()
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        public async Task<ActionResult<IEnumerable<ShowSeatDto>>> Get()
         {
             _logger.LogInformation("Getting list of all ShowSeats");
             var result = await _showseatRepository.GetShowSeatsAsync();
+            if (result is null)
+                return NotFound();
             return Ok(result);
         }
 
-        // GET api/<ShoeSeatController>/5
-        [HttpGet("{id}")]
+        // GET <ShoeSeatController>/5
+        [Route("{id}")]
+        [HttpGet]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult> Get(int id)
         {
             if (id <= 0)
@@ -42,22 +50,30 @@ namespace BookMyShow.Controllers
                 return BadRequest();
             }
             _logger.LogInformation("Getting Id : {id} ShowSeat", id);
-            var result = await _showseatRepository.GetShowSaetAsync(id);
+            var showSeaRtesult = await _showseatRepository.GetShowSaetAsync(id);
+            var result = _mapper.Map<ShowSeat,ShowSeatDto>(showSeaRtesult);
+            if (result is null)
+                return NotFound();
             return Ok(result);
         }
 
-        // POST api/<ShoeSeatController>
+        // POST <ShoeSeatController>
+        [Route("")]
         [HttpPost]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
         public async Task<ActionResult> Post([FromBody] ShowSeatVm showSeatVm)
         {
             _logger.LogInformation("add new ShowSeat");
             var showSeat = _mapper.Map<ShowSeatVm, ShowSeat>(showSeatVm);
-            var result = await _showseatRepository.AddShowSeatAsync(showSeat);
+            var showSeaRtesult = await _showseatRepository.AddShowSeatAsync(showSeat);
+            var result = _mapper.Map<ShowSeat, ShowSeatDto>(showSeaRtesult);
             return Ok(result);
         }
 
-        // PUT api/<ShoeSeatController>/5
-        [HttpPut("{id}")]
+        // PUT <ShoeSeatController>/5
+        [Route("{id}")]
+        [HttpPut]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
         public async Task<ActionResult> Put(int id, [FromBody] ShowSeatVm showSeatVm)
         {
             if (id <= 0)
@@ -67,12 +83,15 @@ namespace BookMyShow.Controllers
             }
             _logger.LogInformation("Update Id: {id} ShowSeat",id);
             var showSeat = _mapper.Map<ShowSeatVm, ShowSeat>(showSeatVm);
-            var result = await _showseatRepository.UpdateShowSeatAsynce(id,showSeat);
+            var showSeaRtesult = await _showseatRepository.UpdateShowSeatAsynce(id,showSeat);
+            var result = _mapper.Map<ShowSeat, ShowSeatDto>(showSeaRtesult);
             return Ok(result);
         }
 
-        // DELETE api/<ShoeSeatController>/5
-        [HttpDelete("{id}")]
+        // DELETE <ShoeSeatController>/5
+        [Route("{id}")]
+        [HttpDelete]
+        [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
         public async Task Delete(int id)
         {
             if (id <= 0)

@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using BookMyShow.Core.Contracts.Infrastructure.Repository;
+using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
+using BookMyShow.Infrastructure.Specs;
 using BookMyShow.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BookMyShow.Controllers
 {
-    
+    [ApiConventionType(typeof(DefaultApiConventions))]
     public class BookingController : ApiControllerBase
     {
 
@@ -23,17 +25,23 @@ namespace BookMyShow.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/<BookingController>
+        // GET: <BookingController>
+
+        [Route("")]
         [HttpGet]
-        public async Task<ActionResult> Get()
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        public async Task<ActionResult<IEnumerable<BookingDto>>> Get()
         {
             _logger.LogInformation("Getting list of all Bookings");
-            var Result= await _bookingRepository.GetBookingsAsync();
-            return Ok(Result);
+            var result= await _bookingRepository.GetBookingsAsync();
+            return Ok(result);
         }
 
-        // GET api/<BookingController>/5
-        [HttpGet("{id}")]
+        // GET <BookingController>
+
+        [Route("{id}")]
+        [HttpGet]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult> Get(int id)
         {
             if (id <= 0)
@@ -43,23 +51,33 @@ namespace BookMyShow.Controllers
             }
 
             _logger.LogInformation("Getting Id : {id} Booking", id);
-            var Result = await _bookingRepository.GetBookingAsync(id);
-            return Ok(Result);
+            var booking = await _bookingRepository.GetBookingAsync(id);
+            var result = _mapper.Map<Booking, BookingDto>(booking);
+            if (result is null)
+                return NotFound();
+            return Ok(result);
         }
 
-        // POST api/<BookingController>
+        // POST <BookingController>
+
+        [Route("")]
         [HttpPost]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
         public async Task<ActionResult> Post([FromBody] BookingVm bookingVm)
         {
 
             _logger.LogInformation("add new Booking");
             var booking=_mapper.Map<BookingVm,Booking>(bookingVm);
-            var Result = await _bookingRepository.AddBookingAsync(booking);
-            return Ok(Result);
+            var bookingResult = await _bookingRepository.AddBookingAsync(booking);
+            var result = _mapper.Map<Booking, BookingDto>(bookingResult);
+            return Ok(result);
         }
 
-        // PUT api/<BookingController>/5
-        [HttpPut("{id}")]
+        // PUT <BookingController>
+
+        [Route("{id}")]
+        [HttpPut]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
         public async Task<ActionResult> Put(int id, [FromBody] BookingVm bookingVm)
         {
             if (id <= 0 )
@@ -69,12 +87,16 @@ namespace BookMyShow.Controllers
             }
             _logger.LogInformation("Update Id: {id} Booking", id);
             var booking = _mapper.Map<BookingVm, Booking>(bookingVm);
-            var Result = await _bookingRepository.UpdateBookingAsynce(id,booking);
-            return Ok(Result);
+            var bookingResult = await _bookingRepository.UpdateBookingAsynce(id,booking);
+            var result = _mapper.Map<Booking, BookingDto>(bookingResult);
+            return Ok(result);
         }
 
-        // DELETE api/<BookingController>/5
-        [HttpDelete("{id}")]
+        // DELETE <BookingController>
+
+        [Route("{id}")]
+        [HttpDelete]
+        [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
         public async Task Delete(int id)
         {
             if (id <= 0)

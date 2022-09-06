@@ -1,4 +1,5 @@
-﻿using BookMyShow.Core.Entities;
+﻿using BookMyShow.Core.Dto;
+using BookMyShow.Core.Entities;
 
 namespace BookMyShow.Core.Contracts.Infrastructure.Repository
 {
@@ -7,7 +8,7 @@ namespace BookMyShow.Core.Contracts.Infrastructure.Repository
         Task<City> AddCityAsync(City city);
         Task DeleteCityAsync(int id);
         Task<City> GetCityAsync(int id);
-        Task<IEnumerable<City>> GetCitysAsync();
+        Task<IEnumerable<CityDto>> GetCitysAsync();
         Task<City> UpdateCityAsynce(int id, City city);
     }
 }

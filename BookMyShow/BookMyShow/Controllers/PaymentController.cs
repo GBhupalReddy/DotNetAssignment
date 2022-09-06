@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using BookMyShow.Core.Contracts.Infrastructure.Repository;
+using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
+using BookMyShow.Infrastructure.Specs;
 using BookMyShow.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BookMyShow.Controllers
 {
-    
+    [ApiConventionType(typeof(DefaultApiConventions))]
     public class PaymentController : ApiControllerBase
     {
 
@@ -21,17 +23,22 @@ namespace BookMyShow.Controllers
             _logger = logger;
             _mapper = mapper;
         }
-        // GET: api/<PaymentController>
+
+        // GET: <PaymentController>
+        [Route("")]
         [HttpGet]
-        public async Task<ActionResult> Get()
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        public async Task<ActionResult<IEnumerable<PaymentDto>>> Get()
         {
             _logger.LogInformation("Getting list of all Payments");
             var result = await _paymentRepository.GetPaymentsAsync();
             return Ok(result);
         }
 
-        // GET api/<PaymentController>/5
-        [HttpGet("{id}")]
+        // GET <PaymentController>/5
+        [Route("{id}")]
+        [HttpGet]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult> Get(int id)
         {
             if (id <= 0)
@@ -40,22 +47,30 @@ namespace BookMyShow.Controllers
                 return BadRequest();
             }
             _logger.LogInformation("Getting Id : {id} Payment", id);
-            var result = await _paymentRepository.GetPaymentAsync(id);
+            var paymentResult = await _paymentRepository.GetPaymentAsync(id);
+            var result = _mapper.Map<Payment, PaymentDto>(paymentResult);
+            if (result is null)
+                return NotFound();
             return Ok(result);
         }
 
-        // POST api/<PaymentController>
+        // POST <PaymentController>
+        [Route("")]
         [HttpPost]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
         public async Task<ActionResult> Post([FromBody] PaymentVm paymentVm)
         {
             _logger.LogInformation("add new Payment");
             var payment=_mapper.Map<PaymentVm,Payment>(paymentVm);
-            var result=await _paymentRepository.AddPaymentAsync(payment);
+            var paymentResult = await _paymentRepository.AddPaymentAsync(payment);
+            var result = _mapper.Map<Payment, PaymentDto>(paymentResult);
             return Ok(result);
         }
 
-        // PUT api/<PaymentController>/5
-        [HttpPut("{id}")]
+        // PUT <PaymentController>/5
+        [Route("{id}")]
+        [HttpPut]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
         public async Task<ActionResult> Put(int id, [FromBody] PaymentVm paymentVm)
         {
             if (id <= 0)
@@ -65,12 +80,17 @@ namespace BookMyShow.Controllers
             }
             _logger.LogInformation("Update Id: {id} Payment", id);
             var payment = _mapper.Map<PaymentVm, Payment>(paymentVm);
-            var result =await _paymentRepository.UpdatePaymentAsynce(id,payment);
+            var paymentResult = await _paymentRepository.UpdatePaymentAsynce(id,payment);
+            var result = _mapper.Map<Payment, PaymentDto>(paymentResult);
+            if (result.Equals(null))
+                return NotFound();
             return Ok(result);
         }
 
-        // DELETE api/<PaymentController>/5
-        [HttpDelete("{id}")]
+        // DELETE <PaymentController>/5
+        [Route("{id}")]
+        [HttpDelete]
+        [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
         public async Task Delete(int id)
         {
             if (id <= 0)

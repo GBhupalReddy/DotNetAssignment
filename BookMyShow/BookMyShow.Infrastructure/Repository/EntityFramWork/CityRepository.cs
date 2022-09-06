@@ -3,15 +3,7 @@ using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
 using BookMyShow.Infrastructure.Data;
 using Dapper;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace BookMyShow.Infrastructure.Repository.EntityFramWork
 {
@@ -26,10 +18,10 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         }
 
         // Get all city's
-        public async Task<IEnumerable<City>> GetCitysAsync()
+        public async Task<IEnumerable<CityDto>> GetCitysAsync()
         {
             var query = "select * from City";
-            var result = await _dbConnection.QueryAsync<City>(query);
+            var result = await _dbConnection.QueryAsync<CityDto>(query);
             return result;
 
         }
@@ -38,9 +30,10 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         public async Task<City> GetCityAsync(int id)
         {
             var query = "select * from City where CityId = @id";
-            var result = await _dbConnection.QueryFirstAsync<City>(query, new {id= id});
+            var result = (await _dbConnection.QueryAsync<City>(query, new { id })).FirstOrDefault();
+            //var result = await _dbConnection.QueryFirstAsync<City>(query, new {id= id});
             return result;
-            //return await _bookMyShowContext.Cities.FindAsync(id);
+           
         }
 
         // Add city
