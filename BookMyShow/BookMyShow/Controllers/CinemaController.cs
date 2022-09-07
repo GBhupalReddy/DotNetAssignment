@@ -44,13 +44,13 @@ namespace BookMyShow.Controllers
             if (id <= 0)
             {
                 _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}",id);
-                return BadRequest();
+                return BadRequest("Please Enter Valid Data");
             }
             _logger.LogInformation("Getting Id {id} Cinema",id);
             var cinema = await _cinemaRepository.GetCinemaAsync(id);
             var result = _mapper.Map<Cinema,CinemaDto>(cinema);
             if (result is null)
-                return NotFound();
+                return NotFound("Please Enter Valid Data");
             return Ok(result);
         }
 
@@ -76,7 +76,7 @@ namespace BookMyShow.Controllers
             if (id <= 0)
             {
                 _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}",id);
-                return BadRequest();
+                return BadRequest("Please Enter Valid Data");
             }
             _logger.LogInformation("Update Id: {id} Cinema",id);
             var cinema=_mapper.Map<CinemaVm,Cinema>(cinemaVm);
@@ -91,7 +91,11 @@ namespace BookMyShow.Controllers
         [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
         public async Task Delete(int id)
         {
-
+            if (id <= 0)
+            {
+                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
+                BadRequest("Please Enter Valid Data");
+            }
             _logger.LogInformation("Deleted Id : {id}  Cinema",id);
             await _cinemaRepository.DeleteCinemaAsync(id);  
         }

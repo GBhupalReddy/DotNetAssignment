@@ -24,8 +24,4 @@
     <ProjectReference Include="..\BookMyShow.Core\BookMyShow.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Service\" />
-  </ItemGroup>
-
 </Project>

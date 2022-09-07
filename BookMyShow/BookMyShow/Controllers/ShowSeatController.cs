@@ -12,12 +12,11 @@ namespace BookMyShow.Controllers
 {
     [ApiConventionType(typeof(DefaultApiConventions))]
     public class ShowSeatController :  ApiControllerBase
-    
     {
-
         private readonly IShowSeatRepository _showseatRepository;
         private readonly ILogger<ShowSeatController> _logger;
         private readonly IMapper _mapper;
+
         public ShowSeatController(IShowSeatRepository showseatRepository, ILogger<ShowSeatController> logger, IMapper mapper)
         {
             _showseatRepository = showseatRepository;
@@ -34,7 +33,7 @@ namespace BookMyShow.Controllers
             _logger.LogInformation("Getting list of all ShowSeats");
             var result = await _showseatRepository.GetShowSeatsAsync();
             if (result is null)
-                return NotFound();
+                return NotFound("Please Enter Valid Data");
             return Ok(result);
         }
 
@@ -47,13 +46,13 @@ namespace BookMyShow.Controllers
             if (id <= 0)
             {
                 _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
-                return BadRequest();
+                return BadRequest("Please Enter Valid Data");
             }
             _logger.LogInformation("Getting Id : {id} ShowSeat", id);
             var showSeaRtesult = await _showseatRepository.GetShowSaetAsync(id);
             var result = _mapper.Map<ShowSeat,ShowSeatDto>(showSeaRtesult);
             if (result is null)
-                return NotFound();
+                return NotFound("Please Enter Valid Data");
             return Ok(result);
         }
 
@@ -79,7 +78,7 @@ namespace BookMyShow.Controllers
             if (id <= 0)
             {
                 _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id} ",id);
-                return BadRequest();
+                return BadRequest("Please Enter Valid Data");
             }
             _logger.LogInformation("Update Id: {id} ShowSeat",id);
             var showSeat = _mapper.Map<ShowSeatVm, ShowSeat>(showSeatVm);
@@ -97,7 +96,7 @@ namespace BookMyShow.Controllers
             if (id <= 0)
             {
                 _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
-                
+                BadRequest("Please Enter Valid Data");
             }
             _logger.LogInformation("Deleted Id :  {id}  ShowSeat", id);
             await _showseatRepository.DeleteShowSeatAsync(id);

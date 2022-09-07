@@ -1,6 +1,8 @@
 ﻿using BookMyShow.Core.Contracts.Infrastructure.Repository;
+using BookMyShow.Core.Contracts.Infrastructure.Service;
 using BookMyShow.Infrastructure.Data;
 using BookMyShow.Infrastructure.Repository.EntityFramWork;
+using BookMyShow.Infrastructure.Service;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
@@ -32,7 +34,8 @@ namespace BookMyShow.Extension
         }
         public static void RegisterApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
-           
+
+            //Repository
 
             services.AddTransient<IBookingRepository, BookingRepository>();
             services.AddTransient<ICinemaHallRepository, CinemaHallRepository>();
@@ -44,6 +47,12 @@ namespace BookMyShow.Extension
             services.AddTransient<IShowSeatRepository, ShowSeatRepository>();
             services.AddTransient<IShowRepository, ShowRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
+
+            //Service
+
+            services.AddTransient<ICityNametoMovieNameService, CityNametoMovieNameService>();
+            services.AddTransient<IUserBookingDetailsService, UserBookingDetailsService>();
+            services.AddTransient<ICinemaHallinCinemaService, CinemaHallinCinemaService>();
 
         }
     }

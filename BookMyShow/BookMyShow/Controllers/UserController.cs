@@ -48,13 +48,13 @@ namespace BookMyShow.Controllers
             if (id <= 0)
             {
                 _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
-                return BadRequest();
+                return BadRequest("Please Enter Valid Data");
             }
             _logger.LogInformation("Getting Id : {id} User", id);
            var user = await _userRepository.GetUserAsync(id);
             var result = _mapper.Map<User,UserDto>(user);
             if (result is null)
-                return NotFound();
+                return NotFound("Please Enter Valid Data");
             return Ok(result);
 
         }
@@ -81,7 +81,7 @@ namespace BookMyShow.Controllers
             if (id <= 0)
             {
                 _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's Id.");
-                return BadRequest();
+                return BadRequest("Please Enter Valid Data");
             }
             _logger.LogInformation("Update Id: {id} User", id);
             var user = await _userRepository.UpdateUserAsynce(id, _mapper.Map<UserVm, User>(userVm));
@@ -100,7 +100,7 @@ namespace BookMyShow.Controllers
             if (id <= 0)
             {
                 _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
-                
+                BadRequest("Please Enter Valid Data");
             }
             _logger.LogInformation("Deleted Id :  {id}  User", id);
             await _userRepository.DeleteUserAsync(id);

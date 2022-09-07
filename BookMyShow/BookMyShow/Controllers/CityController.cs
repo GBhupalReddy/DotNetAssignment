@@ -16,6 +16,7 @@ namespace BookMyShow.Controllers
         private readonly ICityRepository _cityRepository;
         private readonly ILogger<CityController> _logger;
         private readonly IMapper _mapper;
+
         public CityController(ICityRepository cityRepository, ILogger<CityController> logger, IMapper mapper)
         {
             _cityRepository = cityRepository;
@@ -43,13 +44,13 @@ namespace BookMyShow.Controllers
             if (id <= 0)
             {
                 _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
-                return BadRequest();
+                return BadRequest("Please Enter Valid Data");
             }
             _logger.LogInformation("Getting Id {id} City",id);
             var city= await _cityRepository.GetCityAsync(id);
             var result = _mapper.Map<City,CityDto>(city);
             if (result is null)
-                return NotFound();
+                return NotFound("Please Enter Valid Data");
             return Ok(result);  
         }
 
@@ -75,7 +76,7 @@ namespace BookMyShow.Controllers
             if (id <= 0)
             {
                 _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}",id);
-                return BadRequest();
+                return BadRequest("Please Enter Valid Data");
             }
             _logger.LogInformation("Update Id: {id} City",id);
             var city = _mapper.Map<CityVm, City>(cityVm);
@@ -93,7 +94,7 @@ namespace BookMyShow.Controllers
             if (id <= 0)
             {
                 _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
-                
+                BadRequest("Please Enter Valid Data");
             }
             _logger.LogInformation("Deleted  {id}  City",id);
             await _cityRepository.DeleteCityAsync(id);
