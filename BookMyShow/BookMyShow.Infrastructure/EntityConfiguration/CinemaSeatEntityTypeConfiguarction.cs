@@ -14,7 +14,7 @@ namespace BookMyShow.Infrastructure.EntityConfiguration
                 .WithMany(p => p.CinemaSeats)
                 .HasForeignKey(d => d.CinemaHallId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__CinemaSea__Cinem__2D27B809");
+                .HasConstraintName("FK__CinemaSea__Cinem__47DBAE45");
 
         }
     }

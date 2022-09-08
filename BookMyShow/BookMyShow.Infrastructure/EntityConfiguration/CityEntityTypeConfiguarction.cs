@@ -10,20 +10,20 @@ namespace BookMyShow.Infrastructure.EntityConfiguration
         {
             builder.ToTable("City");
 
-                builder.HasIndex(e => e.Name, "UQ__City__737584F64A273F1A")
-                    .IsUnique();
+            builder.HasIndex(e => e.CityName, "UQ__City__886159E559CB46F0")
+                .IsUnique();
 
-                builder.Property(e => e.Name)
-                    .HasMaxLength(64)
-                    .IsUnicode(false);
+            builder.Property(e => e.CityName)
+                .HasMaxLength(64)
+                .IsUnicode(false);
 
-                builder.Property(e => e.State)
-                    .HasMaxLength(64)
-                    .IsUnicode(false);
+            builder.Property(e => e.State)
+                .HasMaxLength(64)
+                .IsUnicode(false);
 
-                builder.Property(e => e.ZipCode)
-                    .HasMaxLength(16)
-                    .IsUnicode(false);
+            builder.Property(e => e.ZipCode)
+                .HasMaxLength(16)
+                .IsUnicode(false);
         }
     }
 }

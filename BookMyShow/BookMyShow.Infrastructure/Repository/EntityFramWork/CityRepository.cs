@@ -3,6 +3,7 @@ using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
 using BookMyShow.Infrastructure.Data;
 using Dapper;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
 
 namespace BookMyShow.Infrastructure.Repository.EntityFramWork
@@ -35,6 +36,25 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
             return result;
            
         }
+        public async Task<IEnumerable<CinemaDto>> GetCinemasAsync(string cityName)
+        {
+            //var qury = "  select cin.CinemaId,cin.Name,cin.TotalCinemaHalls,cin.CityId from Cinema cin inner join City cit on cin.CityId=cit.CityId where cit.Name = @cityName;";
+            //var result = await _dbConnection.QueryAsync<Cinema>(qury, new { cityName = cityName });
+            var result = await (from cinema in _bookMyShowContext.Cinemas
+                                join city in _bookMyShowContext.Cities
+                                on cinema.CityId equals city.CityId
+                                where city.CityName == cityName
+                                select new CinemaDto
+                                {
+                                    CinemaId = cinema.CinemaId,
+                                    CinemaName = cinema.CinemaName,
+                                    TotalCinemaHalls = cinema.TotalCinemaHalls,
+                                    CityName = city.CityName,
+
+
+                                }).ToListAsync();
+            return result;
+        }
 
         // Add city
         public async Task<City> AddCityAsync(City city)
@@ -48,7 +68,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         public async Task<City> UpdateCityAsynce(int id, City city)
         {
             var cityToBeUpdated = await GetCityAsync(id);
-            cityToBeUpdated.Name = city.Name;
+            cityToBeUpdated.CityName = city.CityName;
             cityToBeUpdated.State = city.State;
             cityToBeUpdated.ZipCode = city.ZipCode;
             _bookMyShowContext.Cities.Update(cityToBeUpdated);

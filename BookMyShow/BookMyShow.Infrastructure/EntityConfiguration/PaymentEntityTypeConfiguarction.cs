@@ -20,7 +20,7 @@ namespace BookMyShow.Infrastructure.EntityConfiguration
                 .WithMany(p => p.Payments)
                 .HasForeignKey(d => d.BookingId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Payment__Booking__4222D4EF");
+                .HasConstraintName("FK__Payment__Booking__5CD6CB2B"); ;
 
         }
     }

@@ -10,7 +10,7 @@ namespace BookMyShow.Infrastructure.EntityConfiguration
         {
             builder.ToTable("Cinema");
 
-            builder.Property(e => e.Name)
+            builder.Property(e => e.CinemaName)
                 .HasMaxLength(64)
                 .IsUnicode(false);
 

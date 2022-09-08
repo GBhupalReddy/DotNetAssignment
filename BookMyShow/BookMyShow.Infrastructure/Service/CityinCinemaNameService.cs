@@ -1,23 +1,16 @@
 ﻿using BookMyShow.Core.Contracts.Infrastructure.Service;
 using BookMyShow.Core.Dto;
-using BookMyShow.Core.Entities;
 using BookMyShow.Infrastructure.Data;
-using Dapper;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BookMyShow.Infrastructure.Service
 {
-    public class CityNametoMovieNameService : ICityNametoMovieNameService
+    public class CityinCinemaNameService : ICityinCinemaNameService
     {
         private readonly BookMyShowContext _bookMyShowContext;
         private readonly IDbConnection _dbConnection;
-        public CityNametoMovieNameService(BookMyShowContext bookMyShowContext, IDbConnection dbConnection)
+        public CityinCinemaNameService(BookMyShowContext bookMyShowContext, IDbConnection dbConnection)
         {
             _bookMyShowContext = bookMyShowContext;
             _dbConnection = dbConnection;
@@ -30,13 +23,13 @@ namespace BookMyShow.Infrastructure.Service
             var result = await (from cinema in _bookMyShowContext.Cinemas
                                 join city in _bookMyShowContext.Cities
                                 on cinema.CityId equals city.CityId
-                                where city.Name == cityName
+                                where city.CityName == cityName
                                 select new CinemaDto
                                 {
                                     CinemaId = cinema.CinemaId,
-                                    Name = cinema.Name,
+                                    CinemaName = cinema.CinemaName,
                                     TotalCinemaHalls = cinema.TotalCinemaHalls,
-                                    CityId = cinema.CityId,
+                                    CityName = city.CityName,
                                    
 
                                 }).ToListAsync();

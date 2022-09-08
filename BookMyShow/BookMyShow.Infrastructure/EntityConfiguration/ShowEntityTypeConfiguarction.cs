@@ -12,19 +12,16 @@ namespace BookMyShow.Infrastructure.EntityConfiguration
 
             builder.Property(e => e.Date).HasColumnType("date");
 
-            builder.Property(e => e.EndTime).HasColumnType("datetime");
-            builder.Property(e => e.StartTime).HasColumnType("datetime");
-
             builder.HasOne(d => d.CinemaHall)
                 .WithMany(p => p.Shows)
                 .HasForeignKey(d => d.CinemaHallId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Show__CinemaHall__35BCFE0A");
+                .HasConstraintName("FK__Show__CinemaHall__5070F446");
 
             builder.HasOne(d => d.Movie)
                 .WithMany(p => p.Shows)
                 .HasForeignKey(d => d.MovieId)
-                .HasConstraintName("FK__Show__MovieId__36B12243");
+                .HasConstraintName("FK__Show__MovieId__5165187F");
 
         }
     }

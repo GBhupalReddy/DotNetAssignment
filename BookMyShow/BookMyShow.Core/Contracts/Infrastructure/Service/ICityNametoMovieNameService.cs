@@ -2,7 +2,7 @@
 
 namespace BookMyShow.Core.Contracts.Infrastructure.Service
 {
-    public interface ICityNametoMovieNameService
+    public interface ICityinCinemaNameService
     {
         Task<IEnumerable<CinemaDto>> GetCinemasAsync(string cityName);
     }

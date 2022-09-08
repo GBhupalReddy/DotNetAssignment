@@ -54,6 +54,24 @@ namespace BookMyShow.Controllers
                 return NotFound("Please Enter Valid Data");
             return Ok(result);
         }
+       // GET<MovieController>/5
+        [Route("{cityName}/{movieName}")]
+        [HttpGet]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        // [HttpGet("{cityName},{movieName}")]
+        public async Task<ActionResult> Get(string cityName, string movieName)
+        {
+            var result = await _movieRepository.GetMovieDetails(cityName, movieName);
+            return Ok(result);
+        }
+
+
+        [HttpGet("cityName")]
+        public async Task<ActionResult> Get(string cityName)
+        {
+            var result = await _movieRepository.GetMovieDetails(cityName);
+            return Ok(result);
+        }
 
         // POST <MovieController>
         [Route("")]

@@ -20,7 +20,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         // Get all cinemas
         public async Task<IEnumerable<CinemaDto>> GetCinemasAsync()
         {
-            var query = "select * from Cinema";
+            var query = "select * from Cinema cinema inner join City city on cinema.CityId=city.CityId";
             var result = await _dbConnection.QueryAsync<CinemaDto>(query);
             return result;
 
@@ -48,7 +48,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         public async Task<Cinema> UpdateCinemaAsynce(int id, Cinema cinema)
         {
             var CinemaToBeUpdated = await GetCinemaAsync(id);
-            CinemaToBeUpdated.Name = cinema.Name;
+            CinemaToBeUpdated.CinemaName = cinema.CinemaName;
             CinemaToBeUpdated.TotalCinemaHalls = cinema.TotalCinemaHalls;
             CinemaToBeUpdated.CityId = cinema.CityId;
             _bookMyShowContext.Cinemas.Update(CinemaToBeUpdated);

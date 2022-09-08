@@ -3,8 +3,8 @@
     public class CinemaDto
     {
         public int CinemaId { get; set; }
-        public string Name { get; set; } = null!;
+        public string CinemaName { get; set; } = null!;
         public int TotalCinemaHalls { get; set; }
-        public int CityId { get; set; }
+        public string CityName { get; set; } = null!;
     }
 }

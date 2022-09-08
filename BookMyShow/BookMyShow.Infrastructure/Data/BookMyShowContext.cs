@@ -9,9 +9,8 @@ namespace BookMyShow.Infrastructure.Data
         public BookMyShowContext()
         {
         }
-
         public BookMyShowContext(DbContextOptions<BookMyShowContext> options)
-            : base(options)
+           : base(options)
         {
         }
 
@@ -26,7 +25,6 @@ namespace BookMyShow.Infrastructure.Data
         public virtual DbSet<ShowSeat> ShowSeats { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
 
-        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

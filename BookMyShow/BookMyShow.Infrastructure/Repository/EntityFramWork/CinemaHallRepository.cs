@@ -46,7 +46,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         public async Task<CinemaHall> UpdateCinemaHallAsynce(int id, CinemaHall cinemaHall)
         {
             var cinemaHallToBeUpdated = await GetCinemaHallAsync(id);
-            cinemaHallToBeUpdated.Name = cinemaHall.Name;
+            cinemaHallToBeUpdated.CinemaHallName = cinemaHall.CinemaHallName;
             cinemaHallToBeUpdated.TotalSeats = cinemaHall.TotalSeats;
             cinemaHallToBeUpdated.CinemaId = cinemaHall.CinemaId;
             _bookMyShowContext.CinemaHalls.Update(cinemaHallToBeUpdated);

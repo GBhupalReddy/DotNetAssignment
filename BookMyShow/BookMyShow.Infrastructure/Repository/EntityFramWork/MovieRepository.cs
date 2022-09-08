@@ -3,6 +3,7 @@ using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
 using BookMyShow.Infrastructure.Data;
 using Dapper;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
 
 namespace BookMyShow.Infrastructure.Repository.EntityFramWork
@@ -33,6 +34,30 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
             var result = (await _dbConnection.QueryAsync<Movie>(query, new { id })).FirstOrDefault();
            // var result = await _dbConnection.QueryFirstAsync<Movie>(query, new { id = id });
             return result;
+        }
+
+        public async Task<IEnumerable<MovieDetailes>> GetMovieDetails(string cityName, string movieName)
+        {
+            var result = await (from city in _bookMyShowContext.Cities
+                                join cinema in _bookMyShowContext.Cinemas
+                                on city.CityId equals cinema.CityId
+                                join cinemaHall in _bookMyShowContext.CinemaHalls
+                                on cinema.CinemaId equals cinemaHall.CinemaId
+                                join show in _bookMyShowContext.Shows
+                                on cinemaHall.CinemaHallId equals show.CinemaHallId
+                                join movie in _bookMyShowContext.Movies
+                                on show.MovieId equals movie.MovieId
+                                where city.CityName == cityName && movie.Tittle == movieName
+                                select new MovieDetailes
+                                {
+                                    MovieName = movie.Tittle,
+                                    ShowTiming = show.StartTime,
+                                    CinemaName = cinema.CinemaName,
+                                    CinemaHallName = cinemaHall.CinemaHallName,
+                                    CityName = city.CityName,
+                                }).ToListAsync();
+            return result;
+
         }
 
         // Add movie
@@ -66,6 +91,29 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
             var movie = await GetMovieAsync(id);
             _bookMyShowContext.Movies.Remove(movie);
             await _bookMyShowContext.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<MovieDetailes>> GetMovieDetails(string cityName)
+        {
+            var result = await(from city in _bookMyShowContext.Cities
+                               join cinema in _bookMyShowContext.Cinemas
+                               on city.CityId equals cinema.CityId
+                               join cinemaHall in _bookMyShowContext.CinemaHalls
+                               on cinema.CinemaId equals cinemaHall.CinemaId
+                               join show in _bookMyShowContext.Shows
+                               on cinemaHall.CinemaHallId equals show.CinemaHallId
+                               join movie in _bookMyShowContext.Movies
+                               on show.MovieId equals movie.MovieId
+                               where city.CityName == cityName
+                               select new MovieDetailes
+                               {
+                                   MovieName = movie.Tittle,
+                                   ShowTiming = show.StartTime,
+                                   CinemaName = cinema.CinemaName,
+                                   CinemaHallName = cinemaHall.CinemaHallName,
+                                   CityName = city.CityName,
+                               }).ToListAsync();
+            return result;
         }
     }
 }

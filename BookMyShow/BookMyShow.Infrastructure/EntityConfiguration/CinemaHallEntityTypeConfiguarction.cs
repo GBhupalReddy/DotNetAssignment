@@ -8,9 +8,11 @@ namespace BookMyShow.Infrastructure.EntityConfiguration
     {
         public void Configure(EntityTypeBuilder<CinemaHall> builder)
         {
+           
+
             builder.ToTable("CinemaHall");
 
-            builder.Property(e => e.Name)
+            builder.Property(e => e.CinemaHallName)
                 .HasMaxLength(64)
                 .IsUnicode(false);
 
@@ -18,7 +20,7 @@ namespace BookMyShow.Infrastructure.EntityConfiguration
                 .WithMany(p => p.CinemaHalls)
                 .HasForeignKey(d => d.CinemaId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__CinemaHal__Cinem__2A4B4B5E");
+                .HasConstraintName("FK__CinemaHal__Cinem__44FF419A");
 
         }
     }

@@ -20,11 +20,11 @@ namespace BookMyShow.Infrastructure.Service
                                 on cinemaHall.CinemaId equals cinema.CinemaId
                                 join city in _bookMyShowContext.Cities
                                 on cinema.CityId equals city.CityId
-                               where cinema.Name == cinemaName && city.Name== cityName
+                               where cinema.CinemaName == cinemaName && city.CityName== cityName
                                 select new CinemaHallDto
                                 {
                                     CinemaHallId = cinemaHall.CinemaHallId,
-                                    Name = cinemaHall.Name,
+                                    CinemaHallName = cinemaHall.CinemaHallName,
                                     TotalSeats = cinemaHall.TotalSeats,
                                     CinemaId = cinemaHall.CinemaId
                                 }).ToListAsync();

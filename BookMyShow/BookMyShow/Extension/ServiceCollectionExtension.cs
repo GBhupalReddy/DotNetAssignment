@@ -50,7 +50,7 @@ namespace BookMyShow.Extension
 
             //Service
 
-            services.AddTransient<ICityNametoMovieNameService, CityNametoMovieNameService>();
+            services.AddTransient<ICityinCinemaNameService, CityinCinemaNameService>();
             services.AddTransient<IUserBookingDetailsService, UserBookingDetailsService>();
             services.AddTransient<ICinemaHallinCinemaService, CinemaHallinCinemaService>();
 

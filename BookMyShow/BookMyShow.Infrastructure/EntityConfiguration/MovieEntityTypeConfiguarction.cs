@@ -18,10 +18,6 @@ namespace BookMyShow.Infrastructure.EntityConfiguration
                 .HasMaxLength(512)
                 .IsUnicode(false);
 
-            builder.Property(e => e.Duration)
-                .HasMaxLength(40)
-                .IsUnicode(false);
-
             builder.Property(e => e.Genre)
                 .HasMaxLength(64)
                 .IsUnicode(false);

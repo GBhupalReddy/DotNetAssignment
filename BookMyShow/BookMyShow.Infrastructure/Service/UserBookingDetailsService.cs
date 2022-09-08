@@ -35,8 +35,8 @@ namespace BookMyShow.Infrastructure.Service
                                 select new UserBookingDto
                                 {
                                     UserId = user.UserId,
-                                    Name = user.Name,
-                                    Passoword = user.Passoword,
+                                    Name = user.UserName,
+                                    Passoword = user.Password,
                                     Email = user.Email,
                                     Phone = user.Phone,
                                     BookingId = booking.BookingId,
@@ -46,9 +46,9 @@ namespace BookMyShow.Infrastructure.Service
                                     Amount=payment.Amount,
                                     DicountCoupon=payment.DicountCoupon,
                                     RemoteTransactionId=payment.RemoteTransactionId,
-                                    CinemaHallName=cinemahall.Name,
-                                    CinemaName=cinema.Name,
-                                    CityName=city.Name,
+                                    CinemaHallName=cinemahall.CinemaHallName,
+                                    CinemaName=cinema.CinemaName,
+                                    CityName=city.CityName,
                                 }).ToListAsync();
             return result;
         }

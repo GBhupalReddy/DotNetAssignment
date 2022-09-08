@@ -50,9 +50,9 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         public async Task<User> UpdateUserAsynce(int id,User user)
         {
             var userToBeUpdated=await GetUserAsync(id);
-            userToBeUpdated.Name= user.Name;
+            userToBeUpdated.UserName= user.UserName;
             userToBeUpdated.Email= user.Email;
-            userToBeUpdated.Passoword= user.Passoword;  
+            userToBeUpdated.Password = user.Password;  
             userToBeUpdated.Phone= user.Phone;
             _bookMyShowContext.Users.Update(userToBeUpdated);
             await _bookMyShowContext.SaveChangesAsync();
