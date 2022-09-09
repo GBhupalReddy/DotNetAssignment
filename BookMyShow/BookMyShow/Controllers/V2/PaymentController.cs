@@ -8,41 +8,40 @@ using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace BookMyShow.Controllers
+namespace BookMyShow.Controllers.V2
 {
+    [ApiVersion("2.0")]
     [ApiConventionType(typeof(DefaultApiConventions))]
-    public class UserController : ApiControllerBase
+    public class PaymentController : ApiControllerBase
     {
-        
-        private readonly IUserRepository _userRepository;
-        private readonly ILogger<UserController> _logger;
+
+        private readonly IPaymentRepository _paymentRepository;
+        private readonly ILogger<PaymentController> _logger;
         private readonly IMapper _mapper;
-        public UserController(IUserRepository userRepository, ILogger<UserController> logger, IMapper mapper)
+        public PaymentController(IPaymentRepository paymentRepository, ILogger<PaymentController> logger, IMapper mapper)
         {
-            _userRepository = userRepository;
-            _logger = logger;   
+            _paymentRepository = paymentRepository;
+            _logger = logger;
             _mapper = mapper;
         }
 
-
-        // GET: <UserController>
+        // GET: <PaymentController>
+        [ApiVersion("2.0")]
         [Route("")]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async  Task<ActionResult<IEnumerable<UserDto>>> Get()
+        public async Task<ActionResult<IEnumerable<PaymentDto>>> Get()
         {
-            _logger.LogInformation("Getting list of all Users");
-            var result = await _userRepository.GetUsersAsync();
-            if (!result.Any())
-                return NotFound();
+            _logger.LogInformation("Getting list of all Payments");
+            var result = await _paymentRepository.GetPaymentsAsync();
             return Ok(result);
         }
 
-        // GET <UserController>/5
+        // GET <PaymentController>/5
+        [ApiVersion("2.0")]
         [Route("{id}")]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-
         public async Task<ActionResult> Get(int id)
         {
             if (id <= 0)
@@ -50,48 +49,51 @@ namespace BookMyShow.Controllers
                 _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
                 return BadRequest("Please Enter Valid Data");
             }
-            _logger.LogInformation("Getting Id : {id} User", id);
-           var user = await _userRepository.GetUserAsync(id);
-            var result = _mapper.Map<User,UserDto>(user);
+            _logger.LogInformation("Getting Id : {id} Payment", id);
+            var paymentResult = await _paymentRepository.GetPaymentAsync(id);
+            var result = _mapper.Map<Payment, PaymentDto>(paymentResult);
             if (result is null)
                 return NotFound("Please Enter Valid Data");
             return Ok(result);
-
         }
 
-        // POST <UserController>
+        // POST <PaymentController>
+        [ApiVersion("2.0")]
         [Route("")]
         [HttpPost]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
-        public async Task<ActionResult> Post([FromBody] UserVm userVm)
+        public async Task<ActionResult> Post([FromBody] PaymentVm paymentVm)
         {
-            _logger.LogInformation("add new user");
-            var user = _mapper.Map<UserVm, User>(userVm);
-            var userresult = await _userRepository.AddUserAsync(user);
-            var result = _mapper.Map<User, UserDto>(userresult);
+            _logger.LogInformation("add new Payment");
+            var payment = _mapper.Map<PaymentVm, Payment>(paymentVm);
+            var paymentResult = await _paymentRepository.AddPaymentAsync(payment);
+            var result = _mapper.Map<Payment, PaymentDto>(paymentResult);
             return Ok(result);
         }
 
-        // PUT <UserController>/5
+        // PUT <PaymentController>/5
+        [ApiVersion("2.0")]
         [Route("{id}")]
         [HttpPut]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
-        public async Task<ActionResult> Put(int id, [FromBody] UserVm userVm)
+        public async Task<ActionResult> Put(int id, [FromBody] PaymentVm paymentVm)
         {
             if (id <= 0)
             {
-                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's Id.");
+                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
                 return BadRequest("Please Enter Valid Data");
             }
-            _logger.LogInformation("Update Id: {id} User", id);
-            var user = await _userRepository.UpdateUserAsynce(id, _mapper.Map<UserVm, User>(userVm));
-            var result = _mapper.Map<User,UserDto>(user);
+            _logger.LogInformation("Update Id: {id} Payment", id);
+            var payment = _mapper.Map<PaymentVm, Payment>(paymentVm);
+            var paymentResult = await _paymentRepository.UpdatePaymentAsynce(id, payment);
+            var result = _mapper.Map<Payment, PaymentDto>(paymentResult);
             if (result.Equals(null))
-                return NoContent();
+                return NotFound();
             return Ok(result);
         }
 
-        // DELETE <UserController>/5
+        // DELETE <PaymentController>/5
+        [ApiVersion("2.0")]
         [Route("{id}")]
         [HttpDelete]
         [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
@@ -102,8 +104,8 @@ namespace BookMyShow.Controllers
                 _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
                 BadRequest("Please Enter Valid Data");
             }
-            _logger.LogInformation("Deleted Id :  {id}  User", id);
-            await _userRepository.DeleteUserAsync(id);
+            _logger.LogInformation("Deleted Id :  {id}  Payment", id);
+            await _paymentRepository.DeletePaymentAsync(id);
         }
     }
 }

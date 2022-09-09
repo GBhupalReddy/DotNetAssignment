@@ -30,8 +30,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         public async Task<ShowSeat> GetShowSaetAsync(int id)
         {
             var query = "select * from ShowSeat where ShowSeatId = @id";
-            var result = (await _dbConnection.QueryAsync<ShowSeat>(query, new { id })).FirstOrDefault();
-           // var result = await _dbConnection.QueryFirstAsync<ShowSeat>(query, new { id = id });
+            var result = (await _dbConnection.QueryFirstOrDefaultAsync<ShowSeat>(query, new { id }));
             return result;
         }
 

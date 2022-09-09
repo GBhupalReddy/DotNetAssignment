@@ -2,7 +2,7 @@
 
 namespace BookMyShow.Controllers
 {
-    [Route("[controller]")]
+    [Route("v{version:apiVersion}/[controller]")]
     [ApiController]
     public class ApiControllerBase : ControllerBase
     {

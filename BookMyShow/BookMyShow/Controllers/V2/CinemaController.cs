@@ -8,33 +8,37 @@ using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace BookMyShow.Controllers
+namespace BookMyShow.Controllers.V2
 {
+    [ApiVersion("2.0")]
     [ApiConventionType(typeof(DefaultApiConventions))]
-    public class CinemaHallController : ApiControllerBase
+    public class CinemaController : ApiControllerBase
     {
-        private readonly ICinemaHallRepository _cinemaHallRepository;
-        private readonly ILogger<CinemaHallController> _logger;
+        private readonly ICinemaRepository _cinemaRepository;
+        private readonly ILogger<CinemaController> _logger;
         private readonly IMapper _mapper;
-        public CinemaHallController(ICinemaHallRepository cinemaHallRepository, ILogger<CinemaHallController> logger, IMapper mapper)
+        public CinemaController(ICinemaRepository cinemaRepository, ILogger<CinemaController> logger, IMapper mapper)
         {
-            _cinemaHallRepository = cinemaHallRepository;
+            _cinemaRepository = cinemaRepository;
             _logger = logger;
             _mapper = mapper;
         }
 
-        // GET: <CinemaHallController>
+        // GET: <CinemaController>
+        [ApiVersion("2.0")]
+
         [Route("")]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult<IEnumerable<CinemaHallDto>>> Get()
+        public async Task<ActionResult<IEnumerable<CinemaDto>>> Get()
         {
-            _logger.LogInformation("Getting list of all CinemaHalls");
-            var result= await _cinemaHallRepository.GetCinemaHallsAsync();
+            _logger.LogInformation("Getting list of all Cinemas");
+            var result = await _cinemaRepository.GetCinemasAsync();
             return Ok(result);
         }
 
-        // GET <CinemaHallController>/5
+        // GET <CinemaController>/
+        [ApiVersion("2.0")]
         [Route("{id}")]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
@@ -45,49 +49,49 @@ namespace BookMyShow.Controllers
                 _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
                 return BadRequest("Please Enter Valid Data");
             }
-            _logger.LogInformation("Getting Id {id} CinemaHall",id);
-            var cinemaHall = await _cinemaHallRepository.GetCinemaHallAsync(id);
-            var result = _mapper.Map<CinemaHall, CinemaHallDto>(cinemaHall);
+            _logger.LogInformation("Getting Id {id} Cinema", id);
+            var cinema = await _cinemaRepository.GetCinemaAsync(id);
+            var result = _mapper.Map<Cinema, CinemaDto>(cinema);
             if (result is null)
                 return NotFound("Please Enter Valid Data");
             return Ok(result);
         }
 
-        // POST <CinemaHallController>
+        // POST <CinemaController>
+        [ApiVersion("2.0")]
         [Route("")]
         [HttpPost]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
-        public async Task<ActionResult> Post([FromBody] CinemaHallVm cinemaHallVm)
+        public async Task<ActionResult> Post([FromBody] CinemaVm cinemaVm)
         {
-            
-            _logger.LogInformation("add new CinemaHall");
-            var cinemaHall = _mapper.Map<CinemaHallVm, CinemaHall>(cinemaHallVm);
-            var cinemaHallResult = await _cinemaHallRepository.AddCinemaHallAsync(cinemaHall);
-            var result = _mapper.Map<CinemaHall, CinemaHallDto>(cinemaHallResult);
+            _logger.LogInformation("add new Cinema");
+            var cinema = _mapper.Map<CinemaVm, Cinema>(cinemaVm);
+            var cinemaResult = await _cinemaRepository.AddCinemaAsync(cinema);
+            var result = _mapper.Map<Cinema, CinemaDto>(cinemaResult);
             return Ok(result);
-
         }
 
-        // PUT <CinemaHallController>/5
+        // PUT <CinemaController>
+        [ApiVersion("2.0")]
         [Route("{id}")]
         [HttpPut]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
-        public async Task<ActionResult> Put(int id, [FromBody] CinemaHallVm cinemaHallVm)
+        public async Task<ActionResult> Put(int id, [FromBody] CinemaVm cinemaVm)
         {
             if (id <= 0)
             {
-                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}",id);
+                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
                 return BadRequest("Please Enter Valid Data");
             }
-            _logger.LogInformation("Update Id: {id} CinemaHall",id);
-            var cinemaHall = _mapper.Map<CinemaHallVm, CinemaHall>(cinemaHallVm);
-            var cinemaHallResult = await _cinemaHallRepository.UpdateCinemaHallAsynce(id,cinemaHall);
-            var result = _mapper.Map<CinemaHall, CinemaHallDto>(cinemaHallResult);
+            _logger.LogInformation("Update Id: {id} Cinema", id);
+            var cinema = _mapper.Map<CinemaVm, Cinema>(cinemaVm);
+            var cinemaResult = await _cinemaRepository.UpdateCinemaAsynce(id, cinema);
+            var result = _mapper.Map<Cinema, CinemaDto>(cinemaResult);
             return Ok(result);
-
         }
 
-        // DELETE <CinemaHallController>/5
+        // DELETE <CinemaController>
+        [ApiVersion("2.0")]
         [Route("{id}")]
         [HttpDelete]
         [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
@@ -98,8 +102,8 @@ namespace BookMyShow.Controllers
                 _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
                 BadRequest("Please Enter Valid Data");
             }
-            _logger.LogInformation("Deleted  {id}  CinemaHall",id);
-            await _cinemaHallRepository.DeleteCinemaHallrAsync(id);
+            _logger.LogInformation("Deleted Id : {id}  Cinema", id);
+            await _cinemaRepository.DeleteCinemaAsync(id);
         }
     }
 }

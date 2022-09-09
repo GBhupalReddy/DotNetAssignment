@@ -8,10 +8,11 @@ using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace BookMyShow.Controllers
+namespace BookMyShow.Controllers.V2
 {
+    [ApiVersion("2.0")]
     [ApiConventionType(typeof(DefaultApiConventions))]
-    public class ShowSeatController :  ApiControllerBase
+    public class ShowSeatController : ApiControllerBase
     {
         private readonly IShowSeatRepository _showseatRepository;
         private readonly ILogger<ShowSeatController> _logger;
@@ -25,6 +26,7 @@ namespace BookMyShow.Controllers
         }
 
         // GET: <ShoeSeatController>
+        [ApiVersion("2.0")]
         [Route("")]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
@@ -38,6 +40,7 @@ namespace BookMyShow.Controllers
         }
 
         // GET <ShoeSeatController>/5
+        [ApiVersion("2.0")]
         [Route("{id}")]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
@@ -50,13 +53,14 @@ namespace BookMyShow.Controllers
             }
             _logger.LogInformation("Getting Id : {id} ShowSeat", id);
             var showSeaRtesult = await _showseatRepository.GetShowSaetAsync(id);
-            var result = _mapper.Map<ShowSeat,ShowSeatDto>(showSeaRtesult);
+            var result = _mapper.Map<ShowSeat, ShowSeatDto>(showSeaRtesult);
             if (result is null)
                 return NotFound("Please Enter Valid Data");
             return Ok(result);
         }
 
         // POST <ShoeSeatController>
+        [ApiVersion("2.0")]
         [Route("")]
         [HttpPost]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
@@ -70,6 +74,7 @@ namespace BookMyShow.Controllers
         }
 
         // PUT <ShoeSeatController>/5
+        [ApiVersion("2.0")]
         [Route("{id}")]
         [HttpPut]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
@@ -77,17 +82,18 @@ namespace BookMyShow.Controllers
         {
             if (id <= 0)
             {
-                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id} ",id);
+                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id} ", id);
                 return BadRequest("Please Enter Valid Data");
             }
-            _logger.LogInformation("Update Id: {id} ShowSeat",id);
+            _logger.LogInformation("Update Id: {id} ShowSeat", id);
             var showSeat = _mapper.Map<ShowSeatVm, ShowSeat>(showSeatVm);
-            var showSeaRtesult = await _showseatRepository.UpdateShowSeatAsynce(id,showSeat);
+            var showSeaRtesult = await _showseatRepository.UpdateShowSeatAsynce(id, showSeat);
             var result = _mapper.Map<ShowSeat, ShowSeatDto>(showSeaRtesult);
             return Ok(result);
         }
 
         // DELETE <ShoeSeatController>/5
+        [ApiVersion("2.0")]
         [Route("{id}")]
         [HttpDelete]
         [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]

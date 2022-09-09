@@ -8,8 +8,10 @@ using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace BookMyShow.Controllers
+namespace BookMyShow.Controllers.V1
 {
+    [ApiVersion("1.0")]
+    [ApiVersion("1.1")]
     [ApiConventionType(typeof(DefaultApiConventions))]
     public class CinemaSeatController : ApiControllerBase
     {
@@ -19,24 +21,26 @@ namespace BookMyShow.Controllers
         private readonly IMapper _mapper;
         public CinemaSeatController(ICinemaSeatRepository cinemaSeatRepository, ILogger<CinemaSeatController> logger, IMapper mapper)
         {
-            
+
             _cinemaSeatRepository = cinemaSeatRepository;
             _logger = logger;
             _mapper = mapper;
         }
 
         // GET: <ValuesController>
+        [ApiVersion("1.0")]
         [Route("")]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult<IEnumerable<CinemaSeatDto>>> Get()
         {
             _logger.LogInformation("Getting list of all CinemaSeats");
-            var result=await _cinemaSeatRepository.GetCinemaSeatsAsync();
+            var result = await _cinemaSeatRepository.GetCinemaSeatsAsync();
             return Ok(result);
         }
 
         // GET <ValuesController>/5
+        [ApiVersion("1.0")]
         [Route("{id}")]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
@@ -47,28 +51,30 @@ namespace BookMyShow.Controllers
                 _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
                 return BadRequest("Please Enter Valid Data");
             }
-            _logger.LogInformation("Getting Id {id} CinemaSeat",id);
+            _logger.LogInformation("Getting Id {id} CinemaSeat", id);
             var cinemaSeat = await _cinemaSeatRepository.GetCinemaSeatAsync(id);
-            var result =  _mapper.Map<CinemaSeat,CinemaSeatDto>(cinemaSeat);
+            var result = _mapper.Map<CinemaSeat, CinemaSeatDto>(cinemaSeat);
             if (result is null)
                 return NotFound("Please Enter Valid Data");
             return Ok(result);
         }
 
         // POST <ValuesController>
+        [ApiVersion("1.0")]
         [Route("")]
         [HttpPost]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
         public async Task<ActionResult> Post([FromBody] CinemaSeatVm cinemaSeatVm)
         {
             _logger.LogInformation("add new CinemaSeat");
-            var cinemaSeat=_mapper.Map<CinemaSeatVm,CinemaSeat>(cinemaSeatVm);
+            var cinemaSeat = _mapper.Map<CinemaSeatVm, CinemaSeat>(cinemaSeatVm);
             var cinemaSeatResult = await _cinemaSeatRepository.AddCinemaSeatAsync(cinemaSeat);
             var result = _mapper.Map<CinemaSeat, CinemaSeatDto>(cinemaSeat);
             return Ok(result);
         }
 
         // PUT <ValuesController>/5
+        [ApiVersion("1.0")]
         [Route("{id}")]
         [HttpPut]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
@@ -76,17 +82,18 @@ namespace BookMyShow.Controllers
         {
             if (id <= 0)
             {
-                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}",id);
+                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
                 return BadRequest("Please Enter Valid Data");
             }
-            _logger.LogInformation("Update Id: {id} CinemaSeat",id);
+            _logger.LogInformation("Update Id: {id} CinemaSeat", id);
             var cinemaSeat = _mapper.Map<CinemaSeatVm, CinemaSeat>(cinemaSeatVm);
-            var cinemaSeatResult = await _cinemaSeatRepository.UpdateCinemaSeatAsynce(id,cinemaSeat);
+            var cinemaSeatResult = await _cinemaSeatRepository.UpdateCinemaSeatAsynce(id, cinemaSeat);
             var result = _mapper.Map<CinemaSeat, CinemaSeatDto>(cinemaSeat);
             return Ok(result);
         }
 
         // DELETE <ValuesController>/5
+        [ApiVersion("1.0")]
         [Route("{id}")]
         [HttpDelete]
         [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
@@ -97,7 +104,7 @@ namespace BookMyShow.Controllers
                 _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
                 BadRequest("Please Enter Valid Data");
             }
-            _logger.LogInformation("Deleted  {id}  CinemaSeat",id);
+            _logger.LogInformation("Deleted  {id}  CinemaSeat", id);
             await _cinemaSeatRepository.DeleteCinemaSeatAsync(id);
         }
     }

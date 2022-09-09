@@ -32,8 +32,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         public async Task<Payment> GetPaymentAsync(int id)
         {
             var query = "select * from Payment where PaymentId = @id";
-            var result = (await _dbConnection.QueryAsync<Payment>(query, new { id })).FirstOrDefault();
-           // var result = await _dbConnection.QueryFirstAsync<Payment>(query, new {id = id });
+            var result = (await _dbConnection.QueryFirstOrDefaultAsync<Payment>(query, new { id }));
             return result;
         }
 

@@ -31,7 +31,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         {
 
             var query = "select * from Booking where BookingId = @id";
-            var result = (await _dbConnection.QueryAsync<Booking>(query, new { id })).FirstOrDefault();
+            var result = (await _dbConnection.QueryFirstOrDefaultAsync<Booking>(query, new { id }));
             //var result = await _dbConnection.QueryFirstAsync<Booking>(query, new {id=id});
             return result;
         }

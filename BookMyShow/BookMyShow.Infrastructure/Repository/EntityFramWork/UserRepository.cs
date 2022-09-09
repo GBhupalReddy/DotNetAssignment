@@ -31,8 +31,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         public async Task<User> GetUserAsync(int id)
         {
             var query = "select * from [User] where UserId=@id";
-            var result = (await _dbConnection.QueryAsync<User>(query, new { id })).FirstOrDefault();
-          //  var result = await _dbConnection.QueryFirstAsync<User>(query,new { id = id });
+            var result = (await _dbConnection.QueryFirstOrDefaultAsync<User>(query, new { id }));
             return result;
             
         

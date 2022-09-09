@@ -31,19 +31,17 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         public async Task<City> GetCityAsync(int id)
         {
             var query = "select * from City where CityId = @id";
-            var result = (await _dbConnection.QueryAsync<City>(query, new { id })).FirstOrDefault();
-            //var result = await _dbConnection.QueryFirstAsync<City>(query, new {id= id});
+            var result = (await _dbConnection.QueryFirstOrDefaultAsync<City>(query, new { id }));
             return result;
            
         }
         public async Task<IEnumerable<CinemaDto>> GetCinemasAsync(string cityName)
         {
-            //var qury = "  select cin.CinemaId,cin.Name,cin.TotalCinemaHalls,cin.CityId from Cinema cin inner join City cit on cin.CityId=cit.CityId where cit.Name = @cityName;";
-            //var result = await _dbConnection.QueryAsync<Cinema>(qury, new { cityName = cityName });
+            
             var result = await (from cinema in _bookMyShowContext.Cinemas
                                 join city in _bookMyShowContext.Cities
                                 on cinema.CityId equals city.CityId
-                                where city.CityName == cityName
+                                where city.CityName.ToLower().Contains(cityName.ToLower())  
                                 select new CinemaDto
                                 {
                                     CinemaId = cinema.CinemaId,

@@ -31,34 +31,11 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         public async Task<Movie> GetMovieAsync(int id)
         {
             var query = "select * from Movie where MovieId = @id";
-            var result = (await _dbConnection.QueryAsync<Movie>(query, new { id })).FirstOrDefault();
-           // var result = await _dbConnection.QueryFirstAsync<Movie>(query, new { id = id });
+            var result = (await _dbConnection.QueryFirstOrDefaultAsync<Movie>(query, new { id }));
             return result;
         }
 
-        public async Task<IEnumerable<MovieDetailes>> GetMovieDetails(string cityName, string movieName)
-        {
-            var result = await (from city in _bookMyShowContext.Cities
-                                join cinema in _bookMyShowContext.Cinemas
-                                on city.CityId equals cinema.CityId
-                                join cinemaHall in _bookMyShowContext.CinemaHalls
-                                on cinema.CinemaId equals cinemaHall.CinemaId
-                                join show in _bookMyShowContext.Shows
-                                on cinemaHall.CinemaHallId equals show.CinemaHallId
-                                join movie in _bookMyShowContext.Movies
-                                on show.MovieId equals movie.MovieId
-                                where city.CityName == cityName && movie.Tittle == movieName
-                                select new MovieDetailes
-                                {
-                                    MovieName = movie.Tittle,
-                                    ShowTiming = show.StartTime,
-                                    CinemaName = cinema.CinemaName,
-                                    CinemaHallName = cinemaHall.CinemaHallName,
-                                    CityName = city.CityName,
-                                }).ToListAsync();
-            return result;
-
-        }
+       
 
         // Add movie
         public async Task<Movie> AddMovieAsync(Movie movie)
@@ -93,26 +70,60 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
             await _bookMyShowContext.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<MovieDetailes>> GetMovieDetails(string cityName)
+        public async Task<IEnumerable<MovieDetailes>> GetMovieCityAsync(string cityName)
         {
-            var result = await(from city in _bookMyShowContext.Cities
-                               join cinema in _bookMyShowContext.Cinemas
-                               on city.CityId equals cinema.CityId
-                               join cinemaHall in _bookMyShowContext.CinemaHalls
-                               on cinema.CinemaId equals cinemaHall.CinemaId
-                               join show in _bookMyShowContext.Shows
-                               on cinemaHall.CinemaHallId equals show.CinemaHallId
-                               join movie in _bookMyShowContext.Movies
-                               on show.MovieId equals movie.MovieId
-                               where city.CityName == cityName
-                               select new MovieDetailes
-                               {
-                                   MovieName = movie.Tittle,
-                                   ShowTiming = show.StartTime,
-                                   CinemaName = cinema.CinemaName,
-                                   CinemaHallName = cinemaHall.CinemaHallName,
-                                   CityName = city.CityName,
-                               }).ToListAsync();
+            var result = await (from city in _bookMyShowContext.Cities
+                                join cinema in _bookMyShowContext.Cinemas
+                                on city.CityId equals cinema.CityId
+                                join cinemaHall in _bookMyShowContext.CinemaHalls
+                                on cinema.CinemaId equals cinemaHall.CinemaId
+                                join show in _bookMyShowContext.Shows
+                                on cinemaHall.CinemaHallId equals show.CinemaHallId
+                                join movie in _bookMyShowContext.Movies
+                                on show.MovieId equals movie.MovieId
+                                where city.CityName.ToLower().Contains(cityName.ToLower())
+                                select new MovieDetailes
+                                {
+                                    MovieName = movie.Tittle,
+                                    Language = movie.Language,
+                                    Genre = movie.Genre,
+                                    ShowTiming = show.StartTime,
+                                    CinemaName = cinema.CinemaName,
+                                    CinemaHallName = cinemaHall.CinemaHallName,
+                                    CityName = city.CityName,
+                                }).ToListAsync();
+            return result;
+        }
+        public async Task<IEnumerable<MovieDetailes>> GetMovieCityAsync(string cityName, string movieName)
+        {
+            var cityMovies = await GetMovieCityAsync(cityName);
+
+            var result = from cityMovie in cityMovies
+                         where cityMovie.MovieName.ToLower().Contains(movieName.ToLower())
+                         select cityMovie;
+                                
+            return result;
+
+        }
+        
+        public async Task<IEnumerable<MovieDetailes>> GetMovieLanguageAsync(string cityName,string language)
+        {
+            var cityMovies = await GetMovieCityAsync(cityName);
+
+            var result = from cityMovie in cityMovies
+                         where cityMovie.Language.ToLower().Contains(language.ToLower())
+                         select cityMovie;
+            
+            return result;
+        }
+        public async Task<IEnumerable<MovieDetailes>> GetMovieLanguageGenreAsync(string cityName,string language,string genre)
+        {
+            var cityMovies = await GetMovieLanguageAsync(cityName,language);
+
+            var result = from cityMovie in cityMovies
+                         where cityMovie.Genre.ToLower().Contains(genre.ToLower())
+                         select cityMovie;
+
             return result;
         }
     }
