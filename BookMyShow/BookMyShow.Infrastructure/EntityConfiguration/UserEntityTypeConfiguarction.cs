@@ -1,6 +1,7 @@
 ﻿using BookMyShow.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using static Dapper.SqlMapper;
 
 namespace BookMyShow.Infrastructure.EntityConfiguration
 {
@@ -8,6 +9,8 @@ namespace BookMyShow.Infrastructure.EntityConfiguration
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
+            builder.ToTable("User");
+
             builder.HasIndex(e => e.Phone, "UQ__Users__5C7E359E6F8A3028")
                     .IsUnique();
 

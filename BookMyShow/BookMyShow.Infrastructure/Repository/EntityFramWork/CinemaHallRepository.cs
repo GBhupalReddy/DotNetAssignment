@@ -48,6 +48,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
             var cinemaHallToBeUpdated = await GetCinemaHallAsync(id);
             cinemaHallToBeUpdated.CinemaHallName = cinemaHall.CinemaHallName;
             cinemaHallToBeUpdated.TotalSeats = cinemaHall.TotalSeats;
+            cinemaHallToBeUpdated.AvailableSeats=cinemaHall.AvailableSeats;
             cinemaHallToBeUpdated.CinemaId = cinemaHall.CinemaId;
             _bookMyShowContext.CinemaHalls.Update(cinemaHallToBeUpdated);
             await _bookMyShowContext.SaveChangesAsync();

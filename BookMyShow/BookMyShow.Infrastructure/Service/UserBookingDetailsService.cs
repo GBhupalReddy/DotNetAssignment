@@ -1,5 +1,6 @@
 ﻿using BookMyShow.Core.Contracts.Infrastructure.Service;
 using BookMyShow.Core.Dto;
+using BookMyShow.Core.Entities;
 using BookMyShow.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
@@ -43,14 +44,49 @@ namespace BookMyShow.Infrastructure.Service
                                     NumberOfSeats = booking.NumberOfSeats,
                                     Timestamp = booking.Timestamp,
                                     PaymentId = payment.PaymentId,
-                                    Amount=payment.Amount,
-                                    DicountCoupon=payment.DicountCoupon,
-                                    RemoteTransactionId=payment.RemoteTransactionId,
-                                    CinemaHallName=cinemahall.CinemaHallName,
-                                    CinemaName=cinema.CinemaName,
-                                    CityName=city.CityName,
+                                    Amount = payment.Amount,
+                                    DicountCoupon = payment.DicountCoupon,
+                                    RemoteTransactionId = payment.RemoteTransactionId,
+                                    CinemaHallName = cinemahall.CinemaHallName,
+                                    CinemaName = cinema.CinemaName,
+                                    CityName = city.CityName,
                                 }).ToListAsync();
             return result;
         }
+        public async Task<CinemaHallDto> GetUserBookingDetalisAsync()
+        {
+            var cinemaHall = await (from showSeat in _bookMyShowContext.ShowSeats
+                                    join cinemaSeat in _bookMyShowContext.CinemaSeats
+                                    on showSeat.CinemaSeatId equals cinemaSeat.CinemaSeatId
+                                    where showSeat.BookingId == 2
+                                    select cinemaSeat).ToListAsync();
+            
+            var cinemaHallsss = await (from showSeat in _bookMyShowContext.ShowSeats
+                                       join cinemaSeat in _bookMyShowContext.CinemaSeats
+                                       on showSeat.CinemaSeatId equals cinemaSeat.CinemaSeatId
+                                       join cinema in _bookMyShowContext.CinemaHalls
+                                       on cinemaSeat.CinemaHallId equals cinema.CinemaHallId
+                                       where showSeat.BookingId ==2
+                                       select new CinemaHallDto
+                                       {
+                                           CinemaHallId = cinema.CinemaHallId,
+                                           AvailableSeats = cinema.AvailableSeats,
+                                           CinemaHallName = cinema.CinemaHallName,
+                                           CinemaId = cinema.CinemaId,
+                                           TotalSeats=cinema.TotalSeats
+                                       }).FirstOrDefaultAsync();
+
+            
+
+            //var data = await (from cinema in )
+            //  payment.Amount = amount.Select(c => c.Price).Sum();
+
+            // int result = cinemaHall.Select(c => c.CinemaSeatId).Count();
+
+
+            return cinemaHallsss;
+        }
+
+
     }
 }

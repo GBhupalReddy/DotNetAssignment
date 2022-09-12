@@ -1,6 +1,7 @@
 ﻿using BookMyShow.Core.Contracts.Infrastructure.Repository;
 using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
+using BookMyShow.Core.Enums;
 using BookMyShow.Infrastructure.Data;
 using Dapper;
 using System.Data;
@@ -36,6 +37,26 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         // Add cinema seat
         public async Task<CinemaSeat> AddCinemaSeatAsync(CinemaSeat cinemaSeat)
         {
+            var result = cinemaSeat.SeatNumber;
+            int[] thirdClass = { 1, 2 };
+            int[] secondClass = { 3, 4 };
+            int[] firstClass = { 5, 6 };
+            bool thirdClassReault = Array.Exists(thirdClass, element => element == result);
+            if (thirdClassReault)
+            {
+                cinemaSeat.Type = (int)CinemaSeatType.ThirdClass;
+            }
+            bool secondClassResult = Array.Exists(secondClass, element => element == result);
+            if (secondClassResult)
+            {
+                cinemaSeat.Type = (int)CinemaSeatType.SecondClass;
+            }
+
+            bool firstClassresult = Array.Exists(firstClass, element => element == result);
+            if (firstClassresult)
+            {
+                cinemaSeat.Type = (int)CinemaSeatType.FirstClass;
+            }
             _bookMyShowContext.CinemaSeats.Add(cinemaSeat);
             await _bookMyShowContext.SaveChangesAsync();
             return cinemaSeat;

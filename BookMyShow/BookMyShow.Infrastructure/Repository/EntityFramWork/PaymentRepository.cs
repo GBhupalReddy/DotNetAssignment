@@ -1,8 +1,10 @@
-﻿using BookMyShow.Core.Contracts.Infrastructure.Repository;
+﻿using AutoMapper;
+using BookMyShow.Core.Contracts.Infrastructure.Repository;
 using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
 using BookMyShow.Infrastructure.Data;
 using Dapper;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
 
 namespace BookMyShow.Infrastructure.Repository.EntityFramWork
@@ -11,12 +13,12 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
     {
         private readonly BookMyShowContext _bookMyShowContext;
         private readonly IDbConnection _dbConnection;
-
-
-        public PaymentRepository(BookMyShowContext bookMyShowContext, IDbConnection dbConnection)
+        private readonly IMapper _mapper;
+        public PaymentRepository(BookMyShowContext bookMyShowContext, IMapper mapper, IDbConnection dbConnection)
         {
             _bookMyShowContext = bookMyShowContext;
             _dbConnection = dbConnection;
+            _mapper = mapper;
         }
 
         // Get all payments
@@ -39,15 +41,50 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         // Add payment
         public async Task<Payment> AddPaymentAsync(Payment payment)
         {
+            var amount = from booking in _bookMyShowContext.ShowSeats
+                         where booking.BookingId == payment.BookingId
+                         select booking;
+
+            payment.Amount = amount.Select(c=>c.Price).Sum();
             _bookMyShowContext.Payments.Add(payment);
             await _bookMyShowContext.SaveChangesAsync();
+           if(payment != null)
+            {
+                var cinemaSeats = await (from showSeat in _bookMyShowContext.ShowSeats
+                                         join cinemaSeat in _bookMyShowContext.CinemaSeats
+                                         on showSeat.CinemaSeatId equals cinemaSeat.CinemaSeatId
+                                         where showSeat.BookingId == payment.BookingId
+                                         select cinemaSeat).ToListAsync();
+                
+                 int bokkedTikets = cinemaSeats.Select(c => c.CinemaSeatId).Count();
+                var cinemaHall = await (from showSeat in _bookMyShowContext.ShowSeats
+                                           join cinemaSeat in _bookMyShowContext.CinemaSeats
+                                           on showSeat.CinemaSeatId equals cinemaSeat.CinemaSeatId
+                                           join cinema in _bookMyShowContext.CinemaHalls
+                                           on cinemaSeat.CinemaHallId equals cinema.CinemaHallId
+                                           where showSeat.BookingId == 2
+                                           select new CinemaHall
+                                           {
+                                               CinemaHallId = cinema.CinemaHallId,
+                                               CinemaHallName = cinema.CinemaHallName,
+                                               AvailableSeats = cinema.AvailableSeats,
+                                               CinemaId = cinema.CinemaId,
+                                               TotalSeats = cinema.TotalSeats
+                                           }).FirstOrDefaultAsync();
+                cinemaHall.AvailableSeats = cinemaHall.AvailableSeats - bokkedTikets;
+                  _bookMyShowContext.CinemaHalls.Update(cinemaHall);
+                  await _bookMyShowContext.SaveChangesAsync();
+            }
             return payment;
         }
         // Update payment using id
         public async Task<Payment> UpdatePaymentAsynce(int id, Payment payment)
         {
             var paymentToBeUpdated = await GetPaymentAsync(id);
-            paymentToBeUpdated.Amount = payment.Amount;
+            var amount = from booking in _bookMyShowContext.ShowSeats
+                         where booking.BookingId == payment.BookingId
+                         select booking;
+            payment.Amount= amount.Select(c => c.Price).Sum();
             paymentToBeUpdated.TimeStamp = payment.TimeStamp;
             paymentToBeUpdated.DicountCoupon = payment.DicountCoupon;
             paymentToBeUpdated.RemoteTransactionId = payment.RemoteTransactionId;

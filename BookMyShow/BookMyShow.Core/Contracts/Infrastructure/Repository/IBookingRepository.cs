@@ -6,9 +6,9 @@ namespace BookMyShow.Core.Contracts.Infrastructure.Repository
     public interface IBookingRepository
     {
         Task<Booking> AddBookingAsync(Booking user);
-        Task DeleteBookingAsync(int id);
+        Task DeleteBookingAsync(Booking booking);
         Task<Booking> GetBookingAsync(int id);
         Task<IEnumerable<BookingDto>> GetBookingsAsync();
-        Task<Booking> UpdateBookingAsynce(int id, Booking booking);
+        Task<Booking> UpdateBookingAsynce( Booking booking);
     }
 }

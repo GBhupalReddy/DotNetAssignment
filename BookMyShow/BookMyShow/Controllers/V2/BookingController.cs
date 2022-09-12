@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BookMyShow.Core.Contracts.Infrastructure.Repository;
+using BookMyShow.Core.Contracts.Infrastructure.Service;
 using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
 using BookMyShow.Infrastructure.Specs;
@@ -15,13 +16,13 @@ namespace BookMyShow.Controllers.V2
     public class BookingController : ApiControllerBase
     {
 
-        private readonly IBookingRepository _bookingRepository;
+        private readonly IBookingService _bookingService;
         private readonly ILogger<BookingController> _logger;
         private readonly IMapper _mapper;
 
-        public BookingController(IBookingRepository bookingRepository, ILogger<BookingController> logger, IMapper mapper)
+        public BookingController(IBookingService bookingService, ILogger<BookingController> logger, IMapper mapper)
         {
-            _bookingRepository = bookingRepository;
+            _bookingService = bookingService;
             _logger = logger;
             _mapper = mapper;
         }
@@ -34,7 +35,7 @@ namespace BookMyShow.Controllers.V2
         public async Task<ActionResult<IEnumerable<BookingDto>>> Get()
         {
             _logger.LogInformation("Getting list of all Bookings");
-            var result = await _bookingRepository.GetBookingsAsync();
+            var result = await _bookingService.GetBookingsAsync();
             return Ok(result);
         }
 
@@ -52,7 +53,7 @@ namespace BookMyShow.Controllers.V2
             }
 
             _logger.LogInformation("Getting Id : {id} Booking", id);
-            var booking = await _bookingRepository.GetBookingAsync(id);
+            var booking = await _bookingService.GetBookingUsingIdAsync(id);
             var result = _mapper.Map<Booking, BookingDto>(booking);
             if (result is null)
                 return NotFound("Please Enter Valid Data");
@@ -69,7 +70,7 @@ namespace BookMyShow.Controllers.V2
 
             _logger.LogInformation("add new Booking");
             var booking = _mapper.Map<BookingVm, Booking>(bookingVm);
-            var bookingResult = await _bookingRepository.AddBookingAsync(booking);
+            var bookingResult = await _bookingService.AddBookingAsync(booking);
             var result = _mapper.Map<Booking, BookingDto>(bookingResult);
             return Ok(result);
         }
@@ -88,7 +89,7 @@ namespace BookMyShow.Controllers.V2
             }
             _logger.LogInformation("Update Id: {id} Booking", id);
             var booking = _mapper.Map<BookingVm, Booking>(bookingVm);
-            var bookingResult = await _bookingRepository.UpdateBookingAsynce(id, booking);
+            var bookingResult = await _bookingService.UpdateBookingAsynce(id, booking);
             var result = _mapper.Map<Booking, BookingDto>(bookingResult);
             return Ok(result);
         }
@@ -107,7 +108,7 @@ namespace BookMyShow.Controllers.V2
 
             }
             _logger.LogInformation("Deleted Id :  {id}  Booking", id);
-            await _bookingRepository.DeleteBookingAsync(id);
+            await _bookingService.DeleteBookingAsync(id);
 
         }
     }

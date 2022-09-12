@@ -26,6 +26,7 @@ namespace BookMyShow.Infrastructure.Service
                                     CinemaHallId = cinemaHall.CinemaHallId,
                                     CinemaHallName = cinemaHall.CinemaHallName,
                                     TotalSeats = cinemaHall.TotalSeats,
+                                    AvailableSeats=cinemaHall.AvailableSeats,
                                     CinemaId = cinemaHall.CinemaId
                                 }).ToListAsync();
             return result;

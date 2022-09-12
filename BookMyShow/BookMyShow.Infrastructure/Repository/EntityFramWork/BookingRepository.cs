@@ -45,24 +45,18 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         }
 
         // Update booking using id
-        public async Task<Booking> UpdateBookingAsynce(int id, Booking booking)
+        public async Task<Booking> UpdateBookingAsynce(Booking booking)
         {
-            var bookingToBeUpdated = await GetBookingAsync(id);
-            bookingToBeUpdated.NumberOfSeats = booking.NumberOfSeats;
-            bookingToBeUpdated.Timestamp = booking.Timestamp;
-            bookingToBeUpdated.Status = booking.Status;
-            bookingToBeUpdated.UserId = booking.UserId;
-            bookingToBeUpdated.ShowId = booking.ShowId;
-            _bookMyShowContext.Bookings.Update(bookingToBeUpdated);
+            
+            _bookMyShowContext.Bookings.Update(booking);
             await _bookMyShowContext.SaveChangesAsync();
-            return bookingToBeUpdated;
+            return booking;
 
         }
 
         //deleted booking using id
-        public async Task DeleteBookingAsync(int id)
+        public async Task DeleteBookingAsync(Booking booking)
         {
-            var booking = await GetBookingAsync(id);
             _bookMyShowContext.Bookings.Remove(booking);
             await _bookMyShowContext.SaveChangesAsync();
         }
