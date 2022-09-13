@@ -2,7 +2,6 @@
 {
     public class MovieDto
     {
-        public int MovieId { get; set; }
         public string? Tittle { get; set; }
         public string Description { get; set; } = null!;
         public TimeSpan? Duration { get; set; }

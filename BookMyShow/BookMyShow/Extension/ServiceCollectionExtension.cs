@@ -15,7 +15,6 @@ namespace BookMyShow.Extension
     {
         public static void RegisterSystemServices(this IServiceCollection service, IConfiguration configuration)
         {
-
             service.AddDbContext<BookMyShowContext>(data =>
             {
                 data.UseSqlServer(configuration.GetConnectionString("BookMyShowConnection"));
@@ -44,12 +43,9 @@ namespace BookMyShow.Extension
                 options.ReportApiVersions = true;
             });
 
-
-
         }
         public static void RegisterApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
-
             //Repository
 
             services.AddTransient<IBookingRepository, BookingRepository>();
@@ -66,11 +62,16 @@ namespace BookMyShow.Extension
             //Service
 
             services.AddTransient<IBookingService, BookingService>();
-            services.AddTransient<ICityinCinemaNameService, CityinCinemaNameService>();
-            services.AddTransient<IUserBookingDetailsService, UserBookingDetailsService>();
-            services.AddTransient<ICinemaHallinCinemaService, CinemaHallinCinemaService>();
+            services.AddTransient<ICinemaHallService, CinemaHallService>();
+            services.AddTransient<ICinemaService,CinemaService>();
+            services.AddTransient<ICinemaSeatService, CinemaSeatService>();
+            services.AddTransient<ICityService,CityService>();
+            services.AddTransient<IMovieService, MovieService>();
+            services.AddTransient<IPaymentService, PaymentService>();
+            services.AddTransient<IShowSeatService, ShowSeatService>();
+            services.AddTransient<IShowService, ShowService>();
+            services.AddTransient<IUserService, UserService>();
             
-
         }
     }
 }

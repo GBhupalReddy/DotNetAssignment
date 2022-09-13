@@ -1,17 +1,12 @@
 ﻿using BookMyShow.Core.Contracts.Infrastructure.Repository;
+using BookMyShow.Core.Contracts.Infrastructure.Service;
 using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
-using BookMyShow.Infrastructure.Data;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BookMyShow.Infrastructure.Service
 {
-    public class CinemaService
+    public class CinemaService : ICinemaService
     {
         private readonly ICinemaRepository _cinemaRepository;
         private readonly IDbConnection _dbConnection;
@@ -31,13 +26,13 @@ namespace BookMyShow.Infrastructure.Service
         // Get cinema using id
         public async Task<Cinema> GetCinemaByIdAsync(int id)
         {
-           return await _cinemaRepository.GetCinemaAsync(id);
+            return await _cinemaRepository.GetCinemaAsync(id);
         }
 
         //Add cinema
         public async Task<Cinema> AddCinemaAsync(Cinema cinema)
         {
-           return await _cinemaRepository.AddCinemaAsync(cinema);
+            return await _cinemaRepository.AddCinemaAsync(cinema);
         }
 
         // update cinema using id
@@ -48,15 +43,15 @@ namespace BookMyShow.Infrastructure.Service
             CinemaToBeUpdated.TotalCinemaHalls = cinema.TotalCinemaHalls;
             CinemaToBeUpdated.CityId = cinema.CityId;
 
-            return await _cinemaRepository.UpdateCinemaAsynce(id, CinemaToBeUpdated);
-            return CinemaToBeUpdated;
+            return await _cinemaRepository.UpdateCinemaAsynce(CinemaToBeUpdated);
 
         }
 
         //deleted cinema using id
         public async Task DeleteCinemaAsync(int id)
         {
-            await _cinemaRepository.DeleteCinemaAsync(id);
+            var cinema = await GetCinemaByIdAsync(id);
+            await _cinemaRepository.DeleteCinemaAsync(cinema);
         }
     }
 }

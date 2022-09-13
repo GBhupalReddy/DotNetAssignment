@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BookMyShow.Core.Contracts.Infrastructure.Repository;
+using BookMyShow.Core.Contracts.Infrastructure.Service;
 using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
 using BookMyShow.Infrastructure.Specs;
@@ -15,13 +15,13 @@ namespace BookMyShow.Controllers.V1
     [ApiConventionType(typeof(DefaultApiConventions))]
     public class ShowSeatController : ApiControllerBase
     {
-        private readonly IShowSeatRepository _showseatRepository;
+        private readonly IShowSeatService _showSeatService;
         private readonly ILogger<ShowSeatController> _logger;
         private readonly IMapper _mapper;
 
-        public ShowSeatController(IShowSeatRepository showseatRepository, ILogger<ShowSeatController> logger, IMapper mapper)
+        public ShowSeatController(IShowSeatService showSeatService, ILogger<ShowSeatController> logger, IMapper mapper)
         {
-            _showseatRepository = showseatRepository;
+            _showSeatService = showSeatService;
             _logger = logger;
             _mapper = mapper;
         }
@@ -34,7 +34,7 @@ namespace BookMyShow.Controllers.V1
         public async Task<ActionResult<IEnumerable<ShowSeatDto>>> Get()
         {
             _logger.LogInformation("Getting list of all ShowSeats");
-            var result = await _showseatRepository.GetShowSeatsAsync();
+            var result = await _showSeatService.GetShowSeatsAsync();
             if (result is null)
                 return NotFound("Please Enter Valid Data");
             return Ok(result);
@@ -53,7 +53,7 @@ namespace BookMyShow.Controllers.V1
                 return BadRequest("Please Enter Valid Data");
             }
             _logger.LogInformation("Getting Id : {id} ShowSeat", id);
-            var showSeaRtesult = await _showseatRepository.GetShowSaetAsync(id);
+            var showSeaRtesult = await _showSeatService.GetShowSaetByIdAsync(id);
             var result = _mapper.Map<ShowSeat, ShowSeatDto>(showSeaRtesult);
             if (result is null)
                 return NotFound("Please Enter Valid Data");
@@ -69,7 +69,7 @@ namespace BookMyShow.Controllers.V1
         {
             _logger.LogInformation("add new ShowSeat");
             var showSeat = _mapper.Map<ShowSeatVm, ShowSeat>(showSeatVm);
-            var showSeaRtesult = await _showseatRepository.AddShowSeatAsync(showSeat);
+            var showSeaRtesult = await _showSeatService.AddShowSeatAsync(showSeat);
             var result = _mapper.Map<ShowSeat, ShowSeatDto>(showSeaRtesult);
             return Ok(result);
         }
@@ -88,7 +88,7 @@ namespace BookMyShow.Controllers.V1
             }
             _logger.LogInformation("Update Id: {id} ShowSeat", id);
             var showSeat = _mapper.Map<ShowSeatVm, ShowSeat>(showSeatVm);
-            var showSeaRtesult = await _showseatRepository.UpdateShowSeatAsynce(id, showSeat);
+            var showSeaRtesult = await _showSeatService.UpdateShowSeatAsynce(id, showSeat);
             var result = _mapper.Map<ShowSeat, ShowSeatDto>(showSeaRtesult);
             return Ok(result);
         }
@@ -106,7 +106,7 @@ namespace BookMyShow.Controllers.V1
                 BadRequest("Please Enter Valid Data");
             }
             _logger.LogInformation("Deleted Id :  {id}  ShowSeat", id);
-            await _showseatRepository.DeleteShowSeatAsync(id);
+            await _showSeatService.DeleteShowSeatAsync(id);
         }
     }
 }

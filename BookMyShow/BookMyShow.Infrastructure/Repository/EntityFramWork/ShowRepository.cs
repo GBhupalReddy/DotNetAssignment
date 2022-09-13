@@ -45,24 +45,17 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         }
 
         // Update show using id
-        public async Task<Show> UpdateShowAsynce(int id, Show show)
+        public async Task<Show> UpdateShowAsynce(Show show)
         {
-            var showToBeUpdated = await GetShowAsync(id);
-            showToBeUpdated.Date = show.Date;
-            showToBeUpdated.StartTime = show.StartTime;
-            showToBeUpdated.EndTime = show.EndTime;
-            showToBeUpdated.CinemaHallId = show.CinemaHallId;
-            showToBeUpdated.MovieId = show.MovieId;
-            _bookMyShowContext.Shows.Update(showToBeUpdated);
+            _bookMyShowContext.Shows.Update(show);
             await _bookMyShowContext.SaveChangesAsync();
-            return showToBeUpdated;
+            return show;
 
         }
 
         // Delete show using id
-        public async Task DeleteShowAsync(int id)
+        public async Task DeleteShowAsync(Show show)
         {
-            var show = await GetShowAsync(id);
             _bookMyShowContext.Shows.Remove(show);
             await _bookMyShowContext.SaveChangesAsync();
         }

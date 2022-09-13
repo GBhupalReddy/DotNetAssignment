@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BookMyShow.Core.Contracts.Infrastructure.Repository;
+using BookMyShow.Core.Contracts.Infrastructure.Service;
 using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
 using BookMyShow.Infrastructure.Specs;
@@ -16,13 +16,13 @@ namespace BookMyShow.Controllers.V1
     public class CinemaSeatController : ApiControllerBase
     {
 
-        private readonly ICinemaSeatRepository _cinemaSeatRepository;
+        private readonly ICinemaSeatService _cinemaSeatService;
         private readonly ILogger<CinemaSeatController> _logger;
         private readonly IMapper _mapper;
-        public CinemaSeatController(ICinemaSeatRepository cinemaSeatRepository, ILogger<CinemaSeatController> logger, IMapper mapper)
+        public CinemaSeatController(ICinemaSeatService cinemaSeatService, ILogger<CinemaSeatController> logger, IMapper mapper)
         {
 
-            _cinemaSeatRepository = cinemaSeatRepository;
+            _cinemaSeatService = cinemaSeatService;
             _logger = logger;
             _mapper = mapper;
         }
@@ -35,7 +35,7 @@ namespace BookMyShow.Controllers.V1
         public async Task<ActionResult<IEnumerable<CinemaSeatDto>>> Get()
         {
             _logger.LogInformation("Getting list of all CinemaSeats");
-            var result = await _cinemaSeatRepository.GetCinemaSeatsAsync();
+            var result = await _cinemaSeatService.GetCinemaSeatsAsync();
             return Ok(result);
         }
 
@@ -52,7 +52,7 @@ namespace BookMyShow.Controllers.V1
                 return BadRequest("Please Enter Valid Data");
             }
             _logger.LogInformation("Getting Id {id} CinemaSeat", id);
-            var cinemaSeat = await _cinemaSeatRepository.GetCinemaSeatAsync(id);
+            var cinemaSeat = await _cinemaSeatService.GetCinemaSeatByIdAsync(id);
             var result = _mapper.Map<CinemaSeat, CinemaSeatDto>(cinemaSeat);
             if (result is null)
                 return NotFound("Please Enter Valid Data");
@@ -68,7 +68,7 @@ namespace BookMyShow.Controllers.V1
         {
             _logger.LogInformation("add new CinemaSeat");
             var cinemaSeat = _mapper.Map<CinemaSeatVm, CinemaSeat>(cinemaSeatVm);
-            var cinemaSeatResult = await _cinemaSeatRepository.AddCinemaSeatAsync(cinemaSeat);
+            var cinemaSeatResult = await _cinemaSeatService.AddCinemaSeatAsync(cinemaSeat);
             var result = _mapper.Map<CinemaSeat, CinemaSeatDto>(cinemaSeat);
             return Ok(result);
         }
@@ -87,7 +87,7 @@ namespace BookMyShow.Controllers.V1
             }
             _logger.LogInformation("Update Id: {id} CinemaSeat", id);
             var cinemaSeat = _mapper.Map<CinemaSeatVm, CinemaSeat>(cinemaSeatVm);
-            var cinemaSeatResult = await _cinemaSeatRepository.UpdateCinemaSeatAsynce(id, cinemaSeat);
+            var cinemaSeatResult = await _cinemaSeatService.UpdateCinemaSeatAsynce(id, cinemaSeat);
             var result = _mapper.Map<CinemaSeat, CinemaSeatDto>(cinemaSeat);
             return Ok(result);
         }
@@ -105,7 +105,7 @@ namespace BookMyShow.Controllers.V1
                 BadRequest("Please Enter Valid Data");
             }
             _logger.LogInformation("Deleted  {id}  CinemaSeat", id);
-            await _cinemaSeatRepository.DeleteCinemaSeatAsync(id);
+            await _cinemaSeatService.DeleteCinemaSeatAsync(id);
         }
     }
 }

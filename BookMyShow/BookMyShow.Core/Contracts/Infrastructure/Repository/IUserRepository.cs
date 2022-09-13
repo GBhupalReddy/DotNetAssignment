@@ -8,7 +8,8 @@ namespace BookMyShow.Core.Contracts.Infrastructure.Repository
         Task<IEnumerable<UserDto>> GetUsersAsync();
         Task<User> GetUserAsync(int id);
         Task<User> AddUserAsync(User user);
-        Task<User> UpdateUserAsynce(int id, User user);
-        Task DeleteUserAsync(int id);
+        Task<User> UpdateUserAsynce( User user);
+        Task DeleteUserAsync(User user);
+        Task<IEnumerable<UserBookingDto>> GetUserBookingDetalisAsync(int id);
     }
 }

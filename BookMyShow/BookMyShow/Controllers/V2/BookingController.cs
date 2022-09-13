@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using BookMyShow.Core.Contracts.Infrastructure.Repository;
 using BookMyShow.Core.Contracts.Infrastructure.Service;
 using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;

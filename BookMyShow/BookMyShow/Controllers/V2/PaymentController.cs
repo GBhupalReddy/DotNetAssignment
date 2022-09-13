@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BookMyShow.Core.Contracts.Infrastructure.Repository;
+using BookMyShow.Core.Contracts.Infrastructure.Service;
 using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
 using BookMyShow.Infrastructure.Specs;
@@ -15,12 +15,12 @@ namespace BookMyShow.Controllers.V2
     public class PaymentController : ApiControllerBase
     {
 
-        private readonly IPaymentRepository _paymentRepository;
+        private readonly IPaymentService _paymentService;
         private readonly ILogger<PaymentController> _logger;
         private readonly IMapper _mapper;
-        public PaymentController(IPaymentRepository paymentRepository, ILogger<PaymentController> logger, IMapper mapper)
+        public PaymentController(IPaymentService paymentService, ILogger<PaymentController> logger, IMapper mapper)
         {
-            _paymentRepository = paymentRepository;
+            _paymentService = paymentService;
             _logger = logger;
             _mapper = mapper;
         }
@@ -33,7 +33,7 @@ namespace BookMyShow.Controllers.V2
         public async Task<ActionResult<IEnumerable<PaymentDto>>> Get()
         {
             _logger.LogInformation("Getting list of all Payments");
-            var result = await _paymentRepository.GetPaymentsAsync();
+            var result = await _paymentService.GetPaymentsAsync();
             return Ok(result);
         }
 
@@ -50,7 +50,7 @@ namespace BookMyShow.Controllers.V2
                 return BadRequest("Please Enter Valid Data");
             }
             _logger.LogInformation("Getting Id : {id} Payment", id);
-            var paymentResult = await _paymentRepository.GetPaymentAsync(id);
+            var paymentResult = await _paymentService.GetPaymentByIdAsync(id);
             var result = _mapper.Map<Payment, PaymentDto>(paymentResult);
             if (result is null)
                 return NotFound("Please Enter Valid Data");
@@ -66,7 +66,7 @@ namespace BookMyShow.Controllers.V2
         {
             _logger.LogInformation("add new Payment");
             var payment = _mapper.Map<PaymentVm, Payment>(paymentVm);
-            var paymentResult = await _paymentRepository.AddPaymentAsync(payment);
+            var paymentResult = await _paymentService.AddPaymentAsync(payment);
             var result = _mapper.Map<Payment, PaymentDto>(paymentResult);
             return Ok(result);
         }
@@ -85,7 +85,7 @@ namespace BookMyShow.Controllers.V2
             }
             _logger.LogInformation("Update Id: {id} Payment", id);
             var payment = _mapper.Map<PaymentVm, Payment>(paymentVm);
-            var paymentResult = await _paymentRepository.UpdatePaymentAsynce(id, payment);
+            var paymentResult = await _paymentService.UpdatePaymentAsynce(id, payment);
             var result = _mapper.Map<Payment, PaymentDto>(paymentResult);
             if (result.Equals(null))
                 return NotFound();
@@ -105,7 +105,7 @@ namespace BookMyShow.Controllers.V2
                 BadRequest("Please Enter Valid Data");
             }
             _logger.LogInformation("Deleted Id :  {id}  Payment", id);
-            await _paymentRepository.DeletePaymentAsync(id);
+            await _paymentService.DeletePaymentAsync(id);
         }
     }
 }

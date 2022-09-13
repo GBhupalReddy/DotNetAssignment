@@ -78,28 +78,23 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
             return payment;
         }
         // Update payment using id
-        public async Task<Payment> UpdatePaymentAsynce(int id, Payment payment)
+        public async Task<Payment> UpdatePaymentAsynce( Payment payment)
         {
-            var paymentToBeUpdated = await GetPaymentAsync(id);
+           
             var amount = from booking in _bookMyShowContext.ShowSeats
                          where booking.BookingId == payment.BookingId
                          select booking;
             payment.Amount= amount.Select(c => c.Price).Sum();
-            paymentToBeUpdated.TimeStamp = payment.TimeStamp;
-            paymentToBeUpdated.DicountCoupon = payment.DicountCoupon;
-            paymentToBeUpdated.RemoteTransactionId = payment.RemoteTransactionId;
-            paymentToBeUpdated.PeyementMethod = payment.PeyementMethod;
-            paymentToBeUpdated.BookingId = payment.BookingId;
-            _bookMyShowContext.Payments.Update(paymentToBeUpdated);
+            
+            _bookMyShowContext.Payments.Update(payment);
             await _bookMyShowContext.SaveChangesAsync();
-            return paymentToBeUpdated;
+            return payment;
 
         }
 
         //deleted payment using id
-        public async Task DeletePaymentAsync(int id)
+        public async Task DeletePaymentAsync(Payment payment)
         {
-            var payment = await GetPaymentAsync(id);
             _bookMyShowContext.Payments.Remove(payment);
             await _bookMyShowContext.SaveChangesAsync();
         }

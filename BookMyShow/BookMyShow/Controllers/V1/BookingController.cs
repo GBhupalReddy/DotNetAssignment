@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using BookMyShow.Core.Contracts.Infrastructure.Repository;
 using BookMyShow.Core.Contracts.Infrastructure.Service;
 using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
@@ -73,6 +72,10 @@ namespace BookMyShow.Controllers.V1
             var booking = _mapper.Map<BookingVm, Booking>(bookingVm);
             var bookingResult = await _bookingService.AddBookingAsync(booking);
             var result = _mapper.Map<Booking, BookingDto>(bookingResult);
+            if(result is null)
+            {
+                return NotFound($"{booking.NumberOfSeats} not available");
+            }
             return Ok(result);
         }
 

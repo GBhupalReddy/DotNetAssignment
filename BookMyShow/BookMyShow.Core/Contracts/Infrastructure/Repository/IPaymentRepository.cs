@@ -6,9 +6,9 @@ namespace BookMyShow.Core.Contracts.Infrastructure.Repository
     public interface IPaymentRepository
     {
         Task<Payment> AddPaymentAsync(Payment payment);
-        Task DeletePaymentAsync(int id);
+        Task DeletePaymentAsync(Payment payment);
         Task<Payment> GetPaymentAsync(int id);
         Task<IEnumerable<PaymentDto>> GetPaymentsAsync();
-        Task<Payment> UpdatePaymentAsynce(int id, Payment payment);
+        Task<Payment> UpdatePaymentAsynce( Payment payment);
     }
 }

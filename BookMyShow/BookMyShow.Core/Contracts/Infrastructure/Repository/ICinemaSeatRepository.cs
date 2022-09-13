@@ -6,9 +6,9 @@ namespace BookMyShow.Core.Contracts.Infrastructure.Repository
     public interface ICinemaSeatRepository
     {
         Task<CinemaSeat> AddCinemaSeatAsync(CinemaSeat cinemaSeat);
-        Task DeleteCinemaSeatAsync(int id);
+        Task DeleteCinemaSeatAsync(CinemaSeat cinemaSeat);
         Task<CinemaSeat> GetCinemaSeatAsync(int id);
         Task<IEnumerable<CinemaSeatDto>> GetCinemaSeatsAsync();
-        Task<CinemaSeat> UpdateCinemaSeatAsynce(int id, CinemaSeat cinemaSeat);
+        Task<CinemaSeat> UpdateCinemaSeatAsynce( CinemaSeat cinemaSeat);
     }
 }

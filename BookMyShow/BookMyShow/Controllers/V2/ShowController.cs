@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BookMyShow.Core.Contracts.Infrastructure.Repository;
+using BookMyShow.Core.Contracts.Infrastructure.Service;
 using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
 using BookMyShow.Infrastructure.Specs;
@@ -15,12 +15,12 @@ namespace BookMyShow.Controllers.V2
     public class ShowController : ApiControllerBase
     {
 
-        private readonly IShowRepository _showRepository;
+        private readonly IShowService _showService;
         private readonly ILogger<ShowController> _logger;
         private readonly IMapper _mapper;
-        public ShowController(IShowRepository showRepository, ILogger<ShowController> logger, IMapper mapper)
+        public ShowController(IShowService showService, ILogger<ShowController> logger, IMapper mapper)
         {
-            _showRepository = showRepository;
+            _showService = showService;
             _logger = logger;
             _mapper = mapper;
         }
@@ -33,7 +33,7 @@ namespace BookMyShow.Controllers.V2
         public async Task<ActionResult<IEnumerable<ShowDto>>> Get()
         {
             _logger.LogInformation("Getting list of all Shows");
-            var result = await _showRepository.GetShowsAsync();
+            var result = await _showService.GetShowsAsync();
             return Ok(result);
         }
 
@@ -50,7 +50,7 @@ namespace BookMyShow.Controllers.V2
                 return BadRequest("Please Enter Valid Data");
             }
             _logger.LogInformation("Getting Id : {id} Show", id);
-            var ShowResult = await _showRepository.GetShowAsync(id);
+            var ShowResult = await _showService.GetShowByIdAsync(id);
             var result = _mapper.Map<Show, ShowDto>(ShowResult);
             if (result is null)
                 return NotFound("Please Enter Valid Data");
@@ -66,7 +66,7 @@ namespace BookMyShow.Controllers.V2
         {
             _logger.LogInformation("add new Show");
             var show = _mapper.Map<ShowVm, Show>(showVm);
-            var ShowResult = await _showRepository.AddShowAsync(show);
+            var ShowResult = await _showService.AddShowAsync(show);
             var result = _mapper.Map<Show, ShowDto>(ShowResult);
             return Ok(result);
         }
@@ -85,7 +85,7 @@ namespace BookMyShow.Controllers.V2
             }
             _logger.LogInformation("Update Id: {id} Show", id);
             var show = _mapper.Map<ShowVm, Show>(showVm);
-            var ShowResult = await _showRepository.UpdateShowAsynce(id, show);
+            var ShowResult = await _showService.UpdateShowAsynce(id, show);
             var result = _mapper.Map<Show, ShowDto>(ShowResult);
             return Ok(result);
         }
@@ -103,7 +103,7 @@ namespace BookMyShow.Controllers.V2
                 BadRequest("Please Enter Valid Data");
             }
             _logger.LogInformation("Deleted Id :  {id}  Show", id);
-            await _showRepository.DeleteShowAsync(id);
+            await _showService.DeleteShowAsync(id);
         }
     }
 }

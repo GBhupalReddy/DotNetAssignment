@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using BookMyShow.Core.Contracts.Infrastructure.Repository;
 using BookMyShow.Core.Contracts.Infrastructure.Service;
 using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
@@ -16,13 +15,13 @@ namespace BookMyShow.Controllers.V1
     [ApiConventionType(typeof(DefaultApiConventions))]
     public class CityController : ApiControllerBase
     {
-        private readonly ICityRepository _cityRepository;
+        private readonly ICityService _cityService;
         private readonly ILogger<CityController> _logger;
         private readonly IMapper _mapper;
 
-        public CityController(ICityRepository cityRepository, ILogger<CityController> logger, IMapper mapper)
+        public CityController(ICityService cityService, ILogger<CityController> logger, IMapper mapper)
         {
-            _cityRepository = cityRepository;
+            _cityService = cityService;
             _logger = logger;
             _mapper = mapper;
         }
@@ -35,7 +34,7 @@ namespace BookMyShow.Controllers.V1
         public async Task<ActionResult<IEnumerable<CityDto>>> Get()
         {
             _logger.LogInformation("Getting list of all City's");
-            var result = await _cityRepository.GetCitysAsync();
+            var result = await _cityService.GetCitysAsync();
             return Ok(result);
         }
 
@@ -51,7 +50,7 @@ namespace BookMyShow.Controllers.V1
                 return BadRequest("Please Enter Valid Data");
             }
             _logger.LogInformation("Getting Id {id} City", id);
-            var city = await _cityRepository.GetCityAsync(id);
+            var city = await _cityService.GetCityByIdAsync(id);
             var result = _mapper.Map<City, CityDto>(city);
             if (result is null)
                 return NotFound("Please Enter Valid Data");
@@ -64,7 +63,7 @@ namespace BookMyShow.Controllers.V1
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult> Get(string cityName)
         {
-            var result = await _cityRepository.GetCinemasAsync(cityName);
+            var result = await _cityService.GetCinemaByNameAsync(cityName);
             return Ok(result);
 
         }
@@ -78,7 +77,7 @@ namespace BookMyShow.Controllers.V1
         {
             _logger.LogInformation("add new City");
             var city = _mapper.Map<CityVm, City>(cityVm);
-            var cityResult = await _cityRepository.AddCityAsync(city);
+            var cityResult = await _cityService.AddCityAsync(city);
             var result = _mapper.Map<City, CityDto>(cityResult);
             return Ok(result);
         }
@@ -98,7 +97,7 @@ namespace BookMyShow.Controllers.V1
             }
             _logger.LogInformation("Update Id: {id} City", id);
             var city = _mapper.Map<CityVm, City>(cityVm);
-            var cityResult = await _cityRepository.UpdateCityAsynce(id, city);
+            var cityResult = await _cityService.UpdateCityAsynce(id, city);
             var result = _mapper.Map<City, CityDto>(cityResult);
             return Ok(result);
         }
@@ -117,7 +116,7 @@ namespace BookMyShow.Controllers.V1
                 BadRequest("Please Enter Valid Data");
             }
             _logger.LogInformation("Deleted  {id}  City", id);
-            await _cityRepository.DeleteCityAsync(id);
+            await _cityService.DeleteCityAsync(id);
         }
 
     }

@@ -49,7 +49,6 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
                                     TotalCinemaHalls = cinema.TotalCinemaHalls,
                                     CityName = city.CityName,
 
-
                                 }).ToListAsync();
             return result;
         }
@@ -63,24 +62,46 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         }
 
         // Update city using id
-        public async Task<City> UpdateCityAsynce(int id, City city)
+        public async Task<City> UpdateCityAsynce( City city)
         {
-            var cityToBeUpdated = await GetCityAsync(id);
-            cityToBeUpdated.CityName = city.CityName;
-            cityToBeUpdated.State = city.State;
-            cityToBeUpdated.ZipCode = city.ZipCode;
-            _bookMyShowContext.Cities.Update(cityToBeUpdated);
+          
             await _bookMyShowContext.SaveChangesAsync();
-            return cityToBeUpdated;
+            return city;
 
         }
 
         //Delete city using id
-        public async Task DeleteCityAsync(int id)
+        public async Task DeleteCityAsync(City city)
         {
-            var city = await GetCityAsync(id);
             _bookMyShowContext.Cities.Remove(city);
             await _bookMyShowContext.SaveChangesAsync();
+        }
+        public async Task<IEnumerable<MovieDto>> GetMovieCity(string cityName)
+        {
+            var result = (await (from city in _bookMyShowContext.Cities
+                                 join cinema in _bookMyShowContext.Cinemas
+                                 on city.CityId equals cinema.CityId
+                                 join cinemaHall in _bookMyShowContext.CinemaHalls
+                                 on cinema.CinemaId equals cinemaHall.CinemaId
+                                 join show in _bookMyShowContext.Shows
+                                 on cinemaHall.CinemaHallId equals show.CinemaHallId
+                                 join movie in _bookMyShowContext.Movies
+                                 on show.MovieId equals movie.MovieId
+                                 where city.CityName.ToLower().Contains(cityName)
+                                 select new MovieDto
+                                 {
+                                     Tittle = movie.Tittle,
+                                     Description = movie.Description,
+                                     Duration = movie.Duration,
+                                     ReleaseDate = movie.ReleaseDate,
+                                     Language = movie.Language,
+                                     Genre = movie.Genre,
+
+                                 }).Distinct().ToListAsync());
+
+            return result;
+
+
         }
     }
 }

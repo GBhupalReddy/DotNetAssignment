@@ -6,9 +6,9 @@ namespace BookMyShow.Core.Contracts.Infrastructure.Repository
     public interface ICinemaRepository
     {
         Task<Cinema> AddCinemaAsync(Cinema cinema);
-        Task DeleteCinemaAsync(int id);
+        Task DeleteCinemaAsync(Cinema cinema);
         Task<Cinema> GetCinemaAsync(int id);
         Task<IEnumerable<CinemaDto>> GetCinemasAsync();
-        Task<Cinema> UpdateCinemaAsynce(int id, Cinema cinema);
+        Task<Cinema> UpdateCinemaAsynce( Cinema cinema);
     }
 }

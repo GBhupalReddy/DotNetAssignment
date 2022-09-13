@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BookMyShow.Core.Contracts.Infrastructure.Repository;
+using BookMyShow.Core.Contracts.Infrastructure.Service;
 using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
 using BookMyShow.Infrastructure.Specs;
@@ -16,13 +16,13 @@ namespace BookMyShow.Controllers.V1
     public class MovieController : ApiControllerBase
     {
 
-        private readonly IMovieRepository _movieRepository;
+        private readonly IMovieService _movieService;
         private readonly ILogger<MovieController> _logger;
         private readonly IMapper _mapper;
 
-        public MovieController(IMovieRepository movieRepository, ILogger<MovieController> logger, IMapper mapper)
+        public MovieController(IMovieService movieService, ILogger<MovieController> logger, IMapper mapper)
         {
-            _movieRepository = movieRepository;
+            _movieService = movieService;
             _logger = logger;
             _mapper = mapper;
         }
@@ -36,7 +36,7 @@ namespace BookMyShow.Controllers.V1
         public async Task<ActionResult<IEnumerable<MovieDto>>> Get()
         {
             _logger.LogInformation("Get list of all Movies");
-            var result = await _movieRepository.GetMoviesAsync();
+            var result = await _movieService.GetMoviesAsync();
             return Ok(result);
         }
 
@@ -53,7 +53,7 @@ namespace BookMyShow.Controllers.V1
                 return BadRequest("Please Enter Valid Data");
             }
             _logger.LogInformation("Get Id {id} Movie", id);
-            var movie = await _movieRepository.GetMovieAsync(id);
+            var movie = await _movieService.GetMovieByIdAsync(id);
             var result = _mapper.Map<Movie, MovieDto>(movie);
             if (result is null)
                 return NotFound("Please Enter Valid Data");
@@ -68,7 +68,7 @@ namespace BookMyShow.Controllers.V1
         public async Task<ActionResult> Get(string cityName, string movieName)
         {
             _logger.LogInformation($"Get list of city-name {cityName} Movies {movieName} ");
-            var result = await _movieRepository.GetMovieCityAsync(cityName, movieName);
+            var result = await _movieService.GetMovieCityAsync(cityName, movieName);
             if (result is null)
                 return NotFound("Please Enter Valid Data");
             return Ok(result);
@@ -81,20 +81,20 @@ namespace BookMyShow.Controllers.V1
         public async Task<ActionResult> Get(string cityName)
         {
             _logger.LogInformation($"Get list of city-name {cityName} Movies ");
-            var result = await _movieRepository.GetMovieCityAsync(cityName);
+            var result = await _movieService.GetMovieByCityNameAsync(cityName);
             if (result is null)
                 return NotFound("Please Enter Valid Data");
             return Ok(result);
         }
 
         // GET<MovieController>/language
-        [ApiVersion("1.0")]
+        [ApiVersion("1.1")]
         [HttpGet("city language")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult> Getmovie(string city, string language)
         {
             _logger.LogInformation($"Get list of {city} in {language} Movies ");
-            var result = await _movieRepository.GetMovieLanguageAsync(city, language);
+            var result = await _movieService.GetMovieLanguageAsync(city, language);
             if (result is null)
                 return NotFound("Please Enter Valid Data");
             return Ok(result);
@@ -107,7 +107,7 @@ namespace BookMyShow.Controllers.V1
         public async Task<ActionResult> Getmovies(string city, string language, string genre)
         {
             _logger.LogInformation($"Get list of{city} {language}{genre} Movies ");
-            var result = await _movieRepository.GetMovieLanguageGenreAsync(city, language, genre);
+            var result = await _movieService.GetMovieLanguageGenreAsync(city, language, genre);
             if (result is null)
                 return NotFound("Please Enter Valid Data");
             return Ok(result);
@@ -123,7 +123,7 @@ namespace BookMyShow.Controllers.V1
 
             _logger.LogInformation("add new Movie");
             var movie = _mapper.Map<MovieVm, Movie>(movieVm);
-            var movieResult = await _movieRepository.AddMovieAsync(movie);
+            var movieResult = await _movieService.AddMovieAsync(movie);
             var result = _mapper.Map<Movie, MovieDto>(movieResult);
             return Ok(result);
         }
@@ -142,7 +142,7 @@ namespace BookMyShow.Controllers.V1
             }
             _logger.LogInformation("Update Id: {id} Movie", id);
             var movie = _mapper.Map<MovieVm, Movie>(movieVm);
-            var movieResult = await _movieRepository.UpdateMovieAsynce(id, movie);
+            var movieResult = await _movieService.UpdateMovieAsynce(id, movie);
             var result = _mapper.Map<Movie, MovieDto>(movieResult);
             return Ok(result);
         }
@@ -160,7 +160,7 @@ namespace BookMyShow.Controllers.V1
                 BadRequest("Please Enter Valid Data");
             }
             _logger.LogInformation("Deleted  {id}  Movie", id);
-            await _movieRepository.DeleteMovieAsync(id);
+            await _movieService.DeleteMovieAsync(id);
         }
     }
 }

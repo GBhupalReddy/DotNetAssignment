@@ -46,26 +46,17 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         }
 
         // Update movie using id
-        public async Task<Movie> UpdateMovieAsynce(int id, Movie movie)
+        public async Task<Movie> UpdateMovieAsynce( Movie movie)
         {
-            var movieToBeUpdated = await GetMovieAsync(id);
-            movieToBeUpdated.Tittle = movie.Tittle;
-            movieToBeUpdated.Description = movie.Description;
-            movieToBeUpdated.Duration = movie.Duration;
-            movieToBeUpdated.Language = movie.Language;
-            movieToBeUpdated.ReleaseDate = movie.ReleaseDate;
-            movieToBeUpdated.Country = movie.Country;
-            movieToBeUpdated.Genre = movie.Genre;
-            _bookMyShowContext.Movies.Update(movieToBeUpdated);
+            _bookMyShowContext.Movies.Update(movie);
             await _bookMyShowContext.SaveChangesAsync();
-            return movieToBeUpdated;
+            return movie;
 
         }
 
         // delete movie using id
-        public async Task DeleteMovieAsync(int id)
+        public async Task DeleteMovieAsync(Movie movie)
         {
-            var movie = await GetMovieAsync(id);
             _bookMyShowContext.Movies.Remove(movie);
             await _bookMyShowContext.SaveChangesAsync();
         }
@@ -106,22 +97,22 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
 
         }
         
-        public async Task<IEnumerable<MovieDetailes>> GetMovieLanguageAsync(string cityName,string language)
+        public async Task<IEnumerable<MovieDetailes>> GetMovieLanguageAsync(string cityName,string? language=null)
         {
             var cityMovies = await GetMovieCityAsync(cityName);
 
             var result = from cityMovie in cityMovies
-                         where cityMovie.Language.ToLower().Contains(language.ToLower())
+                         where string.IsNullOrEmpty(language) || cityMovie.Language.ToLower().Contains(language.ToLower())
                          select cityMovie;
             
             return result;
         }
-        public async Task<IEnumerable<MovieDetailes>> GetMovieLanguageGenreAsync(string cityName,string language,string genre)
+        public async Task<IEnumerable<MovieDetailes>> GetMovieLanguageGenreAsync(string cityName,string? language=null,string? genre=null)
         {
             var cityMovies = await GetMovieLanguageAsync(cityName,language);
 
             var result = from cityMovie in cityMovies
-                         where cityMovie.Genre.ToLower().Contains(genre.ToLower())
+                         where string.IsNullOrEmpty(genre) || cityMovie.Genre.ToLower().Contains(genre.ToLower())
                          select cityMovie;
 
             return result;

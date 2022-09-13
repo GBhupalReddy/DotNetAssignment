@@ -2,22 +2,17 @@
 using BookMyShow.Core.Contracts.Infrastructure.Service;
 using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
-using BookMyShow.Infrastructure.Data;
-using Dapper;
-using System.Data;
 
 namespace BookMyShow.Infrastructure.Service
 {
     public class BookingService : IBookingService
     {
         private readonly IBookingRepository _bookingRepository;
-        private readonly BookMyShowContext _bookMyShowContext;
-        private readonly IDbConnection _dbConnection;
-        public BookingService(BookMyShowContext bookMyShowContext, IBookingRepository bookingRepository, IDbConnection dbConnection)
+        
+        public BookingService( IBookingRepository bookingRepository)
         {
             _bookingRepository = bookingRepository;
-            _bookMyShowContext = bookMyShowContext;
-            _dbConnection = dbConnection;
+            
         }
 
         // Get All Bookings

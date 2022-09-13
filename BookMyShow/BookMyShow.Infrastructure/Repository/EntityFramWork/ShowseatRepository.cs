@@ -12,11 +12,9 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
     {
         private readonly BookMyShowContext _bookMyShowContext;
         private readonly IDbConnection _dbConnection;
-        private readonly ICinemaHallRepository _cinemaHallRepository;
 
-        public ShowSeatRepository(BookMyShowContext bookMyShowContext, ICinemaHallRepository cinemaHallRepository, IDbConnection dbConnection)
+        public ShowSeatRepository(BookMyShowContext bookMyShowContext, IDbConnection dbConnection)
         {
-            _cinemaHallRepository = cinemaHallRepository;
             _bookMyShowContext = bookMyShowContext;
             _dbConnection = dbConnection;
         }
@@ -45,7 +43,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
                                     join cinemaSeat in _bookMyShowContext.CinemaSeats
                                     on cinema.CinemaHallId equals cinemaSeat.CinemaHallId
                                     where cinemaSeat.CinemaSeatId == showSeat.CinemaSeatId
-                                    select cinema).FirstOrDefaultAsync();
+                                    select cinema).FirstAsync();
             if (cinemaHall.AvailableSeats >= 0)
             {
 
@@ -82,14 +80,8 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         }
 
         // Update show seat using id
-        public async Task<ShowSeat> UpdateShowSeatAsynce(int id, ShowSeat showSeat)
-        {
-            var showSeatToBeUpdated = await GetShowSaetAsync(id);
-            
-            showSeatToBeUpdated.Status = showSeat.Status;
-            showSeatToBeUpdated.CinemaSeatId = showSeat.CinemaSeatId;
-            showSeatToBeUpdated.ShowId = showSeat.ShowId;
-            showSeatToBeUpdated.BookingId = showSeat.BookingId;
+        public async Task<ShowSeat> UpdateShowSeatAsynce(ShowSeat showSeat)
+        { 
             int cinemaSeatId = showSeat.CinemaSeatId;
             var query = "select SeatNumber from ShowSeat where ShowSeatId = @cinemaSeatId";
             var result = (await _dbConnection.QueryFirstOrDefaultAsync<int>(query, new { cinemaSeatId }));
@@ -99,30 +91,29 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
             bool thirdClassReault = Array.Exists(thirdClass, element => element == result);
             if (thirdClassReault)
             {
-                showSeatToBeUpdated.Price = 200;
+                showSeat.Price = 200;
             }
             bool secondClassResult = Array.Exists(secondClass, element => element == result);
             if (secondClassResult)
             {
-                showSeatToBeUpdated.Price = 300;
+                showSeat.Price = 300;
             }
 
             bool firstClassresult = Array.Exists(firstClass, element => element == result);
             if (firstClassresult)
             {
-                showSeatToBeUpdated.Price = 400;
+                showSeat.Price = 400;
             }
 
-            _bookMyShowContext.ShowSeats.Update(showSeatToBeUpdated);
+            _bookMyShowContext.ShowSeats.Update(showSeat);
             await _bookMyShowContext.SaveChangesAsync();
-            return showSeatToBeUpdated;
+            return showSeat;
 
         }
 
         // delete show seat using id 
-        public async Task DeleteShowSeatAsync(int id)
+        public async Task DeleteShowSeatAsync(ShowSeat showSeat)
         {
-            var showSeat = await GetShowSaetAsync(id);
             _bookMyShowContext.ShowSeats.Remove(showSeat);
             await _bookMyShowContext.SaveChangesAsync();
         }

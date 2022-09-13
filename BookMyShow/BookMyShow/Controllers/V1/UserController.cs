@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BookMyShow.Core.Contracts.Infrastructure.Repository;
+using BookMyShow.Core.Contracts.Infrastructure.Service;
 using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
 using BookMyShow.Infrastructure.Specs;
@@ -16,12 +16,12 @@ namespace BookMyShow.Controllers.V1
     public class UserController : ApiControllerBase
     {
 
-        private readonly IUserRepository _userRepository;
+        private readonly IUserService _userService;
         private readonly ILogger<UserController> _logger;
         private readonly IMapper _mapper;
-        public UserController(IUserRepository userRepository, ILogger<UserController> logger, IMapper mapper)
+        public UserController(IUserService userService, ILogger<UserController> logger, IMapper mapper)
         {
-            _userRepository = userRepository;
+            _userService = userService;
             _logger = logger;
             _mapper = mapper;
         }
@@ -35,7 +35,7 @@ namespace BookMyShow.Controllers.V1
         public async Task<ActionResult<IEnumerable<UserDto>>> Get()
         {
             _logger.LogInformation("Getting list of all Users");
-            var result = await _userRepository.GetUsersAsync();
+            var result = await _userService.GetUsersAsync();
             if (!result.Any())
                 return NotFound();
             return Ok(result);
@@ -55,7 +55,7 @@ namespace BookMyShow.Controllers.V1
                 return BadRequest("Please Enter Valid Data");
             }
             _logger.LogInformation("Getting Id : {id} User", id);
-            var user = await _userRepository.GetUserAsync(id);
+            var user = await _userService.GetUserByIdAsync(id);
             var result = _mapper.Map<User, UserDto>(user);
             if (result is null)
                 return NotFound("Please Enter Valid Data");
@@ -72,7 +72,7 @@ namespace BookMyShow.Controllers.V1
         {
             _logger.LogInformation("add new user");
             var user = _mapper.Map<UserVm, User>(userVm);
-            var userresult = await _userRepository.AddUserAsync(user);
+            var userresult = await _userService.AddUserAsync(user);
             var result = _mapper.Map<User, UserDto>(userresult);
             return Ok(result);
         }
@@ -90,7 +90,7 @@ namespace BookMyShow.Controllers.V1
                 return BadRequest("Please Enter Valid Data");
             }
             _logger.LogInformation("Update Id: {id} User", id);
-            var user = await _userRepository.UpdateUserAsynce(id, _mapper.Map<UserVm, User>(userVm));
+            var user = await _userService.UpdateUserAsynce(id, _mapper.Map<UserVm, User>(userVm));
             var result = _mapper.Map<User, UserDto>(user);
             if (result.Equals(null))
                 return NoContent();
@@ -110,7 +110,7 @@ namespace BookMyShow.Controllers.V1
                 BadRequest("Please Enter Valid Data");
             }
             _logger.LogInformation("Deleted Id :  {id}  User", id);
-            await _userRepository.DeleteUserAsync(id);
+            await _userService.DeleteUserAsync(id);
         }
     }
 }

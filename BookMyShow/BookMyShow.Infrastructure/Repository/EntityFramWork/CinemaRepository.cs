@@ -44,22 +44,18 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         }
 
         // update cinema using id
-        public async Task<Cinema> UpdateCinemaAsynce(int id, Cinema cinema)
+        public async Task<Cinema> UpdateCinemaAsynce(Cinema cinema)
         {
-            var CinemaToBeUpdated = await GetCinemaAsync(id);
-            CinemaToBeUpdated.CinemaName = cinema.CinemaName;
-            CinemaToBeUpdated.TotalCinemaHalls = cinema.TotalCinemaHalls;
-            CinemaToBeUpdated.CityId = cinema.CityId;
-            _bookMyShowContext.Cinemas.Update(CinemaToBeUpdated);
+     
+            _bookMyShowContext.Cinemas.Update(cinema);
             await _bookMyShowContext.SaveChangesAsync();
-            return CinemaToBeUpdated;
+            return cinema;
 
         }
 
         //deleted cinema using id
-        public async Task DeleteCinemaAsync(int id)
+        public async Task DeleteCinemaAsync(Cinema cinema)
         {
-            var cinema = await GetCinemaAsync(id);
             _bookMyShowContext.Cinemas.Remove(cinema);
             await _bookMyShowContext.SaveChangesAsync();
         }
