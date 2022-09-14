@@ -14,19 +14,22 @@ namespace BookMyShow.Infrastructure.Service
         }
         public async Task<IEnumerable<ShowDto>> GetShowsAsync()
         {
-            return await _showRepository.GetShowsAsync();
+            var showes = await _showRepository.GetShowsAsync();
+            return showes;
         }
 
         // Get Show using id
         public async Task<Show> GetShowByIdAsync(int id)
         {
-            return await _showRepository.GetShowAsync(id);
+            var show = await _showRepository.GetShowAsync(id);
+            return show;
         }
 
         // Add show
         public async Task<Show> AddShowAsync(Show show)
         {
-            return await _showRepository.AddShowAsync(show);
+            var result = await _showRepository.AddShowAsync(show);
+            return result;  
         }
 
         // Update show using id
@@ -38,8 +41,10 @@ namespace BookMyShow.Infrastructure.Service
             showToBeUpdated.EndTime = show.EndTime;
             showToBeUpdated.CinemaHallId = show.CinemaHallId;
             showToBeUpdated.MovieId = show.MovieId;
+            showToBeUpdated.AvailableSeats = show.AvailableSeats;
 
-            return await _showRepository.UpdateShowAsynce(showToBeUpdated);
+            var result = await _showRepository.UpdateShowAsynce(showToBeUpdated);
+            return result;
 
         }
 

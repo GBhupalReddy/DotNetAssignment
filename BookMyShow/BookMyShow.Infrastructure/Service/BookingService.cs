@@ -1,37 +1,44 @@
-﻿using BookMyShow.Core.Contracts.Infrastructure.Repository;
+﻿using AutoMapper;
+using BookMyShow.Core.Contracts.Infrastructure.Repository;
 using BookMyShow.Core.Contracts.Infrastructure.Service;
 using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
+using BookMyShow.Core.Enums;
 
 namespace BookMyShow.Infrastructure.Service
 {
     public class BookingService : IBookingService
     {
         private readonly IBookingRepository _bookingRepository;
-        
-        public BookingService( IBookingRepository bookingRepository)
+        private readonly IMapper _mapper;
+
+        public BookingService( IBookingRepository bookingRepository,IMapper mapper)
         {
             _bookingRepository = bookingRepository;
+            _mapper = mapper;
             
         }
 
         // Get All Bookings
         public async Task<IEnumerable<BookingDto>> GetBookingsAsync()
         {
-            return await _bookingRepository.GetBookingsAsync();
+            var bookings = await _bookingRepository.GetBookingsAsync();
+            return bookings;
         }
 
         // Get  Booking using booking id
         public async Task<Booking> GetBookingUsingIdAsync(int id)
         {
 
-            return await _bookingRepository.GetBookingAsync(id);
+            var booking = await _bookingRepository.GetBookingAsync(id);
+            return booking;
         }
 
         // Add booking
-        public async Task<Booking> AddBookingAsync(Booking user)
+        public async Task<Booking> AddBookingAsync(Booking booking)
         {
-            return await _bookingRepository.AddBookingAsync(user);
+            var reusult = await _bookingRepository.AddBookingAsync(booking);
+            return reusult;
         }
 
         // Update booking using id
@@ -54,6 +61,13 @@ namespace BookMyShow.Infrastructure.Service
         {
             var booking = await GetBookingUsingIdAsync(id);
             await _bookingRepository.DeleteBookingAsync(booking);
+        }
+
+        public async Task<bool> CreateBooking(BookingUser bookingUser)
+        {
+            int numberOfTickets = bookingUser.NumberOfSeats;
+            int seatType = bookingUser.SeatType;
+            return  false;
         }
     }
 }

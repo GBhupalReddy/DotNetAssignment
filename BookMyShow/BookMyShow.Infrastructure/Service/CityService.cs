@@ -16,25 +16,29 @@ namespace BookMyShow.Infrastructure.Service
         }
         public async Task<IEnumerable<CityDto>> GetCitysAsync()
         {
-            return await _cityRepository.GetCitysAsync();
+            var cities = await _cityRepository.GetCitysAsync();
+            return cities;  
         }
 
         // Get city using id
         public async Task<City> GetCityByIdAsync(int id)
         {
-            return await _cityRepository.GetCityAsync(id);
+            var city = await _cityRepository.GetCityAsync(id);
+            return city;
 
         }
-        public async Task<IEnumerable<CinemaDto>> GetCinemaByNameAsync(string cityName)
+        public async Task<IEnumerable<CinemaDto>> GetCinemaCitysync(string cityName)
         {
 
-            return await _cityRepository.GetCinemasAsync(cityName);
+            var city = await _cityRepository.GetCinemaCityAsync(cityName);
+            return city;
         }
 
         // Add city
         public async Task<City> AddCityAsync(City city)
         {
-            return await _cityRepository.AddCityAsync(city);
+            var reusult= await _cityRepository.AddCityAsync(city);
+            return reusult;
         }
 
         // Update city using id
@@ -45,7 +49,8 @@ namespace BookMyShow.Infrastructure.Service
             cityToBeUpdated.State = city.State;
             cityToBeUpdated.ZipCode = city.ZipCode;
 
-            return await _cityRepository.UpdateCityAsynce(cityToBeUpdated);
+            var result = await _cityRepository.UpdateCityAsynce(cityToBeUpdated);
+            return result;
         }
 
         //Delete city using id

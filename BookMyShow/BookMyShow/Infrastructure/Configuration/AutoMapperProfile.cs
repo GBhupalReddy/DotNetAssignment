@@ -33,6 +33,7 @@ namespace BookMyShow.Infrastructure.Configuration
             CreateMap<ShowSeat, ShowSeatDto>();
             CreateMap<Show, ShowDto>();
             CreateMap<User, UserDto>();
+            CreateMap<BookingUser, Booking>();
         }
     }
 }

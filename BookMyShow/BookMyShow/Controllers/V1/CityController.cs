@@ -63,7 +63,7 @@ namespace BookMyShow.Controllers.V1
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult> Get(string cityName)
         {
-            var result = await _cityService.GetCinemaByNameAsync(cityName);
+            var result = await _cityService.GetCinemaCitysync(cityName);
             return Ok(result);
 
         }

@@ -9,15 +9,14 @@ namespace BookMyShow.Infrastructure.Service
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
-        private readonly IDbConnection _dbConnection;
-        public UserService(IUserRepository userRepository, IDbConnection dbConnection)
+        public UserService(IUserRepository userRepository)
         {
             _userRepository = userRepository;
-            _dbConnection = dbConnection;
         }
         public async Task<IEnumerable<UserDto>> GetUsersAsync()
         {
-            return await _userRepository.GetUsersAsync();
+            var users = await _userRepository.GetUsersAsync();
+            return users;
 
         }
 
@@ -25,14 +24,16 @@ namespace BookMyShow.Infrastructure.Service
         public async Task<User> GetUserByIdAsync(int id)
         {
 
-            return await _userRepository.GetUserAsync(id);
+            var user = await _userRepository.GetUserAsync(id);
+            return user;
 
         }
 
         // Add user
         public async Task<User> AddUserAsync(User user)
         {
-            return await _userRepository.AddUserAsync(user);
+            var result= await _userRepository.AddUserAsync(user);
+            return result;
         }
 
         //Update user using id
@@ -43,7 +44,8 @@ namespace BookMyShow.Infrastructure.Service
             userToBeUpdated.Email = user.Email;
             userToBeUpdated.Password = user.Password;
             userToBeUpdated.Phone = user.Phone;
-            return await _userRepository.UpdateUserAsynce(userToBeUpdated);
+            var result = await _userRepository.UpdateUserAsynce(userToBeUpdated);
+            return result;
 
         }
 

@@ -15,19 +15,23 @@ namespace BookMyShow.Infrastructure.Service
         //Get all cinema halls
         public async Task<IEnumerable<CinemaHallDto>> GetCinemaHallsAsync()
         {
-            return await _cinemaHallRepository.GetCinemaHallsAsync();
+            var cinemaHalls = await _cinemaHallRepository.GetCinemaHallsAsync();
+            return cinemaHalls;
         }
 
         // Get cinema hall using id
         public async Task<CinemaHall> GetCinemaHallByIdAsync(int id)
         {
-            return await _cinemaHallRepository.GetCinemaHallAsync(id);
+            var cinemaHall = await _cinemaHallRepository.GetCinemaHallAsync(id);
+            return cinemaHall;
+
         }
 
         // add cinema hall
         public async Task<CinemaHall> AddCinemaHallAsync(CinemaHall cinemaHall)
         {
-            return await _cinemaHallRepository.AddCinemaHallAsync(cinemaHall);
+            var result =await _cinemaHallRepository.AddCinemaHallAsync(cinemaHall);
+            return result;
         }
 
         // update cinema hall using id
@@ -36,10 +40,10 @@ namespace BookMyShow.Infrastructure.Service
             var cinemaHallToBeUpdated = await GetCinemaHallByIdAsync(id);
             cinemaHallToBeUpdated.CinemaHallName = cinemaHall.CinemaHallName;
             cinemaHallToBeUpdated.TotalSeats = cinemaHall.TotalSeats;
-            cinemaHallToBeUpdated.AvailableSeats = cinemaHall.AvailableSeats;
             cinemaHallToBeUpdated.CinemaId = cinemaHall.CinemaId;
 
-            return await _cinemaHallRepository.UpdateCinemaHallAsynce(cinemaHallToBeUpdated);
+            var result = await _cinemaHallRepository.UpdateCinemaHallAsynce(cinemaHallToBeUpdated);
+            return result;
 
         }
 

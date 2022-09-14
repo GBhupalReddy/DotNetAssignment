@@ -15,26 +15,35 @@ namespace BookMyShow.Infrastructure.Service
         // Get all payments
         public async Task<IEnumerable<PaymentDto>> GetPaymentsAsync()
         {
-            return await _paymentRepository.GetPaymentsAsync();
+            var payments = await _paymentRepository.GetPaymentsAsync();
+            return payments;
         }
 
         // Get payment using id
         public async Task<Payment> GetPaymentByIdAsync(int id)
         {
-            return await _paymentRepository.GetPaymentAsync(id);
+            var payment = await _paymentRepository.GetPaymentAsync(id);
+            return payment;
         }
 
         // Add payment
         public async Task<Payment> AddPaymentAsync(Payment payment)
         {
-            return await _paymentRepository.AddPaymentAsync(payment);
+            var result = await _paymentRepository.AddPaymentAsync(payment);
+            return result;
         }
         // Update payment using id
         public async Task<Payment> UpdatePaymentAsynce(int id, Payment payment)
         {
             var paymentToBeUpdated = await GetPaymentByIdAsync(id);
+            paymentToBeUpdated.TimeStamp = payment.TimeStamp;
+            paymentToBeUpdated.DicountCoupon=payment.DicountCoupon;
+            paymentToBeUpdated.PeyementMethod=payment.PeyementMethod;
+            paymentToBeUpdated.BookingId=payment.BookingId;
+            paymentToBeUpdated.RemoteTransactionId=payment.RemoteTransactionId;
 
-            return await _paymentRepository.UpdatePaymentAsynce(paymentToBeUpdated);
+            var result = await _paymentRepository.UpdatePaymentAsynce(paymentToBeUpdated);
+            return result;
         }
 
         //deleted payment using id

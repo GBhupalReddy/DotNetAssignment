@@ -3,55 +3,55 @@ using BookMyShow.Core.Contracts.Infrastructure.Service;
 using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
 using BookMyShow.Core.Enums;
-using System.Data;
 
 namespace BookMyShow.Infrastructure.Service
 {
     public class CinemaSeatService : ICinemaSeatService
     {
         private readonly ICinemaSeatRepository _cinemaSeatRepository;
-        private readonly IDbConnection _dbConnection;
-        public CinemaSeatService(ICinemaSeatRepository cinemaSeatRepository, IDbConnection dbConnection)
+        public CinemaSeatService(ICinemaSeatRepository cinemaSeatRepository)
         {
             _cinemaSeatRepository = cinemaSeatRepository;
-            _dbConnection = dbConnection;
         }
         // Get all cinema seats
         public async Task<IEnumerable<CinemaSeatDto>> GetCinemaSeatsAsync()
         {
-            return await _cinemaSeatRepository.GetCinemaSeatsAsync();
+            var cinemaSeats =await _cinemaSeatRepository.GetCinemaSeatsAsync();
+            return cinemaSeats;
         }
 
         // Get cinema seat using id
         public async Task<CinemaSeat> GetCinemaSeatByIdAsync(int id)
         {
-            return await _cinemaSeatRepository.GetCinemaSeatAsync(id);
+            var cinemaseat = await _cinemaSeatRepository.GetCinemaSeatAsync(id);
+            return cinemaseat;
         }
 
         // Add cinema seat
         public async Task<CinemaSeat> AddCinemaSeatAsync(CinemaSeat cinemaSeat)
         {
-            var result = cinemaSeat.SeatNumber;
+            var seatNumber = cinemaSeat.SeatNumber;
             int[] thirdClass = { 1, 2 };
             int[] secondClass = { 3, 4 };
             int[] firstClass = { 5, 6 };
-            bool thirdClassReault = Array.Exists(thirdClass, element => element == result);
+            bool thirdClassReault = Array.Exists(thirdClass, element => element == seatNumber);
             if (thirdClassReault)
             {
                 cinemaSeat.Type = (int)CinemaSeatType.ThirdClass;
             }
-            bool secondClassResult = Array.Exists(secondClass, element => element == result);
+            bool secondClassResult = Array.Exists(secondClass, element => element == seatNumber);
             if (secondClassResult)
             {
                 cinemaSeat.Type = (int)CinemaSeatType.SecondClass;
             }
 
-            bool firstClassresult = Array.Exists(firstClass, element => element == result);
+            bool firstClassresult = Array.Exists(firstClass, element => element == seatNumber);
             if (firstClassresult)
             {
                 cinemaSeat.Type = (int)CinemaSeatType.FirstClass;
             }
-            return await _cinemaSeatRepository.AddCinemaSeatAsync(cinemaSeat);
+            var result = await _cinemaSeatRepository.AddCinemaSeatAsync(cinemaSeat);
+            return result;
         }
 
         //Update cinema seat using id
@@ -62,7 +62,8 @@ namespace BookMyShow.Infrastructure.Service
             cinemaSeatToBeUpdated.Type = cinemaSeat.Type;
             cinemaSeatToBeUpdated.CinemaHallId = cinemaSeat.CinemaHallId;
 
-            return await _cinemaSeatRepository.UpdateCinemaSeatAsynce( cinemaSeatToBeUpdated);
+            var result = await _cinemaSeatRepository.UpdateCinemaSeatAsynce( cinemaSeatToBeUpdated);
+            return result;
 
         }
 

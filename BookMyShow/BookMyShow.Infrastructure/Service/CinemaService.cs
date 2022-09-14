@@ -2,37 +2,37 @@
 using BookMyShow.Core.Contracts.Infrastructure.Service;
 using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
-using System.Data;
 
 namespace BookMyShow.Infrastructure.Service
 {
     public class CinemaService : ICinemaService
     {
         private readonly ICinemaRepository _cinemaRepository;
-        private readonly IDbConnection _dbConnection;
-        public CinemaService(ICinemaRepository cinemaRepository, IDbConnection dbConnection)
+        public CinemaService(ICinemaRepository cinemaRepository)
         {
             _cinemaRepository = cinemaRepository;
-            _dbConnection = dbConnection;
         }
 
         // Get all cinemas
         public async Task<IEnumerable<CinemaDto>> GetCinemasAsync()
         {
-            return await _cinemaRepository.GetCinemasAsync();
+            var cinemas = await _cinemaRepository.GetCinemasAsync();
+            return cinemas;
 
         }
 
         // Get cinema using id
         public async Task<Cinema> GetCinemaByIdAsync(int id)
         {
-            return await _cinemaRepository.GetCinemaAsync(id);
+            var cinema = await _cinemaRepository.GetCinemaAsync(id);
+            return cinema;
         }
 
         //Add cinema
         public async Task<Cinema> AddCinemaAsync(Cinema cinema)
         {
-            return await _cinemaRepository.AddCinemaAsync(cinema);
+            var result = await _cinemaRepository.AddCinemaAsync(cinema);
+            return result;
         }
 
         // update cinema using id
@@ -43,7 +43,8 @@ namespace BookMyShow.Infrastructure.Service
             CinemaToBeUpdated.TotalCinemaHalls = cinema.TotalCinemaHalls;
             CinemaToBeUpdated.CityId = cinema.CityId;
 
-            return await _cinemaRepository.UpdateCinemaAsynce(CinemaToBeUpdated);
+            var result =  await _cinemaRepository.UpdateCinemaAsynce(CinemaToBeUpdated);
+            return result;
 
         }
 

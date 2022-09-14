@@ -11,11 +11,13 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
     public class ShowSeatRepository : IShowSeatRepository
     {
         private readonly BookMyShowContext _bookMyShowContext;
+        private readonly ICinemaSeatRepository _cinemaSeatRepository;
         private readonly IDbConnection _dbConnection;
 
-        public ShowSeatRepository(BookMyShowContext bookMyShowContext, IDbConnection dbConnection)
+        public ShowSeatRepository(BookMyShowContext bookMyShowContext, ICinemaSeatRepository cinemaSeatRepository, IDbConnection dbConnection)
         {
             _bookMyShowContext = bookMyShowContext;
+            _cinemaSeatRepository = cinemaSeatRepository;
             _dbConnection = dbConnection;
         }
 
@@ -39,12 +41,13 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         // add show seat
         public async Task<ShowSeat> AddShowSeatAsync(ShowSeat showSeat)
         {
-            var cinemaHall = await (from cinema in _bookMyShowContext.CinemaHalls
-                                    join cinemaSeat in _bookMyShowContext.CinemaSeats
-                                    on cinema.CinemaHallId equals cinemaSeat.CinemaHallId
-                                    where cinemaSeat.CinemaSeatId == showSeat.CinemaSeatId
+            var showAvailableSeats = await (from show in _bookMyShowContext.Shows
+                                    where show.ShowId == showSeat.ShowId
+                                    select show.AvailableSeats).FirstAsync();
+            var cinemaSeats = await (from cinema in _bookMyShowContext.CinemaSeats
+                                    where cinema.CinemaSeatId == showSeat.CinemaSeatId
                                     select cinema).FirstAsync();
-            if (cinemaHall.AvailableSeats >= 0)
+            // if (cinemaHall.AvailableSeats >= 0)
             {
 
                 int cinemaSeatId = showSeat.CinemaSeatId;
@@ -73,7 +76,8 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
 
                 _bookMyShowContext.ShowSeats.Add(showSeat);
                 await _bookMyShowContext.SaveChangesAsync();
-                
+
+
                 return showSeat;
             }
             return null;

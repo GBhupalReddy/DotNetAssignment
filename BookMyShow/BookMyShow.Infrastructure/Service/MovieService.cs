@@ -12,15 +12,19 @@ namespace BookMyShow.Infrastructure.Service
         {
             _movieRepository = movieRepository;
         }
+
+        // Get Movies
         public async Task<IEnumerable<MovieDto>> GetMoviesAsync()
         {
-            return await _movieRepository.GetMoviesAsync();
+           var movies = await _movieRepository.GetMoviesAsync();
+            return movies;
         }
 
         // Get movie using id
         public async Task<Movie> GetMovieByIdAsync(int id)
         {
-            return await _movieRepository.GetMovieAsync(id);
+            var movie = await _movieRepository.GetMovieAsync(id);
+            return movie;
         }
 
 
@@ -28,7 +32,8 @@ namespace BookMyShow.Infrastructure.Service
         // Add movie
         public async Task<Movie> AddMovieAsync(Movie movie)
         {
-            return await _movieRepository.AddMovieAsync(movie);
+            var reusult = await _movieRepository.AddMovieAsync(movie);
+            return reusult;
         }
 
         // Update movie using id
@@ -43,7 +48,8 @@ namespace BookMyShow.Infrastructure.Service
             movieToBeUpdated.Country = movie.Country;
             movieToBeUpdated.Genre = movie.Genre;
 
-            return await _movieRepository.UpdateMovieAsynce(movieToBeUpdated);
+            var reusult = await _movieRepository.UpdateMovieAsynce(movieToBeUpdated);
+            return reusult;
 
         }
 
@@ -56,21 +62,25 @@ namespace BookMyShow.Infrastructure.Service
 
         public async Task<IEnumerable<MovieDetailes>> GetMovieByCityNameAsync(string cityName)
         {
-            return await _movieRepository.GetMovieCityAsync(cityName);
+            var result =await _movieRepository.GetMovieCityAsync(cityName);
+            return result;
         }
         public async Task<IEnumerable<MovieDetailes>> GetMovieCityAsync(string cityName, string movieName)
         {
-            return await _movieRepository.GetMovieCityAsync(cityName, movieName);
+            var result = await _movieRepository.GetMovieCityAsync(cityName, movieName);
+            return result;
 
         }
 
         public async Task<IEnumerable<MovieDetailes>> GetMovieLanguageAsync(string cityName, string? language=null)
         {
-            return await _movieRepository.GetMovieLanguageAsync(cityName, language: language);
+            var result = await _movieRepository.GetMovieLanguageAsync(cityName, language: language);
+            return result;
         }
         public async Task<IEnumerable<MovieDetailes>> GetMovieLanguageGenreAsync(string cityName, string? language=null, string? genre=null)
         {
-            return await _movieRepository.GetMovieLanguageGenreAsync(cityName, language: language, genre: genre);
+            var result = await _movieRepository.GetMovieLanguageGenreAsync(cityName, language: language, genre: genre);
+            return result;
         }
     }
 }

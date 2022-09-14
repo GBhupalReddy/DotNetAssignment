@@ -15,20 +15,23 @@ namespace BookMyShow.Infrastructure.Service
         // Get all show seat seats
         public async Task<IEnumerable<ShowSeatDto>> GetShowSeatsAsync()
         {
-            return await _showSeatRepository.GetShowSeatsAsync();
+            var showSeats = await _showSeatRepository.GetShowSeatsAsync();
+            return showSeats;
 
         }
 
         //Get show seat using id
         public async Task<ShowSeat> GetShowSaetByIdAsync(int id)
         {
-            return await _showSeatRepository.GetShowSaetAsync(id);
+            var showSeat = await _showSeatRepository.GetShowSaetAsync(id);
+            return showSeat;
         }
 
         // add show seat
         public async Task<ShowSeat> AddShowSeatAsync(ShowSeat showSeat)
         {
-            return await _showSeatRepository.AddShowSeatAsync(showSeat);
+            var result = await _showSeatRepository.AddShowSeatAsync(showSeat);
+            return result;
         }
 
         // Update show seat using id
@@ -41,7 +44,8 @@ namespace BookMyShow.Infrastructure.Service
             showSeatToBeUpdated.ShowId = showSeat.ShowId;
             showSeatToBeUpdated.BookingId = showSeat.BookingId;
 
-            return await _showSeatRepository.UpdateShowSeatAsynce(showSeatToBeUpdated);
+            var result = await _showSeatRepository.UpdateShowSeatAsynce(showSeatToBeUpdated);
+            return result;
 
         }
 

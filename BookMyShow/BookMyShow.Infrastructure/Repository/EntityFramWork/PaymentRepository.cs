@@ -57,22 +57,13 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
                                          select cinemaSeat).ToListAsync();
                 
                  int bokkedTikets = cinemaSeats.Select(c => c.CinemaSeatId).Count();
-                var cinemaHall = await (from showSeat in _bookMyShowContext.ShowSeats
-                                           join cinemaSeat in _bookMyShowContext.CinemaSeats
-                                           on showSeat.CinemaSeatId equals cinemaSeat.CinemaSeatId
-                                           join cinema in _bookMyShowContext.CinemaHalls
-                                           on cinemaSeat.CinemaHallId equals cinema.CinemaHallId
-                                           where showSeat.BookingId == 2
-                                           select new CinemaHall
-                                           {
-                                               CinemaHallId = cinema.CinemaHallId,
-                                               CinemaHallName = cinema.CinemaHallName,
-                                               AvailableSeats = cinema.AvailableSeats,
-                                               CinemaId = cinema.CinemaId,
-                                               TotalSeats = cinema.TotalSeats
-                                           }).FirstOrDefaultAsync();
-                cinemaHall.AvailableSeats = cinemaHall.AvailableSeats - bokkedTikets;
-                  _bookMyShowContext.CinemaHalls.Update(cinemaHall);
+                var updateShow = await (from show in _bookMyShowContext.Shows
+                                        join booking in _bookMyShowContext.Bookings
+                                        on show.ShowId equals booking.ShowId
+                                        where booking.BookingId == payment.BookingId
+                                       select show).FirstAsync();
+                updateShow.AvailableSeats = updateShow.AvailableSeats - bokkedTikets;
+                  _bookMyShowContext.Shows.Update(updateShow);
                   await _bookMyShowContext.SaveChangesAsync();
             }
             return payment;

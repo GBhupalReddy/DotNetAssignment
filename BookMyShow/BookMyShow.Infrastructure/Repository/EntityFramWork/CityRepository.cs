@@ -35,7 +35,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
             return result;
            
         }
-        public async Task<IEnumerable<CinemaDto>> GetCinemasAsync(string cityName)
+        public async Task<IEnumerable<CinemaDto>> GetCinemaCityAsync(string cityName)
         {
             
             var result = await (from cinema in _bookMyShowContext.Cinemas
