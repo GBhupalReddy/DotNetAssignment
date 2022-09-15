@@ -1,7 +1,6 @@
 ﻿using BookMyShow.Core.Contracts.Infrastructure.Repository;
 using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
-using BookMyShow.Core.Enums;
 using BookMyShow.Infrastructure.Data;
 using Dapper;
 using System.Data;

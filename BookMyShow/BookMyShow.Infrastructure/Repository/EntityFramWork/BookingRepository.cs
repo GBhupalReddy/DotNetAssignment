@@ -44,16 +44,11 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         // Add booking
         public async Task<Booking> AddBookingAsync(Booking booking)
         {
-            var availableSeats = await (from show in _bookMyShowContext.Shows
-                                        where show.ShowId == booking.ShowId
-                                        select show.AvailableSeats).FirstOrDefaultAsync();
-            if (availableSeats >= booking.NumberOfSeats)
-            {
+           
                 _bookMyShowContext.Bookings.Add(booking);
                 await _bookMyShowContext.SaveChangesAsync();
                 return booking;
-            }
-            return null;
+          
         }
 
         // Update booking using id
@@ -73,110 +68,42 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
             await _bookMyShowContext.SaveChangesAsync();
         }
 
-        public async Task<Booking> CreateBooking(BookingUser bookingUser)
+
+      
+        public async Task<int> GetcinemaHallId(BookingUser bookingUser)
         {
-            var availableSeats = await (from show in _bookMyShowContext.Shows
-                                        where show.ShowId == bookingUser.ShowId
-                                        select show.AvailableSeats).FirstOrDefaultAsync();
-            var cinemaHallId = await(from show in _bookMyShowContext.Shows
-                                     where show.ShowId == bookingUser.ShowId
-                                     select show.CinemaHallId).FirstOrDefaultAsync(); 
 
-            int numberOfTickets = bookingUser.NumberOfSeats;
-            if (availableSeats >= numberOfTickets)
-            {
-                int seatType = bookingUser.SeatType;
-                var seatNumbers = await (from show in _bookMyShowContext.Shows
-                                         join cinemahall in _bookMyShowContext.CinemaHalls
-                                         on show.CinemaHallId equals cinemahall.CinemaHallId
-                                         join cinemaSeat in _bookMyShowContext.CinemaSeats
-                                         on cinemahall.CinemaHallId equals cinemaSeat.CinemaHallId
-                                         where show.ShowId == bookingUser.ShowId
-                                         select cinemaSeat.SeatNumber).ToListAsync();
-
-
-
-                int classAvailableSeats = 0;
-                int[] thirdClass = { 1, 2 };
-                int[] secondClass = { 3, 4 };
-                int[] firstClass = { 5, 6 };
-                List<int> ids = new List<int>();
-                foreach (var ab in seatNumbers)
-                {
-                    
-                    if (seatType == 1)
-                    {
-                        bool thirdClassReault = Array.Exists(thirdClass, element => element == ab);
-                        if (thirdClassReault)
-                        {
-                            classAvailableSeats++;
-                            ids.Add((int)ab);
-                        }
-                    }
-                    if (seatType == 2)
-                    {
-                        bool secondClassResult = Array.Exists(secondClass, element => element == ab);
-                        if (secondClassResult)
-                        {
-                            classAvailableSeats++;
-                            ids.Add((int)ab);
-                        }
-                    }
-                    if (seatType == 3)
-                    {
-                        bool firstClassresult = Array.Exists(firstClass, element => element == ab);
-                        if (firstClassresult)
-                        {
-                            classAvailableSeats++;
-                            ids.Add((int)ab);
-                        }
-                    }
-                }
-
-                if (classAvailableSeats >= numberOfTickets)
-                {
-                    var vdata = _mapper.Map<BookingUser, Booking>(bookingUser);
-                    var data = await AddBookingAsync(vdata);
-
-                    if (data != null)
-                    {
-                        foreach (var id in ids)
-                        {
-
-                            var cinemaseaid = await (from cinemaSeat in _bookMyShowContext.CinemaSeats
-                                                     where cinemaSeat.SeatNumber == id && cinemaSeat.CinemaHallId == cinemaHallId
-                                                     select cinemaSeat.CinemaSeatId).FirstAsync();
-
-                            ShowSeat showSeat1 = new()
-                            {
-                                Status = 1,
-                                CinemaSeatId = cinemaseaid,
-                                ShowId = bookingUser.ShowId,
-                                BookingId = data.BookingId,
-                            };
-
-                            await _showSeatRepository.AddShowSeatAsync(showSeat1);
-                        }
-                    }
-
-                    return data;
-
-                }
-            }
-            return null;
+            var cinemaHallId = await (from show in _bookMyShowContext.Shows
+                                      where show.ShowId == bookingUser.ShowId
+                                      select show.CinemaHallId).FirstOrDefaultAsync();
+            return cinemaHallId;
         }
 
-        public async Task<IEnumerable<CinemaSeat>> getdata()
+        public async Task<List<int?>> GetCinemaSeats(int seatType,BookingUser bookingUser)
         {
             var seatNumbers = await (from show in _bookMyShowContext.Shows
-                                     join cinemahall in _bookMyShowContext.CinemaHalls
-                                     on show.CinemaHallId equals cinemahall.CinemaHallId
+                                     join showSeat in _bookMyShowContext.ShowSeats
+                                     on show.ShowId equals showSeat.ShowId
                                      join cinemaSeat in _bookMyShowContext.CinemaSeats
-                                     on cinemahall.CinemaHallId equals cinemaSeat.CinemaHallId
-                                     where show.ShowId == 6 
-                                     select cinemaSeat).ToListAsync();
-
+                                     on showSeat.CinemaSeatId equals cinemaSeat.CinemaSeatId
+                                     where showSeat.ShowId == bookingUser.ShowId && cinemaSeat.Type == seatType
+                                     select cinemaSeat.SeatNumber).ToListAsync();
             return seatNumbers;
         }
+        public async Task<IEnumerable<ShowSeat>> GetBookedTickets(decimal a, BookingUser bookingUser)
+        {
+            var bookedTickets = await (from shoeSeat in _bookMyShowContext.ShowSeats
+                                where shoeSeat.Price == a && shoeSeat.ShowId == bookingUser.ShowId
+                                select shoeSeat).ToListAsync();
+            return bookedTickets;
+        }
+        public async Task<int> GetCinemaSeatId(int id,int cinemaHallId)
+        {
+            var cinemaseatid = await (from cinemaSeat in _bookMyShowContext.CinemaSeats
+                                     where cinemaSeat.SeatNumber == id && cinemaSeat.CinemaHallId == cinemaHallId
+                                     select cinemaSeat.CinemaSeatId).FirstAsync();
+            return cinemaseatid;
+        }
+        
     }
 }

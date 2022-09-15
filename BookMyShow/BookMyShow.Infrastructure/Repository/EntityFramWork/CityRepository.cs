@@ -101,7 +101,6 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
 
             return result;
 
-
         }
     }
 }
