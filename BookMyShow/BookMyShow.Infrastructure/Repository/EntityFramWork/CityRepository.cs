@@ -1,4 +1,4 @@
-﻿using BookMyShow.Core.Contracts.Infrastructure.Repository;
+﻿ using BookMyShow.Core.Contracts.Infrastructure.Repository;
 using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
 using BookMyShow.Infrastructure.Data;
@@ -21,7 +21,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         // Get all city's
         public async Task<IEnumerable<CityDto>> GetCitysAsync()
         {
-            var query = "select * from City";
+            var query = "execute GetCities";
             var result = await _dbConnection.QueryAsync<CityDto>(query);
             return result;
 
@@ -30,7 +30,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         // Get city using id
         public async Task<City> GetCityAsync(int id)
         {
-            var query = "select * from City where CityId = @id";
+            var query = "execute GetCityById  @id";
             var result = (await _dbConnection.QueryFirstOrDefaultAsync<City>(query, new { id }));
             return result;
            
@@ -38,18 +38,8 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         public async Task<IEnumerable<CinemaDto>> GetCinemaCityAsync(string cityName)
         {
             
-            var result = await (from cinema in _bookMyShowContext.Cinemas
-                                join city in _bookMyShowContext.Cities
-                                on cinema.CityId equals city.CityId
-                                where city.CityName.ToLower().Contains(cityName.ToLower())  
-                                select new CinemaDto
-                                {
-                                    CinemaId = cinema.CinemaId,
-                                    CinemaName = cinema.CinemaName,
-                                    TotalCinemaHalls = cinema.TotalCinemaHalls,
-                                    CityName = city.CityName,
-
-                                }).ToListAsync();
+            var query = "execute GetCinemaDto  @cityName";
+            var result = await _dbConnection.QueryAsync<CinemaDto>(query, new { cityName });
             return result;
         }
 

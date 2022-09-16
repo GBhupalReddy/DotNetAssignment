@@ -24,7 +24,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         // Get all payments
         public async Task<IEnumerable<PaymentDto>> GetPaymentsAsync()
         {
-            var query = "select * from Payment";
+            var query = "execute GetPayments";
             var result = await _dbConnection.QueryAsync<PaymentDto>(query);
             return result;
 
@@ -33,7 +33,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         // Get payment using id
         public async Task<Payment> GetPaymentAsync(int id)
         {
-            var query = "select * from Payment where PaymentId = @id";
+            var query = "execute GetPaymentById";
             var result = (await _dbConnection.QueryFirstOrDefaultAsync<Payment>(query, new { id }));
             return result;
         }
@@ -44,24 +44,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
             
             _bookMyShowContext.Payments.Add(payment);
             await _bookMyShowContext.SaveChangesAsync();
-           //if(payment != null)
-           // {
-           //     var cinemaSeats = await (from showSeat in _bookMyShowContext.ShowSeats
-           //                              join cinemaSeat in _bookMyShowContext.CinemaSeats
-           //                              on showSeat.CinemaSeatId equals cinemaSeat.CinemaSeatId
-           //                              where showSeat.BookingId == payment.BookingId
-           //                              select cinemaSeat).ToListAsync();
-                
-           //      int bokkedTikets = cinemaSeats.Select(c => c.CinemaSeatId).Count();
-           //     var updateShow = await (from show in _bookMyShowContext.Shows
-           //                             join booking in _bookMyShowContext.Bookings
-           //                             on show.ShowId equals booking.ShowId
-           //                             where booking.BookingId == payment.BookingId
-           //                            select show).FirstAsync();
-           //     updateShow.AvailableSeats = updateShow.AvailableSeats - bokkedTikets;
-           //       _bookMyShowContext.Shows.Update(updateShow);
-           //       await _bookMyShowContext.SaveChangesAsync();
-           // }
+          
             return payment;
         }
         // Update payment using id
@@ -84,21 +67,27 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
 
         public async Task<IEnumerable<ShowSeat>> GetBookingAmount(Payment payment)
         {
-            var amount =await (from booking in _bookMyShowContext.ShowSeats
-                         where booking.BookingId == payment.BookingId
-                         select booking).ToListAsync();
+            var query = "execute GetBookingAmount";
+            var result = await _dbConnection.QueryAsync<ShowSeat>(query, new { payment.BookingId });
 
-            return amount;
+            //var amount =await (from booking in _bookMyShowContext.ShowSeats
+            //             where booking.BookingId == payment.BookingId
+            //             select booking).ToListAsync();
+
+            return result;
         }
         public async Task<IEnumerable<CinemaSeat>> GetCinemaSeats(Payment payment)
         {
-            var cinemaSeats = await (from showSeat in _bookMyShowContext.ShowSeats
-                                     join cinemaSeat in _bookMyShowContext.CinemaSeats
-                                     on showSeat.CinemaSeatId equals cinemaSeat.CinemaSeatId
-                                     where showSeat.BookingId == payment.BookingId
-                                     select cinemaSeat).ToListAsync();
+            var query = "execute GetBookedCinemaSeat";
+            var result = await _dbConnection.QueryAsync<CinemaSeat>(query, new { payment.BookingId });
 
-            return cinemaSeats;
+            //var cinemaSeats = await (from showSeat in _bookMyShowContext.ShowSeats
+            //                         join cinemaSeat in _bookMyShowContext.CinemaSeats
+            //                         on showSeat.CinemaSeatId equals cinemaSeat.CinemaSeatId
+            //                         where showSeat.BookingId == payment.BookingId
+            //                         select cinemaSeat).ToListAsync();
+
+            return result;
         }
         public async Task<Show> GetUpdateShow(Payment payment)
         {

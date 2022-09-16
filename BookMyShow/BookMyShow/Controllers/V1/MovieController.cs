@@ -59,55 +59,17 @@ namespace BookMyShow.Controllers.V1
                 return NotFound("Please Enter Valid Data");
             return Ok(result);
         }
-        // GET<MovieController>/cityName/movieName
+   
+
+        // GET<MovieController>Movie/City/language/genre
         [ApiVersion("1.0")]
-        [Route("{cityName}/{movieName}")]
+        [Route("{cityName}")]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-
-        public async Task<ActionResult> Get(string cityName, string movieName)
+        public async Task<ActionResult> Getmovies(string cityName, string? language=null, string? genre=null, string? movieName = null)
         {
-            _logger.LogInformation($"Get list of city-name {cityName} Movies {movieName} ");
-            var result = await _movieService.GetMovieCityAsync(cityName, movieName);
-            if (result is null)
-                return NotFound("Please Enter Valid Data");
-            return Ok(result);
-        }
-
-        // GET<MovieController>/cityName
-        [ApiVersion("1.0")]
-        [HttpGet("cityName")]
-        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult> Get(string cityName)
-        {
-            _logger.LogInformation($"Get list of city-name {cityName} Movies ");
-            var result = await _movieService.GetMovieByCityNameAsync(cityName);
-            if (result is null)
-                return NotFound("Please Enter Valid Data");
-            return Ok(result);
-        }
-
-        // GET<MovieController>/language
-        [ApiVersion("1.1")]
-        [HttpGet("city language")]
-        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult> Getmovie(string city, string language)
-        {
-            _logger.LogInformation($"Get list of {city} in {language} Movies ");
-            var result = await _movieService.GetMovieLanguageAsync(city, language);
-            if (result is null)
-                return NotFound("Please Enter Valid Data");
-            return Ok(result);
-        }
-
-        // GET<MovieController>/language/genre
-        [ApiVersion("1.0")]
-        [HttpGet("city language genre")]
-        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult> Getmovies(string city, string language, string genre)
-        {
-            _logger.LogInformation($"Get list of{city} {language}{genre} Movies ");
-            var result = await _movieService.GetMovieLanguageGenreAsync(city, language, genre);
+            _logger.LogInformation($"Get list of{cityName} {language}{genre} Movies ");
+            var result = await _movieService.GetMovieLanguageGenreAsync(cityName, language, genre, movieName);
             if (result is null)
                 return NotFound("Please Enter Valid Data");
             return Ok(result);

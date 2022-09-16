@@ -10,8 +10,7 @@ namespace BookMyShow.Core.Contracts.Infrastructure.Service
         Task<Movie> GetMovieByIdAsync(int id);
         Task<IEnumerable<MovieDetailes>> GetMovieByCityNameAsync(string cityName);
         Task<IEnumerable<MovieDetailes>> GetMovieCityAsync(string cityName, string movieName);
-        Task<IEnumerable<MovieDetailes>> GetMovieLanguageAsync(string cityName, string? language=null);
-        Task<IEnumerable<MovieDetailes>> GetMovieLanguageGenreAsync(string cityName, string? language=null, string? genre=null);
+        Task<IEnumerable<MovieDetailes>> GetMovieLanguageGenreAsync(string cityName, string? language=null, string? genre= null,string ? movieName = null);
         Task<IEnumerable<MovieDto>> GetMoviesAsync();
         Task<Movie> UpdateMovieAsynce(int id, Movie movie);
     }

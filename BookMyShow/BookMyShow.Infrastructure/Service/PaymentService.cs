@@ -36,6 +36,7 @@ namespace BookMyShow.Infrastructure.Service
             payment.Amount = bookinagAmount.Select(c => c.Price).Sum();
 
             var paymentresult = await _paymentRepository.AddPaymentAsync(payment);
+
            if(paymentresult != null)
             {
                 var cinemaSeats = await _paymentRepository.GetCinemaSeats(paymentresult);

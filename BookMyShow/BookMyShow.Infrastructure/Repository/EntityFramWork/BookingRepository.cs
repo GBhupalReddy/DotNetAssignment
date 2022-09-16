@@ -27,7 +27,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         // Get All Bookings
         public async Task<IEnumerable<BookingDto>> GetBookingsAsync()
         {
-            var query = "select * from Booking";
+            var query = "execute GetBooking";
             var result = await _dbConnection.QueryAsync<BookingDto>(query);
             return result;
         }
@@ -36,7 +36,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         public async Task<Booking> GetBookingAsync(int id)
         {
 
-            var query = "select * from Booking where BookingId = @id";
+            var query = "execute GetBookingById  @id";
             var result = (await _dbConnection.QueryFirstOrDefaultAsync<Booking>(query, new { id }));
             return result;
         }
