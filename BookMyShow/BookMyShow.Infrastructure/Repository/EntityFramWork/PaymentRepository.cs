@@ -67,7 +67,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
 
         public async Task<IEnumerable<ShowSeat>> GetBookingAmount(Payment payment)
         {
-            var query = "execute GetBookingAmount";
+            var query = "execute GetBookingAmount @BookingId";
             var result = await _dbConnection.QueryAsync<ShowSeat>(query, new { payment.BookingId });
 
             //var amount =await (from booking in _bookMyShowContext.ShowSeats
@@ -78,7 +78,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         }
         public async Task<IEnumerable<CinemaSeat>> GetCinemaSeats(Payment payment)
         {
-            var query = "execute GetBookedCinemaSeat";
+            var query = "execute GetBookedCinemaSeat @BookingId";
             var result = await _dbConnection.QueryAsync<CinemaSeat>(query, new { payment.BookingId });
 
             //var cinemaSeats = await (from showSeat in _bookMyShowContext.ShowSeats

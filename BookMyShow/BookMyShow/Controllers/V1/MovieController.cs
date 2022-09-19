@@ -63,8 +63,8 @@ namespace BookMyShow.Controllers.V1
 
         // GET<MovieController>Movie/City/language/genre
         [ApiVersion("1.0")]
-        [Route("{cityName}")]
-        [HttpGet]
+       // [Route("{cityName}")]
+        [HttpGet("cityName")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult> Getmovies(string cityName, string? language=null, string? genre=null, string? movieName = null)
         {

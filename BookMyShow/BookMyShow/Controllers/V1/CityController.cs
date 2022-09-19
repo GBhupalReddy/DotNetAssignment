@@ -57,16 +57,16 @@ namespace BookMyShow.Controllers.V1
             return Ok(result);
         }
 
-        [ApiVersion("1.0")]
-        [Route("cityName")]
-        [HttpGet]
-        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult> Get(string cityName)
-        {
-            var result = await _cityService.GetCinemaCitysync(cityName);
-            return Ok(result);
+        //[ApiVersion("1.0")]
+        //[Route("cityName")]
+        //[HttpGet]
+        //[ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        //public async Task<ActionResult> Get(string cityName)
+        //{
+        //    var result = await _cityService.GetCinemaCitysync(cityName);
+        //    return Ok(result);
 
-        }
+        //}
 
         // POST <CityController>
         [ApiVersion("1.0")]

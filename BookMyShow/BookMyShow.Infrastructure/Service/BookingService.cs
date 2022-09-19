@@ -66,109 +66,84 @@ namespace BookMyShow.Infrastructure.Service
         public async Task<Booking> CreateBooking(BookingUser bookingUser)
         {
             
-                int seatType = bookingUser.SeatType;
-                var seatNumbers = await _bookingRepository.GetCinemaSeats(seatType, bookingUser);
-                decimal a = 0;
-                int cinemaHallId = await _bookingRepository.GetcinemaHallId(bookingUser);
+             int seatType = bookingUser.SeatType;
+             var seatNumbers = await _bookingRepository.GetCinemaSeats(seatType, bookingUser);
+             decimal a = 0;
+             int cinemaHallId = await _bookingRepository.GetcinemaHallId(bookingUser);
 
-                List<int> thirdClass = new List<int> { 1, 2 };
-                List<int> secondClass = new List<int> { 3, 4 };
-                List<int> firstClass = new List<int> { 5, 6 };
+             List<int> thirdClass = new List<int> { 1, 2 };
+             List<int> secondClass = new List<int> { 3, 4 };
+             List<int> firstClass = new List<int> { 5, 6 };
 
-                if (seatType == 1)
-                {
-                    a = 200;
-                    foreach (var ab in seatNumbers)
-                    {
-                            thirdClass.Remove((int)ab);
-                    }
-                }
-                 if (seatType == 2)
+             if (seatType == 1)
+             {
+                 a = 200;
+                 foreach (var ab in seatNumbers)
                  {
-                   a = 300;
-                     foreach (var ab in seatNumbers)
-                     {
-                     secondClass.Remove((int)ab);
-                     }
+                         thirdClass.Remove((int)ab);
                  }
-                 if (seatType == 3)
-                 {
-                      a = 400;
-                     foreach (var ab in seatNumbers)
-                     {
-                         firstClass.Remove((int)ab);
-                     }
-                 }
-               
-                 var vdata = _mapper.Map<BookingUser, Booking>(bookingUser);
-                 var data = await AddBookingAsync(vdata);
-
-                 if (data != null)
-                 {
-                     
-                     if(seatType == 1)
-                     {
-                         for (int i = 0; i < bookingUser.NumberOfSeats; i++)
-                         {
-                             var cinemaseaid = await _bookingRepository.GetCinemaSeatId(thirdClass[i], cinemaHallId);
-                             ShowSeat showSeat1 = new()
-                             {
-                                 ShowSeatId = 0,
-                                 Status = 1,
-                                 Price = a,
-                                 CinemaSeatId = cinemaseaid,
-                                 ShowId = bookingUser.ShowId,
-                                 BookingId = data.BookingId,
-                             };
-                             await _showSeatRepository.AddShowSeatAsync(showSeat1);
-                         }
-                     }
-                     if (seatType == 1)
-                     {
-                       for (int i = 0; i < bookingUser.NumberOfSeats; i++)
-                        {
-                             var cinemaseaid = await _bookingRepository.GetCinemaSeatId(secondClass[i], cinemaHallId);
-                             ShowSeat showSeat1 = new()
-                             {
-                                 ShowSeatId = 0,
-                                 Status = 1,
-                                 Price = a,
-                                 CinemaSeatId = cinemaseaid,
-                                 ShowId = bookingUser.ShowId,
-                                 BookingId = data.BookingId,
-                             };
-
-                             await _showSeatRepository.AddShowSeatAsync(showSeat1);
-
-                         }
-                      }
-                     if (seatType == 1)
-                     {
-                         for (int i = 0; i < bookingUser.NumberOfSeats; i++)
-                         {
-                             var cinemaseaid = await _bookingRepository.GetCinemaSeatId(firstClass[i], cinemaHallId);
-                             ShowSeat showSeat1 = new()
-                             {
-                                 ShowSeatId = 0,
-                                 Status = 1,
-                                 Price = a,
-                                 CinemaSeatId = cinemaseaid,
-                                 ShowId = bookingUser.ShowId,
-                                 BookingId = data.BookingId,
-                             };
-
-                             await _showSeatRepository.AddShowSeatAsync(showSeat1);
-
-                         }
-
-                     }
-
-                 return data;
-                }
-            
+                 if(thirdClass.Count() >= bookingUser.NumberOfSeats)
+                  {
+                   var result =   await  BookingValidaction(bookingUser, thirdClass, a, cinemaHallId);
+                    return result;
+                  }
+                 
+             }
+              if (seatType == 2)
+              {
+                a = 300;
+                  foreach (var ab in seatNumbers)
+                  {
+                  secondClass.Remove((int)ab);
+                  }
+                  if (secondClass.Count() >= bookingUser.NumberOfSeats)
+                  {
+                    var result = await BookingValidaction(bookingUser, secondClass, a, cinemaHallId);
+                    return result;
+                   }
+               }
+              if (seatType == 3)
+              {
+                   a = 400;
+                  foreach (var ab in seatNumbers)
+                  {
+                      firstClass.Remove((int)ab);
+                  }
+                  if (firstClass.Count() >= bookingUser.NumberOfSeats)
+                  {
+                    var result =  await BookingValidaction(bookingUser, firstClass, a, cinemaHallId);
+                    return result;
+                   }
+               }
+             
+             
             return null;
         }
-       
+        public async Task<Booking> BookingValidaction(BookingUser bookingUser,List<int> list,decimal payment,int cinemaHallId)
+        {
+            var booking = _mapper.Map<BookingUser, Booking>(bookingUser);
+            var data = await AddBookingAsync(booking);
+
+            if (data != null)
+            {
+                for (int i = 0; i < bookingUser.NumberOfSeats; i++)
+                {
+                    var cinemaseaid = await _bookingRepository.GetCinemaSeatId(list[i], cinemaHallId);
+                    ShowSeat showSeat1 = new()
+                    {
+                        ShowSeatId = 0,
+                        Status = 1,
+                        Price = payment,
+                        CinemaSeatId = cinemaseaid,
+                        ShowId = bookingUser.ShowId,
+                        BookingId = data.BookingId,
+                    };
+
+                    await _showSeatRepository.AddShowSeatAsync(showSeat1);
+                }
+            }
+            return booking;
+        }
     }
 }
 
