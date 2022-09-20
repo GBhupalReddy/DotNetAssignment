@@ -124,10 +124,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
                                                  CinemaHallName = cinemaHall.CinemaHallName,
                                                  CityName = city.CityName,
                                              }).ToListAsync();
-            //from cityMovie in cityMovies
-            //             where string.IsNullOrEmpty(genre) || cityMovie.Genre.ToLower().Contains(genre.ToLower())
-            //             select cityMovie;
-
+           
             return result;
         }
     }

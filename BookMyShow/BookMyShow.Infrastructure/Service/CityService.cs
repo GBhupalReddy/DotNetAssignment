@@ -17,7 +17,7 @@ namespace BookMyShow.Infrastructure.Service
         public async Task<IEnumerable<CityDto>> GetCitysAsync()
         {
             var cities = await _cityRepository.GetCitysAsync();
-            return cities;  
+            return cities;
         }
 
         // Get city using id
@@ -37,7 +37,7 @@ namespace BookMyShow.Infrastructure.Service
         // Add city
         public async Task<City> AddCityAsync(City city)
         {
-            var reusult= await _cityRepository.AddCityAsync(city);
+            var reusult = await _cityRepository.AddCityAsync(city);
             return reusult;
         }
 
@@ -60,10 +60,15 @@ namespace BookMyShow.Infrastructure.Service
             await _cityRepository.DeleteCityAsync(city);
         }
 
-        public async Task<IEnumerable<MovieDto>> GetMovieCity(string cityName)
+        public async Task<IEnumerable<MovieDto>> GetCityMovie(string cityName)
         {
-            var result = await _cityRepository.GetMovieCity(cityName);
+            var result = await _cityRepository.GetCityMovie(cityName);
             return result;
         }
+        public async Task<IEnumerable<MovieDetailes>> GetCityCinemaMovieAsync(string cityName, string? cinemaName = null)
+        {
+            var cityCinemaMovie = await _cityRepository.GetCityCinemaMovieAsync(cityName,cinemaName);
+            return cityCinemaMovie;
+         }
     }
 }

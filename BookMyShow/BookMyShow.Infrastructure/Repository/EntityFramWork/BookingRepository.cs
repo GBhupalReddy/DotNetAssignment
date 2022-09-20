@@ -79,15 +79,11 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
             return cinemaHallId;
         }
 
-        public async Task<List<int?>> GetCinemaSeats(int seatType,BookingUser bookingUser)
+        public async Task<IEnumerable<int>> GetCinemaSeats(int seatType,BookingUser bookingUser)
         {
-            var seatNumbers = await (from show in _bookMyShowContext.Shows
-                                     join showSeat in _bookMyShowContext.ShowSeats
-                                     on show.ShowId equals showSeat.ShowId
-                                     join cinemaSeat in _bookMyShowContext.CinemaSeats
-                                     on showSeat.CinemaSeatId equals cinemaSeat.CinemaSeatId
-                                     where showSeat.ShowId == bookingUser.ShowId && cinemaSeat.Type == seatType
-                                     select cinemaSeat.SeatNumber).ToListAsync();
+            
+            var seatNumbersQery = "execute GetBooking";
+            var seatNumbers = await _dbConnection.QueryAsync<int>(seatNumbersQery);
             return seatNumbers;
         }
         public async Task<IEnumerable<ShowSeat>> GetBookedTickets(decimal a, BookingUser bookingUser)

@@ -5,7 +5,6 @@
         public int CinemaHallId { get; set; }
         public string CinemaHallName { get; set; } = null!;
         public int TotalSeats { get; set; }
-        public int AvailableSeats { get; set; }
         public int CinemaId { get; set; }
     }
 }

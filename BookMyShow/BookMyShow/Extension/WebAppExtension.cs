@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
+﻿using BookMyShow.Middleware;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Serilog;
 
 namespace BookMyShow.Extension
@@ -22,7 +23,8 @@ namespace BookMyShow.Extension
                     }
                 });
             }
-
+            //Register Exception handler Middleware
+            app.UseMiddleware<ExceptionMiddleware>();
             app.UseHttpsRedirection();
             app.UseSerilogRequestLogging();
 

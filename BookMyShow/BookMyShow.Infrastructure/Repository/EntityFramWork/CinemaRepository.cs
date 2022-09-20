@@ -29,7 +29,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         // Get cinema using id
         public async Task<Cinema> GetCinemaAsync(int id)
         {
-            var query = "execute GetCinemaById";
+            var query = "execute GetCinemaById @id";
             var result = (await _dbConnection.QueryFirstOrDefaultAsync<Cinema>(query, new { id }));
             return result;
 

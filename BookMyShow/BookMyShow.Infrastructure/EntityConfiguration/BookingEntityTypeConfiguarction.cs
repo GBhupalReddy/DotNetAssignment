@@ -1,7 +1,6 @@
 ﻿using BookMyShow.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System.Reflection.Emit;
 
 namespace BookMyShow.Infrastructure.EntityConfiguration
 {

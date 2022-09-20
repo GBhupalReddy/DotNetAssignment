@@ -31,7 +31,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         public async Task<City> GetCityAsync(int id)
         {
             var query = "execute GetCityById  @id";
-            var result = (await _dbConnection.QueryFirstOrDefaultAsync<City>(query, new { id }));
+            var result = await _dbConnection.QueryFirstOrDefaultAsync<City>(query, new { id });
             return result;
            
         }
@@ -66,31 +66,38 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
             _bookMyShowContext.Cities.Remove(city);
             await _bookMyShowContext.SaveChangesAsync();
         }
-        public async Task<IEnumerable<MovieDto>> GetMovieCity(string cityName)
+        public async Task<IEnumerable<MovieDto>> GetCityMovie(string cityName)
         {
-            var result = (await (from city in _bookMyShowContext.Cities
-                                 join cinema in _bookMyShowContext.Cinemas
-                                 on city.CityId equals cinema.CityId
-                                 join cinemaHall in _bookMyShowContext.CinemaHalls
-                                 on cinema.CinemaId equals cinemaHall.CinemaId
-                                 join show in _bookMyShowContext.Shows
-                                 on cinemaHall.CinemaHallId equals show.CinemaHallId
-                                 join movie in _bookMyShowContext.Movies
-                                 on show.MovieId equals movie.MovieId
-                                 where city.CityName.ToLower().Contains(cityName)
-                                 select new MovieDto
-                                 {
-                                     Tittle = movie.Tittle,
-                                     Description = movie.Description,
-                                     Duration = movie.Duration,
-                                     ReleaseDate = movie.ReleaseDate,
-                                     Language = movie.Language,
-                                     Genre = movie.Genre,
+            
+            var ciryMovieQuery = "execute GetCityMovie @cityName";
+            var ciryMovieresult = await _dbConnection.QueryAsync<MovieDto>(ciryMovieQuery,new {cityName});
 
-                                 }).Distinct().ToListAsync());
+            return ciryMovieresult;
 
+        }
+        public async Task<IEnumerable<MovieDetailes>> GetCityCinemaMovieAsync(string cityName, string? cinemaName = null)
+        {
+            var result = await (from city in _bookMyShowContext.Cities
+                                join cinema in _bookMyShowContext.Cinemas
+                                on city.CityId equals cinema.CityId
+                                join cinemaHall in _bookMyShowContext.CinemaHalls
+                                on cinema.CinemaId equals cinemaHall.CinemaId
+                                join show in _bookMyShowContext.Shows
+                                on cinemaHall.CinemaHallId equals show.CinemaHallId
+                                join movie in _bookMyShowContext.Movies
+                                on show.MovieId equals movie.MovieId
+                                where city.CityName.ToLower().Contains(cityName.ToLower())  && (string.IsNullOrEmpty(cinemaName) || cinema.CinemaName.ToLower().Contains(cinemaName.ToLower()))
+                                select new MovieDetailes
+                                {
+                                    MovieName = movie.Tittle,
+                                    Language = movie.Language,
+                                    Genre = movie.Genre,
+                                    ShowTiming = show.StartTime,
+                                    CinemaName = cinema.CinemaName,
+                                    CinemaHallName = cinemaHall.CinemaHallName,
+                                    CityName = city.CityName,
+                                }).ToListAsync();
             return result;
-
         }
     }
 }

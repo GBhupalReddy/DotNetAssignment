@@ -11,6 +11,7 @@ namespace BookMyShow.Core.Contracts.Infrastructure.Service
         Task<City> GetCityByIdAsync(int id);
         Task<IEnumerable<CityDto>> GetCitysAsync();
         Task<City> UpdateCityAsynce(int id, City city);
-        Task<IEnumerable<MovieDto>> GetMovieCity(string cityName);
+        Task<IEnumerable<MovieDto>> GetCityMovie(string cityName);
+        Task<IEnumerable<MovieDetailes>> GetCityCinemaMovieAsync(string cityName, string? cinemaName = null);
     }
 }

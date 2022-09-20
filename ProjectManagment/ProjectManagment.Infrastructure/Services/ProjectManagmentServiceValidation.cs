@@ -97,9 +97,9 @@ namespace ProjectManagment.Infrastructure.Services
             try
             {
                 Console.WriteLine();
-                Console.WriteLine(" PRESS 1 : The department details using department Id  : ");
-                Console.WriteLine(" PRESS 2 : The department details using department Name  ");
-                Console.WriteLine(" PRESS 3 : The All department details  3 : ");
+                Console.WriteLine(" PRESS 1 : Get department details using department Id  : ");
+                Console.WriteLine(" PRESS 2 : Get department details using department Name  ");
+                Console.WriteLine(" PRESS 3 : All department details  3 : ");
 
                 int? departmentSearch = Convert.ToInt32(Console.ReadLine());
                 if (departmentSearch == null)
@@ -144,7 +144,7 @@ namespace ProjectManagment.Infrastructure.Services
                         // The department details for using Department Name
                         do
                         {
-                            Console.WriteLine(" Enter Department Name (Marketing,Finance,Accounting) ");
+                            Console.WriteLine(" Enter department name (Marketing,Finance,Accounting) ");
                             Console.WriteLine();
                             string deptName = Console.ReadLine()?.ToLower();
                             if (String.IsNullOrEmpty(deptName))
@@ -175,7 +175,7 @@ namespace ProjectManagment.Infrastructure.Services
                         projectManagementService.DisplayData(deparmentyData);
                         Console.WriteLine();
                         break;
-                    default: throw new ArgumentOutOfRangeException("Please Enter on 1 to 3 numbers only");
+                    default: throw new ArgumentOutOfRangeException("Please enter on 1 to 3 numbers only");
                 }
             }
             catch (ArgumentOutOfRangeException arex)
@@ -192,13 +192,13 @@ namespace ProjectManagment.Infrastructure.Services
             }
             catch (ArgumentNullException)
             {
-                Console.WriteLine("with out enter anything it is not possible to search data  \n So please enter valid data");
+                Console.WriteLine("With out enter anything it is not possible to search data  \n So please enter valid data");
                 DepartmentData();
 
             }
             catch (FormatException)
             {
-                Console.WriteLine("you are trying with string are null values \n So please enter valid data");
+                Console.WriteLine("You are trying with string are null values \n So please enter valid data");
                 DepartmentData();
             }
             catch (Exception)
@@ -208,7 +208,7 @@ namespace ProjectManagment.Infrastructure.Services
             }
             do
             {
-                Console.WriteLine("PRESS 1 : Department Menu");
+                Console.WriteLine("PRESS 1 : Department menu");
                 Console.WriteLine("PRESS 2 : Main menu");
                 Console.WriteLine();
                 int a = Convert.ToInt32(Console.ReadLine());
@@ -222,7 +222,7 @@ namespace ProjectManagment.Infrastructure.Services
                 }
                 else
                 {
-                    Console.WriteLine("please Enter only 1 or 2");
+                    Console.WriteLine("Please enter only 1 or 2");
                     Console.WriteLine();
                     validation = true;
                 }
@@ -235,9 +235,9 @@ namespace ProjectManagment.Infrastructure.Services
             try
             {
                 Console.WriteLine();
-                Console.WriteLine(" PRESS 1 : The Employee details using department Id  : ");
-                Console.WriteLine(" PRESS 2 : The Employee details using Employee number  ");
-                Console.WriteLine(" PRESS 3 : The All Employee details : ");
+                Console.WriteLine(" PRESS 1 : Get employee details using department Id  : ");
+                Console.WriteLine(" PRESS 2 : Get employee details using employee number  ");
+                Console.WriteLine(" PRESS 3 : All employee details : ");
                 int? employeesearch = Convert.ToInt32(Console.ReadLine());
                 if (employeesearch == null)
                 {
@@ -259,7 +259,7 @@ namespace ProjectManagment.Infrastructure.Services
                               {
                                   throw new ArgumentNullException();
                               }
-                              Console.WriteLine($" the list of employees there for the department Id {deptId} ");
+                              Console.WriteLine($"The list of employees there for the department Id {deptId} ");
                               Console.WriteLine();
                               var getEmployeeData = projectManagementService.GetEmployeeData(deptId: deptId);
                               if (CheckData(getEmployeeData))
@@ -289,7 +289,7 @@ namespace ProjectManagment.Infrastructure.Services
                              {
                                  throw new ArgumentNullException();
                              }
-                             Console.WriteLine($" the employees details for the Employee number {empNumber} ");
+                             Console.WriteLine($"The employees details for the Employee number {empNumber} ");
                              Console.WriteLine();
                              var employeeData = projectManagementService.GetEmployeeData(empNumber: empNumber);
                              if (CheckData(employeeData))
@@ -314,7 +314,7 @@ namespace ProjectManagment.Infrastructure.Services
                         projectManagementService.DisplayData(allEmployeeData);
                         Console.WriteLine();
                         break;
-                    default: throw new ArgumentOutOfRangeException("Please Enter on 1 to 3 numbers only");
+                    default: throw new ArgumentOutOfRangeException("Please enter on 1 to 3 numbers only");
                 }
             }
             catch (ArgumentOutOfRangeException arex)
@@ -330,13 +330,13 @@ namespace ProjectManagment.Infrastructure.Services
             }
             catch (ArgumentNullException)
             {
-                Console.WriteLine("with out enter anything it is not possible to search data  \n So please enter valid data");
+                Console.WriteLine("With out enter anything it is not possible to search data  \n So please enter valid data");
                 EmployeeData();
 
             }
             catch (FormatException)
             {
-                Console.WriteLine("you are trying with string are null values \n So please enter valid data");
+                Console.WriteLine("You are trying with string are null values \n So please enter valid data");
                 EmployeeData();
             }
             catch (Exception)
@@ -346,7 +346,7 @@ namespace ProjectManagment.Infrastructure.Services
             }
             do
             {
-                Console.WriteLine("PRESS 1 : Employee Menu");
+                Console.WriteLine("PRESS 1 : Employee menu");
                 Console.WriteLine("PRESS 2 : Main menu");
                 int a = Convert.ToInt32(Console.ReadLine());
                 if (a == 1)
@@ -359,7 +359,7 @@ namespace ProjectManagment.Infrastructure.Services
                 }
                 else
                 {
-                    Console.WriteLine("please Enter only 1 or 2");
+                    Console.WriteLine("Please enter only 1 or 2");
                     Console.WriteLine();
                     validation = true;
                 }
@@ -372,9 +372,9 @@ namespace ProjectManagment.Infrastructure.Services
             try
             {
                 Console.WriteLine();
-                Console.WriteLine(" PRESS 1 : The Project details using department Id ");
-                Console.WriteLine(" PRESS 2 : The Project details using department Name  ");
-                Console.WriteLine(" PRESS 3 : The All Project details  3 : ");
+                Console.WriteLine(" PRESS 1 : Get Project details using department Id ");
+                Console.WriteLine(" PRESS 2 : Get Project details using department Name  ");
+                Console.WriteLine(" PRESS 3 : All Project details  3 : ");
 
                 int? projectSearch = Convert.ToInt32(Console.ReadLine());
                 if (projectSearch == null)
@@ -397,7 +397,7 @@ namespace ProjectManagment.Infrastructure.Services
                              {
                                  throw new ArgumentNullException();
                              }
-                             Console.WriteLine(" the list of projects there for the department Id. ");
+                             Console.WriteLine("The list of projects there for the department Id. ");
                              Console.WriteLine();
                              var getProjectData = projectManagementService.GetProjectsData(deptId);
                              if (CheckData(getProjectData))
@@ -441,7 +441,7 @@ namespace ProjectManagment.Infrastructure.Services
                     case 3:
                         //All projects for each department 
 
-                        Console.WriteLine(" all projects for each department ");
+                        Console.WriteLine("All projects for each department ");
                         Console.WriteLine();
                         var getProject = projectManagementService.GetProjectsData();
                         projectManagementService.DisplayData(getProject);
@@ -463,13 +463,13 @@ namespace ProjectManagment.Infrastructure.Services
             }
             catch (ArgumentNullException)
             {
-                Console.WriteLine("with out enter anything it is not possible to search data  \n So please enter valid data");
+                Console.WriteLine("With out enter anything it is not possible to search data  \n So please enter valid data");
                 ProjectData();
 
             }
             catch (FormatException)
             {
-                Console.WriteLine("you are trying with string are null values  \n So please enter valid data");
+                Console.WriteLine("You are trying with string are null values  \n So please enter valid data");
                 ProjectData();
             }
             catch (Exception)
@@ -492,7 +492,7 @@ namespace ProjectManagment.Infrastructure.Services
                 }
                 else
                 {
-                    Console.WriteLine("please Enter only 1 or 2");
+                    Console.WriteLine("Please enter only 1 or 2");
                     Console.WriteLine();
                     validation = true;
                 }
@@ -502,7 +502,7 @@ namespace ProjectManagment.Infrastructure.Services
         // the number of employees working in each department 
         public void EmployeeCount()
         {
-            Console.WriteLine("the number of employees working for each department");
+            Console.WriteLine("The number of employees working for each department");
             Console.WriteLine();
             var employeCount = projectManagementService.GetEmployeeCount();
             projectManagementService.DisplayData(employeCount);
@@ -526,10 +526,10 @@ namespace ProjectManagment.Infrastructure.Services
             try
             {
                 Console.WriteLine();
-                Console.WriteLine(" PRESS 1 : The  ProjectResourse details using department Id ");
-                Console.WriteLine(" PRESS 2 : The ProjectResourse details using department Name  ");
-                Console.WriteLine(" PRESS 3 : In ProjectResourse detailsPlease do you want search text : ");
-                Console.WriteLine(" PRESS 4 : The All ProjectResourse details ");
+                Console.WriteLine(" PRESS 1 : Get ProjectResourse details using department Id ");
+                Console.WriteLine(" PRESS 2 : Get ProjectResourse details using department Name  ");
+                Console.WriteLine(" PRESS 3 : Get ProjectResourse detailsPlease do you want search text : ");
+                Console.WriteLine(" PRESS 4 : All ProjectResourse details ");
                 int projectResoursesearch = Convert.ToInt32(Console.ReadLine());
                 if (projectResoursesearch == null)
                 {
@@ -541,7 +541,7 @@ namespace ProjectManagment.Infrastructure.Services
                         // ProjectResourse Details using department id
                         do
                         {
-                              Console.WriteLine("Enter Department Id  which Department  ProjectResourseDetails you want");
+                              Console.WriteLine("Enter department Id  which department  projectResourseDetails you want");
                               int? deptId = Convert.ToInt32(Console.ReadLine());
                               if (deptId < 0)
                               {
@@ -580,7 +580,7 @@ namespace ProjectManagment.Infrastructure.Services
                                   throw new ArgumentNullException();
                               }
 
-                              Console.WriteLine($"Department wise using DepartmentName Text is {departmentName}");
+                              Console.WriteLine($"Department wise using departmentName Text is {departmentName}");
                               Console.WriteLine();
                               var combineDataName = projectManagementService.GetCombineData(deptName: departmentName);
                               if (CheckData(combineDataName))
@@ -607,7 +607,7 @@ namespace ProjectManagment.Infrastructure.Services
                              {
                                  throw new ArgumentNullException();
                              }
-                             Console.WriteLine($"search the result by {searchText} text");
+                             Console.WriteLine($"Search the result by {searchText} text");
                              Console.WriteLine();
                              var searchData = projectManagementService.GetSearchData(searchText);
                              if(CheckData(searchData))
@@ -629,7 +629,7 @@ namespace ProjectManagment.Infrastructure.Services
                         Console.WriteLine();
                         projectManagementService.DisplayData(projectResoursedata);
                         break;
-                    default: throw new ArgumentOutOfRangeException("Please Enter on 1 to 4 numbers only");
+                    default: throw new ArgumentOutOfRangeException("Please enter on 1 to 4 numbers only");
                 }
             }
             catch (ArgumentOutOfRangeException arex)
@@ -645,12 +645,12 @@ namespace ProjectManagment.Infrastructure.Services
             }
             catch (ArgumentNullException)
             {
-                Console.WriteLine("with out enter anything it is not possible to search data  \n So please enter valid data");
+                Console.WriteLine("With out enter anything it is not possible to search data  \n So please enter valid data");
                 ProjectResourseDetails();
             }
             catch (FormatException)
             {
-                Console.WriteLine("you are trying with string are null values  \n So please enter valid data");
+                Console.WriteLine("You are trying with string are null values  \n So please enter valid data");
                 ProjectResourseDetails();
             }
             catch (Exception)
@@ -660,7 +660,7 @@ namespace ProjectManagment.Infrastructure.Services
             }
             do
             { 
-                Console.WriteLine("PRESS 1 : ProjectResourseDetailst Menu");
+                Console.WriteLine("PRESS 1 : ProjectResourseDetailst menu");
                 Console.WriteLine("PRESS 2 : Main menu");
                 int a = Convert.ToInt32(Console.ReadLine());
                 if (a == 1)
@@ -673,7 +673,7 @@ namespace ProjectManagment.Infrastructure.Services
                 }
                 else
                 {
-                    Console.WriteLine("please Enter only 1 or 2");
+                    Console.WriteLine("Please enter only 1 or 2");
                     Console.WriteLine();
                     validation = true;
                 }

@@ -21,30 +21,40 @@ namespace BookMyShow.Controllers.V2
             _mapper = mapper;
         }
         [ApiVersion("2.0")]
-        [Route("cityCinema")]
+        [Route("CityCinema/{cityName}")]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult> GetCityCinema(string cityCinema)
+        public async Task<ActionResult> GetCityCinema(string cityName)
         {
-            var result = await _cityService.GetCinemaCitysync(cityCinema);
+            var result = await _cityService.GetCinemaCitysync(cityName);
             return Ok(result);
 
         }
 
 
         [ApiVersion("2.0")]
-        [Route("{cityMovie}")]
+        [Route("CityMovies/{cityName}")]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult> GetCityMovie(string cityMovie)
+        public async Task<ActionResult> GetCityMovie(string cityName)
         {
-            var result = await _cityService.GetMovieCity(cityMovie);
+            var result = await _cityService.GetCityMovie(cityName);
+            return Ok(result);
+
+        }
+
+        [ApiVersion("2.0")]
+        [Route("CityCinemaMovie/{cityName}")]
+        [HttpGet]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        public async Task<ActionResult> GetCityCinemaMovie(string cityName, string? cinemaName = null)
+        {
+            var result = await _cityService.GetCityCinemaMovieAsync(cityName, cinemaName);
             return Ok(result);
 
         }
 
 
-       
 
     }
 }
