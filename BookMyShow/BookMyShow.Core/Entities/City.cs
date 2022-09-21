@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace BookMyShow.Core.Entities
+﻿namespace BookMyShow.Core.Entities
 {
     public partial class City
     {
@@ -11,7 +8,7 @@ namespace BookMyShow.Core.Entities
         }
 
         public int CityId { get; set; }
-        public string Name { get; set; } = null!;
+        public string CityName { get; set; } = null!;
         public string State { get; set; } = null!;
         public string ZipCode { get; set; } = null!;
 

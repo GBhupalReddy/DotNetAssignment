@@ -1,13 +1,17 @@
-﻿using BookMyShow.Core.Entities;
+﻿using BookMyShow.Core.Dto;
+using BookMyShow.Core.Entities;
 
 namespace BookMyShow.Core.Contracts.Infrastructure.Repository
 {
     public interface ICityRepository
     {
         Task<City> AddCityAsync(City city);
-        Task DeleteCityAsync(int id);
+        Task DeleteCityAsync(City city);
         Task<City> GetCityAsync(int id);
-        Task<IEnumerable<City>> GetCitysAsync();
-        Task<City> UpdateCityAsynce(int id, City city);
+        Task<IEnumerable<CinemaDto>> GetCinemaCityAsync(string cityName);
+        Task<IEnumerable<CityDto>> GetCitysAsync();
+        Task<City> UpdateCityAsynce( City city);
+        Task<IEnumerable<MovieDto>> GetCityMovie(string cityName);
+        Task<IEnumerable<MovieDetailes>> GetCityCinemaMovieAsync(string cityName, string? cinemaName = null);
     }
 }

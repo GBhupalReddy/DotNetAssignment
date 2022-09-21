@@ -1,13 +1,18 @@
-﻿using BookMyShow.Core.Entities;
+﻿using BookMyShow.Core.Dto;
+using BookMyShow.Core.Entities;
 
 namespace BookMyShow.Core.Contracts.Infrastructure.Repository
 {
     public interface IBookingRepository
     {
         Task<Booking> AddBookingAsync(Booking user);
-        Task DeleteBookingAsync(int id);
+        Task DeleteBookingAsync(Booking booking);
         Task<Booking> GetBookingAsync(int id);
-        Task<IEnumerable<Booking>> GetBookingsAsync();
-        Task<Booking> UpdateBookingAsynce(int id, Booking booking);
+        Task<IEnumerable<BookingDto>> GetBookingsAsync();
+        Task<Booking> UpdateBookingAsynce( Booking booking);
+        Task<int> GetcinemaHallId(BookingUser bookingUser);
+        Task<IEnumerable<int>> GetCinemaSeats(int seatType,BookingUser bookingUser);
+        Task<IEnumerable<ShowSeat>> GetBookedTickets(decimal a, BookingUser bookingUser);
+        Task<int> GetCinemaSeatId(int id, int cinemaHallId);
     }
 }

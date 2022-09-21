@@ -1,7 +1,9 @@
 ﻿using BookMyShow.Core.Contracts.Infrastructure.Repository;
+using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
 using BookMyShow.Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
+using Dapper;
+using System.Data;
 
 namespace BookMyShow.Infrastructure.Repository.EntityFramWork
 {
@@ -9,56 +11,51 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
     {
 
         private readonly BookMyShowContext _bookMyShowContext;
+        private readonly IDbConnection _dbConnection;
 
-        public ShowRepository()
+        public ShowRepository(BookMyShowContext bookMyShowContext, IDbConnection dbConnection)
         {
-            _bookMyShowContext = new BookMyShowContext();
+            _bookMyShowContext =bookMyShowContext;
+            _dbConnection = dbConnection;
         }
 
-
-        public async Task<IEnumerable<Show>> GetShowsAsync()
+        // Get all Shows
+        public async Task<IEnumerable<ShowDto>> GetShowsAsync()
         {
-            return await (from show in _bookMyShowContext.Shows
-                          select new Show
-                          {
-                              ShowId = show.ShowId,
-                              Date = show.Date,
-                              StartTime = show.StartTime,
-                              EndTime = show.EndTime,
-                              CinemaHallId = show.CinemaHallId,
-                              MovieId = show.MovieId
-                          }).ToListAsync();
+            var query = "execute GetShowes";
+            var result = await _dbConnection.QueryAsync<ShowDto>(query);
+            return result;
 
         }
 
+        // Get Show using id
         public async Task<Show> GetShowAsync(int id)
         {
-            return await _bookMyShowContext.Shows.FindAsync(id);
+            var query = "execute GetShowById @id";
+            var result = (await _dbConnection.QueryFirstOrDefaultAsync<Show>(query, new { id }));
+            return result;
         }
 
+        // Add show
         public async Task<Show> AddShowAsync(Show show)
         {
             _bookMyShowContext.Shows.Add(show);
             await _bookMyShowContext.SaveChangesAsync();
             return show;
         }
-        public async Task<Show> UpdateShowAsynce(int id, Show show)
+
+        // Update show using id
+        public async Task<Show> UpdateShowAsynce(Show show)
         {
-            var showToBeUpdated = await GetShowAsync(id);
-            showToBeUpdated.Date = show.Date;
-            showToBeUpdated.StartTime = show.StartTime;
-            showToBeUpdated.EndTime = show.EndTime;
-            showToBeUpdated.CinemaHallId = show.CinemaHallId;
-            showToBeUpdated.MovieId = show.MovieId;
-            _bookMyShowContext.Shows.Update(showToBeUpdated);
+            _bookMyShowContext.Shows.Update(show);
             await _bookMyShowContext.SaveChangesAsync();
-            return showToBeUpdated;
+            return show;
 
         }
 
-        public async Task DeleteShowAsync(int id)
+        // Delete show using id
+        public async Task DeleteShowAsync(Show show)
         {
-            var show = await GetShowAsync(id);
             _bookMyShowContext.Shows.Remove(show);
             await _bookMyShowContext.SaveChangesAsync();
         }

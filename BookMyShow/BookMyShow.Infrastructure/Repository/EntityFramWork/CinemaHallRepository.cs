@@ -1,59 +1,60 @@
-﻿using BookMyShow.Core.Entities;
+﻿using BookMyShow.Core.Contracts.Infrastructure.Repository;
+using BookMyShow.Core.Dto;
+using BookMyShow.Core.Entities;
 using BookMyShow.Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
-using BookMyShow.Core.Contracts.Infrastructure.Repository;
+using Dapper;
+using System.Data;
 
 namespace BookMyShow.Infrastructure.Repository.EntityFramWork
 {
     public class CinemaHallRepository : ICinemaHallRepository
     {
         private readonly BookMyShowContext _bookMyShowContext;
-        public CinemaHallRepository()
+        private readonly IDbConnection _dbConnection;
+        public CinemaHallRepository(BookMyShowContext bookMyShowContext , IDbConnection dbConnection)
         {
-            _bookMyShowContext = new BookMyShowContext();
+            _bookMyShowContext = bookMyShowContext;
+            _dbConnection = dbConnection;
         }
 
-
-        public async Task<IEnumerable<CinemaHall>> GetCinemaHallsAsync()
+        //Get all cinema halls
+        public async Task<IEnumerable<CinemaHallDto>> GetCinemaHallsAsync()
         {
-            return await (from cinemaHall in _bookMyShowContext.CinemaHalls
-
-                          select new CinemaHall
-                          {
-                              CinemaHallId = cinemaHall.CinemaHallId,
-                              Name = cinemaHall.Name,
-                              TotalSeats = cinemaHall.TotalSeats,
-                              CinemaId = cinemaHall.CinemaId,
-                          }).ToListAsync();
-
+            var query = "execute GetCinemaHalls";
+            var result =await _dbConnection.QueryAsync<CinemaHallDto>(query);
+            return result;
         }
 
+        // Get cinema hall using id
         public async Task<CinemaHall> GetCinemaHallAsync(int id)
         {
-            return await _bookMyShowContext.CinemaHalls.FindAsync(id);
+            var query = "execute GetCinemaHallById @id";
+            var result = (await _dbConnection.QueryFirstOrDefaultAsync<CinemaHall>(query, new { id }));
+         
+            return result;
         }
 
+        // add cinema hall
         public async Task<CinemaHall> AddCinemaHallAsync(CinemaHall cinemaHall)
         {
             _bookMyShowContext.CinemaHalls.Add(cinemaHall);
             await _bookMyShowContext.SaveChangesAsync();
             return cinemaHall;
         }
-        public async Task<CinemaHall> UpdateCinemaHallAsynce(int id, CinemaHall cinemaHall)
+
+        // update cinema hall using id
+        public async Task<CinemaHall> UpdateCinemaHallAsynce( CinemaHall cinemaHall)
         {
-            var cinemaHallToBeUpdated = await GetCinemaHallAsync(id);
-            cinemaHallToBeUpdated.Name = cinemaHall.Name;
-            cinemaHallToBeUpdated.TotalSeats = cinemaHall.TotalSeats;
-            cinemaHallToBeUpdated.CinemaId = cinemaHall.CinemaId;
-            _bookMyShowContext.CinemaHalls.Update(cinemaHallToBeUpdated);
+           
+            _bookMyShowContext.CinemaHalls.Update(cinemaHall);
             await _bookMyShowContext.SaveChangesAsync();
-            return cinemaHallToBeUpdated;
+            return cinemaHall;
 
         }
 
-        public async Task DeleteCinemaHallrAsync(int id)
+        // delete cinema hall using id
+        public async Task DeleteCinemaHallrAsync(CinemaHall cinemaHall)
         {
-            var cinemaHall = await GetCinemaHallAsync(id);
             _bookMyShowContext.CinemaHalls.Remove(cinemaHall);
             await _bookMyShowContext.SaveChangesAsync();
         }

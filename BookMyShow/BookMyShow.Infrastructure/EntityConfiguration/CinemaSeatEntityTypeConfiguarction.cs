@@ -1,11 +1,6 @@
 ﻿using BookMyShow.Core.Entities;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BookMyShow.Infrastructure.EntityConfiguration
 {
@@ -19,7 +14,7 @@ namespace BookMyShow.Infrastructure.EntityConfiguration
                 .WithMany(p => p.CinemaSeats)
                 .HasForeignKey(d => d.CinemaHallId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__CinemaSea__Cinem__2D27B809");
+                .HasConstraintName("FK__CinemaSea__Cinem__47DBAE45");
 
         }
     }

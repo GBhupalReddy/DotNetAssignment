@@ -2,68 +2,99 @@
 using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
 using BookMyShow.Infrastructure.Data;
+using Dapper;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data;
 
 namespace BookMyShow.Infrastructure.Repository.EntityFramWork
 {
     public class UserRepository : IUserRepository
     {
         private readonly BookMyShowContext _bookMyShowContext;
-        public UserRepository()
+        private readonly IDbConnection _dbConnection;
+        public UserRepository(BookMyShowContext bookMyShowContext, IDbConnection dbConnection)
         {
-            _bookMyShowContext = new BookMyShowContext();
+            _bookMyShowContext = bookMyShowContext;
+            _dbConnection = dbConnection;
         }
         
-
+        // Get all users
         public async Task<IEnumerable<UserDto>> GetUsersAsync()
         {
-            return await (from user in _bookMyShowContext.Users
-
-                          select new UserDto
-                          {
-                              UserId = user.UserId,
-                              Name = user.Name,
-                              Email = user.Email,
-                              Passoword = user.Passoword,
-                              Phone = user.Phone
-                          }).ToListAsync();
-
+            var query = "execute GetUsers";
+            var result = await _dbConnection.QueryAsync<UserDto>(query);
+            return result;
+                
         }
 
+        // Get user using id
         public async Task<User> GetUserAsync(int id)
         {
-            return await _bookMyShowContext.Users.FindAsync(id);
+            var query = "execute GetUserById";
+            var result = (await _dbConnection.QueryFirstOrDefaultAsync<User>(query, new { id }));
+            return result;
+            
         }
 
+        // Add user
         public async Task<User> AddUserAsync(User user)
         {
             _bookMyShowContext.Users.Add(user);
             await _bookMyShowContext.SaveChangesAsync();
             return user;
         }
-        public async Task<User> UpdateUserAsynce(int id,User user)
+
+        //Update user using id
+        public async Task<User> UpdateUserAsynce(User user)
         {
-            var userToBeUpdated=await GetUserAsync(id);
-            userToBeUpdated.Name= user.Name;
-            userToBeUpdated.Email= user.Email;
-            userToBeUpdated.Passoword= user.Passoword;  
-            userToBeUpdated.Phone= user.Phone;
-            _bookMyShowContext.Users.Update(userToBeUpdated);
+          
+            _bookMyShowContext.Users.Update(user);
             await _bookMyShowContext.SaveChangesAsync();
-            return userToBeUpdated;
+            return user;
 
         }
 
-        public async Task DeleteUserAsync(int id)
+        //Delete user using id
+        public async Task DeleteUserAsync(User user)
         {
-            var user= await GetUserAsync(id);
             _bookMyShowContext.Users.Remove(user);
            await _bookMyShowContext.SaveChangesAsync();
+        }
+        public async Task<IEnumerable<UserBookingDto>> GetUserBookingDetalisAsync(int id)
+        {
+            var result = await (from user in _bookMyShowContext.Users
+                                join booking in _bookMyShowContext.Bookings
+                                on user.UserId equals booking.UserId
+                                join payment in _bookMyShowContext.Payments
+                                on booking.BookingId equals payment.BookingId
+                                join show in _bookMyShowContext.Shows
+                                on booking.ShowId equals show.ShowId
+                                join cinemahall in _bookMyShowContext.CinemaHalls
+                                on show.CinemaHallId equals cinemahall.CinemaHallId
+                                join cinema in _bookMyShowContext.Cinemas
+                                on cinemahall.CinemaId equals cinema.CinemaId
+                                join city in _bookMyShowContext.Cities
+                                on cinema.CityId equals city.CityId
+                                where user.UserId == id
+                                select new UserBookingDto
+                                {
+                                    UserId = user.UserId,
+                                    Name = user.UserName,
+                                    Passoword = user.Password,
+                                    Email = user.Email,
+                                    Phone = user.Phone,
+                                    BookingId = booking.BookingId,
+                                    NumberOfSeats = booking.NumberOfSeats,
+                                    Timestamp = booking.Timestamp,
+                                    PaymentId = payment.PaymentId,
+                                    Amount = payment.Amount,
+                                    DicountCoupon = payment.DicountCoupon,
+                                    RemoteTransactionId = payment.RemoteTransactionId,
+                                    CinemaHallName = cinemahall.CinemaHallName,
+                                    CinemaName = cinema.CinemaName,
+                                    CityName = city.CityName,
+                                }).ToListAsync();
+            return result;
         }
         
     }

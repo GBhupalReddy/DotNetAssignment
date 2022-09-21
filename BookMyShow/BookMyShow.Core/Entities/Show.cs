@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace BookMyShow.Core.Entities
+﻿namespace BookMyShow.Core.Entities
 {
     public partial class Show
     {
@@ -13,9 +10,10 @@ namespace BookMyShow.Core.Entities
 
         public int ShowId { get; set; }
         public DateTime? Date { get; set; }
-        public DateTime? StartTime { get; set; }
-        public DateTime? EndTime { get; set; }
+        public TimeSpan? StartTime { get; set; }
+        public TimeSpan? EndTime { get; set; }
         public int CinemaHallId { get; set; }
+        public int AvailableSeats { get; set; }
         public int? MovieId { get; set; }
 
         public virtual CinemaHall CinemaHall { get; set; } = null!;

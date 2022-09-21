@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace BookMyShow.Core.Entities
+﻿namespace BookMyShow.Core.Entities
 {
     public partial class CinemaHall
     {
@@ -12,7 +9,7 @@ namespace BookMyShow.Core.Entities
         }
 
         public int CinemaHallId { get; set; }
-        public string Name { get; set; } = null!;
+        public string CinemaHallName { get; set; } = null!;
         public int TotalSeats { get; set; }
         public int CinemaId { get; set; }
 

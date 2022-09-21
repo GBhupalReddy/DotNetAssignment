@@ -1,13 +1,14 @@
-﻿using BookMyShow.Core.Entities;
+﻿using BookMyShow.Core.Dto;
+using BookMyShow.Core.Entities;
 
 namespace BookMyShow.Core.Contracts.Infrastructure.Repository
 {
-    public interface IShowseatRepository
+    public interface IShowSeatRepository
     {
         Task<ShowSeat> AddShowSeatAsync(ShowSeat showSeat);
-        Task DeleteShowSeatAsync(int id);
+        Task DeleteShowSeatAsync(ShowSeat showSeat);
         Task<ShowSeat> GetShowSaetAsync(int id);
-        Task<IEnumerable<ShowSeat>> GetShowSeatsAsync();
-        Task<ShowSeat> UpdateShowSeatAsynce(int id, ShowSeat showSeat);
+        Task<IEnumerable<ShowSeatDto>> GetShowSeatsAsync();
+        Task<ShowSeat> UpdateShowSeatAsynce( ShowSeat showSeat);
     }
 }

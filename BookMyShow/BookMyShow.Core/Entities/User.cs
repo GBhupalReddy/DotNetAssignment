@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace BookMyShow.Core.Entities
+﻿namespace BookMyShow.Core.Entities
 {
     public partial class User
     {
@@ -11,8 +8,8 @@ namespace BookMyShow.Core.Entities
         }
 
         public int UserId { get; set; }
-        public string? Name { get; set; }
-        public string Passoword { get; set; } = null!;
+        public string? UserName { get; set; }
+        public string Password { get; set; } = null!;
         public string Email { get; set; } = null!;
         public string Phone { get; set; } = null!;
 

@@ -1,11 +1,6 @@
 ﻿using BookMyShow.Core.Entities;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BookMyShow.Infrastructure.EntityConfiguration
 {
@@ -21,10 +16,6 @@ namespace BookMyShow.Infrastructure.EntityConfiguration
 
             builder.Property(e => e.Description)
                 .HasMaxLength(512)
-                .IsUnicode(false);
-
-            builder.Property(e => e.Duration)
-                .HasMaxLength(40)
                 .IsUnicode(false);
 
             builder.Property(e => e.Genre)
