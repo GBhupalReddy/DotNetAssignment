@@ -2,6 +2,7 @@
 using BookMyShow.Core.Contracts.Infrastructure.Service;
 using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
+using BookMyShow.Core.Exceptions;
 using BookMyShow.Infrastructure.Specs;
 using BookMyShow.ViewModel;
 using Microsoft.AspNetCore.Mvc;
@@ -24,85 +25,6 @@ namespace BookMyShow.Controllers.V2
             _mapper = mapper;
         }
 
-        // GET: <CinemaController>
-        [ApiVersion("2.0")]
-
-        [Route("")]
-        [HttpGet]
-        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult<IEnumerable<CinemaDto>>> Get()
-        {
-            _logger.LogInformation("Getting list of all Cinemas");
-            var result = await _cinemaService.GetCinemasAsync();
-            return Ok(result);
-        }
-
-        // GET <CinemaController>/
-        [ApiVersion("2.0")]
-        [Route("{id}")]
-        [HttpGet]
-        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult> Get(int id)
-        {
-            if (id <= 0)
-            {
-                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
-                return BadRequest("Please Enter Valid Data");
-            }
-            _logger.LogInformation("Getting Id {id} Cinema", id);
-            var cinema = await _cinemaService.GetCinemaByIdAsync(id);
-            if (cinema is null)
-                return NotFound("Please Enter Valid Data");
-            return Ok(cinema);
-        }
-
-        // POST <CinemaController>
-        [ApiVersion("2.0")]
-        [Route("")]
-        [HttpPost]
-        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
-        public async Task<ActionResult> Post([FromBody] CinemaVm cinemaVm)
-        {
-            _logger.LogInformation("add new Cinema");
-            var cinema = _mapper.Map<CinemaVm, Cinema>(cinemaVm);
-            var cinemaResult = await _cinemaService.AddCinemaAsync(cinema);
-            var result = _mapper.Map<Cinema, CinemaDto>(cinemaResult);
-            return Ok(result);
-        }
-
-        // PUT <CinemaController>
-        [ApiVersion("2.0")]
-        [Route("{id}")]
-        [HttpPut]
-        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
-        public async Task<ActionResult> Put(int id, [FromBody] CinemaVm cinemaVm)
-        {
-            if (id <= 0)
-            {
-                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
-                return BadRequest("Please Enter Valid Data");
-            }
-            _logger.LogInformation("Update Id: {id} Cinema", id);
-            var cinema = _mapper.Map<CinemaVm, Cinema>(cinemaVm);
-            var cinemaResult = await _cinemaService.UpdateCinemaAsynce(id, cinema);
-            var result = _mapper.Map<Cinema, CinemaDto>(cinemaResult);
-            return Ok(result);
-        }
-
-        // DELETE <CinemaController>
-        [ApiVersion("2.0")]
-        [Route("{id}")]
-        [HttpDelete]
-        [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
-        public async Task Delete(int id)
-        {
-            if (id <= 0)
-            {
-                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
-                BadRequest("Please Enter Valid Data");
-            }
-            _logger.LogInformation("Deleted Id : {id}  Cinema", id);
-            await _cinemaService.DeleteCinemaAsync(id);
-        }
+        
     }
 }

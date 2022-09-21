@@ -10,8 +10,9 @@ namespace BookMyShow.Core.Contracts.Infrastructure.Repository
         Task<Payment> GetPaymentAsync(int id);
         Task<IEnumerable<PaymentDto>> GetPaymentsAsync();
         Task<Payment> UpdatePaymentAsynce( Payment payment);
-        Task<IEnumerable<ShowSeat>> GetBookingAmount(Payment payment);
-        Task<IEnumerable<CinemaSeat>> GetCinemaSeats(Payment payment);
-        Task<Show> GetUpdateShow(Payment payment);
+        Task<GetBookingAmount> GetBookingAmount(int bookingId);
+        Task<Show> GetUpdateShow(int bookingId);
+        Task DeleteShowSeatAsync(int bookingId);
+        Task<Payment> GetPaymentByBookinId(int bookingId);
     }
 }

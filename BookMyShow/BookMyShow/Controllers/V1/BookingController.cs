@@ -33,7 +33,7 @@ namespace BookMyShow.Controllers.V1
         [Route("")]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult<IEnumerable<BookingDto>>> Get()
+        public async Task<ActionResult<IEnumerable<BookingDto>>> GetBookings()
         {
             _logger.LogInformation("Getting list of all Bookings");
             var result = await _bookingService.GetBookingsAsync();
@@ -45,7 +45,7 @@ namespace BookMyShow.Controllers.V1
         [Route("{id}")]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult> Get(int id)
+        public async Task<ActionResult> GetBookinfById(int id)
         {
             if (id <= 0)
             {
@@ -54,7 +54,7 @@ namespace BookMyShow.Controllers.V1
             }
 
             _logger.LogInformation("Getting Id : {id} Booking", id);
-            var booking = await _bookingService.GetBookingUsingIdAsync(id);
+            var booking = await _bookingService.GetBookingByIdAsync(id);
             var result = _mapper.Map<Booking, BookingDto>(booking);
             if (result is null)
                 return NotFound("Please Enter Valid Data");
@@ -66,7 +66,7 @@ namespace BookMyShow.Controllers.V1
         [Route("")]
         [HttpPost]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
-        public async Task<ActionResult> Post([FromBody] BookingVm bookingVm)
+        public async Task<ActionResult> PostBooking([FromBody] BookingVm bookingVm)
         {
 
             _logger.LogInformation("add new Booking");
@@ -85,7 +85,7 @@ namespace BookMyShow.Controllers.V1
         [Route("{id}")]
         [HttpPut]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
-        public async Task<ActionResult> Put(int id, [FromBody] BookingVm bookingVm)
+        public async Task<ActionResult> PutBooking(int id, [FromBody] BookingVm bookingVm)
         {
             if (id <= 0)
             {
@@ -104,7 +104,7 @@ namespace BookMyShow.Controllers.V1
         [Route("{id}")]
         [HttpDelete]
         [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
-        public async Task Delete(int id)
+        public async Task DeleteBooking(int id)
         {
             if (id <= 0)
             {

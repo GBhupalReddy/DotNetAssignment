@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using BookMyShow.Core.Contracts.Infrastructure.Repository;
+﻿using BookMyShow.Core.Contracts.Infrastructure.Repository;
 using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
 using BookMyShow.Infrastructure.Data;
@@ -13,21 +12,17 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
     {
         private readonly BookMyShowContext _bookMyShowContext;
         private readonly IDbConnection _dbConnection;
-        private readonly IMapper _mapper;
-        private readonly IShowSeatRepository _showSeatRepository;
-        public BookingRepository(BookMyShowContext bookMyShowContext,IDbConnection dbConnection, IMapper mapper, IShowSeatRepository showSeatRepository)
+        public BookingRepository(BookMyShowContext bookMyShowContext,IDbConnection dbConnection)
         {
             _bookMyShowContext = bookMyShowContext;
             _dbConnection = dbConnection;
-            _mapper = mapper;
-            _showSeatRepository = showSeatRepository;
         }
 
 
         // Get All Bookings
         public async Task<IEnumerable<BookingDto>> GetBookingsAsync()
         {
-            var query = "execute GetBooking";
+            var query = "select * from Booking";
             var result = await _dbConnection.QueryAsync<BookingDto>(query);
             return result;
         }
@@ -36,8 +31,8 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         public async Task<Booking> GetBookingAsync(int id)
         {
 
-            var query = "execute GetBookingById  @id";
-            var result = (await _dbConnection.QueryFirstOrDefaultAsync<Booking>(query, new { id }));
+            var query = "select * from Booking where BookingId = @id";
+            var result = await _dbConnection.QueryFirstOrDefaultAsync<Booking>(query, new { id });
             return result;
         }
 
@@ -70,30 +65,25 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
 
 
       
-        public async Task<int> GetcinemaHallId(BookingUser bookingUser)
+        public async Task<int> GetcinemaHallIdAsync(int showId)
         {
+            var cinemaHallIdQuery = "select cinemaHallId from Show where ShowId = @showId";
 
-            var cinemaHallId = await (from show in _bookMyShowContext.Shows
-                                      where show.ShowId == bookingUser.ShowId
-                                      select show.CinemaHallId).FirstOrDefaultAsync();
+            var cinemaHallId = await _dbConnection.QueryFirstOrDefaultAsync<int>(cinemaHallIdQuery, new { showId });
+
             return cinemaHallId;
         }
 
-        public async Task<IEnumerable<int>> GetCinemaSeats(int seatType,BookingUser bookingUser)
+        public async Task<IEnumerable<int>> GetCinemaSeatsAsync(int seatType,int bookingUser)
         {
             
-            var seatNumbersQery = "execute GetBooking";
-            var seatNumbers = await _dbConnection.QueryAsync<int>(seatNumbersQery);
+            var seatNumbersQery = "execute GetBookedSeats @seatType, @bookingUser";
+            var seatNumbers = await _dbConnection.QueryAsync<int>(seatNumbersQery ,new { seatType , bookingUser});
+           
             return seatNumbers;
         }
-        public async Task<IEnumerable<ShowSeat>> GetBookedTickets(decimal a, BookingUser bookingUser)
-        {
-            var bookedTickets = await (from shoeSeat in _bookMyShowContext.ShowSeats
-                                where shoeSeat.Price == a && shoeSeat.ShowId == bookingUser.ShowId
-                                select shoeSeat).ToListAsync();
-            return bookedTickets;
-        }
-        public async Task<int> GetCinemaSeatId(int id,int cinemaHallId)
+
+        public async Task<int> GetCinemaSeatIdAsync(int id,int cinemaHallId)
         {
             var cinemaseatid = await (from cinemaSeat in _bookMyShowContext.CinemaSeats
                                      where cinemaSeat.SeatNumber == id && cinemaSeat.CinemaHallId == cinemaHallId

@@ -27,18 +27,18 @@ namespace BookMyShow.Infrastructure.Service
             return city;
 
         }
-        public async Task<IEnumerable<CinemaDto>> GetCinemaCitysync(string cityName)
+        public async Task<IEnumerable<CinemaDto>> GetCityInCinemaAsync(string cityName)
         {
 
-            var city = await _cityRepository.GetCinemaCityAsync(cityName);
-            return city;
+            var cityCinema = await _cityRepository.GetCityInCinemaAsync(cityName);
+            return cityCinema;
         }
 
         // Add city
         public async Task<City> AddCityAsync(City city)
         {
-            var reusult = await _cityRepository.AddCityAsync(city);
-            return reusult;
+            var cityresult = await _cityRepository.AddCityAsync(city);
+            return cityresult;
         }
 
         // Update city using id
@@ -49,8 +49,8 @@ namespace BookMyShow.Infrastructure.Service
             cityToBeUpdated.State = city.State;
             cityToBeUpdated.ZipCode = city.ZipCode;
 
-            var result = await _cityRepository.UpdateCityAsynce(cityToBeUpdated);
-            return result;
+            var cityresult = await _cityRepository.UpdateCityAsynce(cityToBeUpdated);
+            return cityresult;
         }
 
         //Delete city using id
@@ -60,10 +60,10 @@ namespace BookMyShow.Infrastructure.Service
             await _cityRepository.DeleteCityAsync(city);
         }
 
-        public async Task<IEnumerable<MovieDto>> GetCityMovie(string cityName)
+        public async Task<IEnumerable<MovieDto>> GetCityInMovie(string cityName)
         {
-            var result = await _cityRepository.GetCityMovie(cityName);
-            return result;
+            var cityMovie = await _cityRepository.GetCityInMovie(cityName);
+            return cityMovie;
         }
         public async Task<IEnumerable<MovieDetailes>> GetCityCinemaMovieAsync(string cityName, string? cinemaName = null)
         {

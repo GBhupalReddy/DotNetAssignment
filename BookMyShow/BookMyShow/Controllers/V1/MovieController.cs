@@ -33,7 +33,7 @@ namespace BookMyShow.Controllers.V1
         [Route("")]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult<IEnumerable<MovieDto>>> Get()
+        public async Task<ActionResult<IEnumerable<MovieDto>>> GetMovies()
         {
             _logger.LogInformation("Get list of all Movies");
             var result = await _movieService.GetMoviesAsync();
@@ -45,7 +45,7 @@ namespace BookMyShow.Controllers.V1
         [Route("{id}")]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult> Get(int id)
+        public async Task<ActionResult> GetMovieById(int id)
         {
             if (id <= 0)
             {
@@ -61,26 +61,14 @@ namespace BookMyShow.Controllers.V1
         }
    
 
-        // GET<MovieController>Movie/City/language/genre
-        [ApiVersion("1.0")]
-       // [Route("{cityName}")]
-        [HttpGet("cityName")]
-        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult> Getmovies(string cityName, string? language=null, string? genre=null, string? movieName = null)
-        {
-            _logger.LogInformation($"Get list of{cityName} {language}{genre} Movies ");
-            var result = await _movieService.GetMovieLanguageGenreAsync(cityName, language, genre, movieName);
-            if (result is null)
-                return NotFound("Please Enter Valid Data");
-            return Ok(result);
-        }
+    
 
         // POST <MovieController>
         [ApiVersion("1.0")]
         [Route("")]
         [HttpPost]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
-        public async Task<ActionResult> Post([FromBody] MovieVm movieVm)
+        public async Task<ActionResult> PostMovie([FromBody] MovieVm movieVm)
         {
 
             _logger.LogInformation("add new Movie");
@@ -95,7 +83,7 @@ namespace BookMyShow.Controllers.V1
         [Route("{id}")]
         [HttpPut]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
-        public async Task<ActionResult> Put(int id, [FromBody] MovieVm movieVm)
+        public async Task<ActionResult> PutMovie(int id, [FromBody] MovieVm movieVm)
         {
             if (id <= 0)
             {
@@ -114,7 +102,7 @@ namespace BookMyShow.Controllers.V1
         [Route("{id}")]
         [HttpDelete]
         [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
-        public async Task Delete(int id)
+        public async Task DeleteMovie(int id)
         {
             if (id <= 0)
             {

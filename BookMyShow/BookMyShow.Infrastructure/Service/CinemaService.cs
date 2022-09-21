@@ -31,8 +31,8 @@ namespace BookMyShow.Infrastructure.Service
         //Add cinema
         public async Task<Cinema> AddCinemaAsync(Cinema cinema)
         {
-            var result = await _cinemaRepository.AddCinemaAsync(cinema);
-            return result;
+            var cinemaResult = await _cinemaRepository.AddCinemaAsync(cinema);
+            return cinemaResult;
         }
 
         // update cinema using id
@@ -43,8 +43,8 @@ namespace BookMyShow.Infrastructure.Service
             CinemaToBeUpdated.TotalCinemaHalls = cinema.TotalCinemaHalls;
             CinemaToBeUpdated.CityId = cinema.CityId;
 
-            var result =  await _cinemaRepository.UpdateCinemaAsynce(CinemaToBeUpdated);
-            return result;
+            var cinemaResult =  await _cinemaRepository.UpdateCinemaAsynce(CinemaToBeUpdated);
+            return cinemaResult;
 
         }
 

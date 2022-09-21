@@ -31,7 +31,7 @@ namespace BookMyShow.Controllers.V1
         [Route("")]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult<IEnumerable<PaymentDto>>> Get()
+        public async Task<ActionResult<IEnumerable<PaymentDto>>> GetPayments()
         {
             _logger.LogInformation("Getting list of all Payments");
             var result = await _IPaymentService.GetPaymentsAsync();
@@ -43,7 +43,7 @@ namespace BookMyShow.Controllers.V1
         [Route("{id}")]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult> Get(int id)
+        public async Task<ActionResult> GetPayment(int id)
         {
             if (id <= 0)
             {
@@ -63,9 +63,14 @@ namespace BookMyShow.Controllers.V1
         [Route("")]
         [HttpPost]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
-        public async Task<ActionResult> Post([FromBody] PaymentVm paymentVm)
+        public async Task<ActionResult> PostPayment([FromBody] PaymentVm paymentVm)
         {
             _logger.LogInformation("add new Payment");
+            var paymentExit = await _IPaymentService.GetPaymentByBookinId(paymentVm.BookingId);
+            if (paymentExit is not null)
+            {
+                return BadRequest("this Payment already Completed");
+            }
             var payment = _mapper.Map<PaymentVm, Payment>(paymentVm);
             var paymentResult = await _IPaymentService.AddPaymentAsync(payment);
             var result = _mapper.Map<Payment, PaymentDto>(paymentResult);
@@ -77,7 +82,7 @@ namespace BookMyShow.Controllers.V1
         [Route("{id}")]
         [HttpPut]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
-        public async Task<ActionResult> Put(int id, [FromBody] PaymentVm paymentVm)
+        public async Task<ActionResult> PutPayment(int id, [FromBody] PaymentVm paymentVm)
         {
             if (id <= 0)
             {
@@ -98,7 +103,7 @@ namespace BookMyShow.Controllers.V1
         [Route("{id}")]
         [HttpDelete]
         [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
-        public async Task Delete(int id)
+        public async Task DeletePayment(int id)
         {
             if (id <= 0)
             {

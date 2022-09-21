@@ -9,10 +9,14 @@ namespace BookMyShow.Infrastructure.Service
     {
         private readonly IPaymentRepository _paymentRepository;
         private readonly IShowRepository _showRepository;
-        public PaymentService(IPaymentRepository paymentRepository, IShowRepository showRepository)
+        private readonly IShowSeatRepository _showSeatRepository;
+        private readonly IBookingService _bookingservice;
+        public PaymentService(IPaymentRepository paymentRepository, IShowRepository showRepository, IShowSeatRepository showSeatRepository, IBookingService bookingservice)
         {
             _paymentRepository = paymentRepository;
             _showRepository = showRepository;
+            _showSeatRepository = showSeatRepository;
+            _bookingservice = bookingservice;
         }
         // Get all payments
         public async Task<IEnumerable<PaymentDto>> GetPaymentsAsync()
@@ -31,21 +35,18 @@ namespace BookMyShow.Infrastructure.Service
         // Add payment
         public async Task<Payment> AddPaymentAsync(Payment payment)
         {
-            var bookinagAmount = await _paymentRepository.GetBookingAmount(payment);
+            var bookingAmount = await _paymentRepository.GetBookingAmount(payment.BookingId);
 
-            payment.Amount = bookinagAmount.Select(c => c.Price).Sum();
+            payment.Amount = bookingAmount.BookingAmount;
 
             var paymentresult = await _paymentRepository.AddPaymentAsync(payment);
 
-           if(paymentresult != null)
+            if (paymentresult != null)
             {
-                var cinemaSeats = await _paymentRepository.GetCinemaSeats(paymentresult);
 
-                int bokkedTikets = cinemaSeats.Select(c => c.CinemaSeatId).Count();
+                var updateShow = await _paymentRepository.GetUpdateShow(paymentresult.BookingId);
 
-                var updateShow = await _paymentRepository.GetUpdateShow(paymentresult);
-
-                updateShow.AvailableSeats = updateShow.AvailableSeats - bokkedTikets;
+                updateShow.AvailableSeats = updateShow.AvailableSeats - bookingAmount.NoOfBookings;
 
                 await _showRepository.UpdateShowAsynce(updateShow);
 
@@ -63,9 +64,9 @@ namespace BookMyShow.Infrastructure.Service
             paymentToBeUpdated.BookingId=payment.BookingId;
             paymentToBeUpdated.RemoteTransactionId=payment.RemoteTransactionId;
 
-            var bookinagAmount = await _paymentRepository.GetBookingAmount(paymentToBeUpdated);
+            var bookinagAmount = await _paymentRepository.GetBookingAmount(paymentToBeUpdated.BookingId);
 
-            paymentToBeUpdated.Amount = bookinagAmount.Select(c => c.Price).Sum();
+            paymentToBeUpdated.Amount = bookinagAmount.BookingAmount;
 
             var result = await _paymentRepository.UpdatePaymentAsynce(paymentToBeUpdated);
             return result;
@@ -76,6 +77,31 @@ namespace BookMyShow.Infrastructure.Service
         {
             var payment = await GetPaymentByIdAsync(id);
             await _paymentRepository.DeletePaymentAsync(payment);
+
+            // update show in AvailableSeats
+
+            var bookingAmount = await _paymentRepository.GetBookingAmount(payment.BookingId);
+
+          //  int bokkedTikets = bookinagAmount.Select(c => c.CinemaSeatId).Count();
+
+            var updateShow = await _paymentRepository.GetUpdateShow(payment.BookingId);
+            updateShow.AvailableSeats = updateShow.AvailableSeats + bookingAmount.NoOfBookings;
+
+            await _showRepository.UpdateShowAsynce(updateShow);
+
+            // delete booking seats in show seats
+             
+             await  _paymentRepository.DeleteShowSeatAsync(payment.BookingId);
+
+            // delete booking
+
+            await _bookingservice.DeleteBookingAsync(payment.BookingId);
+
+        }
+        public  async Task<Payment> GetPaymentByBookinId(int bookingId)
+        {
+            var PaymentByBookinId = await _paymentRepository.GetPaymentByBookinId(bookingId);
+            return PaymentByBookinId;
         }
     }
 }

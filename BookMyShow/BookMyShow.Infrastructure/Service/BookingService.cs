@@ -27,7 +27,7 @@ namespace BookMyShow.Infrastructure.Service
         }
 
         // Get  Booking using booking id
-        public async Task<Booking> GetBookingUsingIdAsync(int id)
+        public async Task<Booking> GetBookingByIdAsync(int id)
         {
 
             var booking = await _bookingRepository.GetBookingAsync(id);
@@ -44,7 +44,7 @@ namespace BookMyShow.Infrastructure.Service
         // Update booking using id
         public async Task<Booking> UpdateBookingAsynce(int id, Booking booking)
         {
-            var bookingToBeUpdated = await GetBookingUsingIdAsync(id);
+            var bookingToBeUpdated = await GetBookingByIdAsync(id);
             bookingToBeUpdated.NumberOfSeats = booking.NumberOfSeats;
             bookingToBeUpdated.Timestamp = booking.Timestamp;
             bookingToBeUpdated.Status = booking.Status;
@@ -59,17 +59,19 @@ namespace BookMyShow.Infrastructure.Service
         //deleted booking using id
         public async Task DeleteBookingAsync(int id)
         {
-            var booking = await GetBookingUsingIdAsync(id);
+            var booking = await GetBookingByIdAsync(id);
             await _bookingRepository.DeleteBookingAsync(booking);
+
+
         }
 
-        public async Task<Booking> CreateBooking(BookingUser bookingUser)
+        public async Task<Booking> CreateBookingAsync(BookingUser bookingUser)
         {
             
              int seatType = bookingUser.SeatType;
-             var seatNumbers = await _bookingRepository.GetCinemaSeats(seatType, bookingUser);
+             var seatNumbers = await _bookingRepository.GetCinemaSeatsAsync(seatType, bookingUser.ShowId);
              decimal a = 0;
-             int cinemaHallId = await _bookingRepository.GetcinemaHallId(bookingUser);
+             int cinemaHallId = await _bookingRepository.GetcinemaHallIdAsync(bookingUser.ShowId);
 
              List<int> thirdClass = new List<int> { 1, 2 };
              List<int> secondClass = new List<int> { 3, 4 };
@@ -84,7 +86,7 @@ namespace BookMyShow.Infrastructure.Service
                  }
                  if(thirdClass.Count() >= bookingUser.NumberOfSeats)
                   {
-                   var result =   await  BookingValidaction(bookingUser, thirdClass, a, cinemaHallId);
+                   var result =   await  CreateBookingShowSeatAsync(bookingUser, thirdClass, a, cinemaHallId);
                     return result;
                   }
                  
@@ -98,7 +100,7 @@ namespace BookMyShow.Infrastructure.Service
                   }
                   if (secondClass.Count() >= bookingUser.NumberOfSeats)
                   {
-                    var result = await BookingValidaction(bookingUser, secondClass, a, cinemaHallId);
+                    var result = await CreateBookingShowSeatAsync(bookingUser, secondClass, a, cinemaHallId);
                     return result;
                    }
                }
@@ -111,7 +113,7 @@ namespace BookMyShow.Infrastructure.Service
                   }
                   if (firstClass.Count() >= bookingUser.NumberOfSeats)
                   {
-                    var result =  await BookingValidaction(bookingUser, firstClass, a, cinemaHallId);
+                    var result =  await CreateBookingShowSeatAsync(bookingUser, firstClass, a, cinemaHallId);
                     return result;
                    }
                }
@@ -119,7 +121,7 @@ namespace BookMyShow.Infrastructure.Service
              
             return null;
         }
-        public async Task<Booking> BookingValidaction(BookingUser bookingUser,List<int> list,decimal payment,int cinemaHallId)
+        public async Task<Booking> CreateBookingShowSeatAsync(BookingUser bookingUser,List<int> list,decimal payment,int cinemaHallId)
         {
             var booking = _mapper.Map<BookingUser, Booking>(bookingUser);
             var data = await AddBookingAsync(booking);
@@ -128,7 +130,7 @@ namespace BookMyShow.Infrastructure.Service
             {
                 for (int i = 0; i < bookingUser.NumberOfSeats; i++)
                 {
-                    var cinemaseaid = await _bookingRepository.GetCinemaSeatId(list[i], cinemaHallId);
+                    var cinemaseaid = await _bookingRepository.GetCinemaSeatIdAsync(list[i], cinemaHallId);
                     ShowSeat showSeat1 = new()
                     {
                         ShowSeatId = 0,

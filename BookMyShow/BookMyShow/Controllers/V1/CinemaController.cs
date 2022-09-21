@@ -32,7 +32,7 @@ namespace BookMyShow.Controllers.V1
         [Route("")]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult<IEnumerable<CinemaDto>>> Get()
+        public async Task<ActionResult<IEnumerable<CinemaDto>>> GetCinemas()
         {
             _logger.LogInformation("Getting list of all Cinemas");
             var result = await _cinemaService.GetCinemasAsync();
@@ -44,7 +44,7 @@ namespace BookMyShow.Controllers.V1
         [Route("{id}")]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult> Get(int id)
+        public async Task<ActionResult> GetCinema(int id)
         {
             if (id <= 0)
             {
@@ -55,7 +55,8 @@ namespace BookMyShow.Controllers.V1
             var cinema = await _cinemaService.GetCinemaByIdAsync(id);
             if (cinema is null)
                 return NotFound("Please Enter Valid Data");
-            return Ok(cinema);
+            var cinemaDto = _mapper.Map<Cinema, CinemaDto>(cinema);
+            return Ok(cinemaDto);
         }
 
         // POST <CinemaController>
@@ -63,13 +64,13 @@ namespace BookMyShow.Controllers.V1
         [Route("")]
         [HttpPost]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
-        public async Task<ActionResult> Post([FromBody] CinemaVm cinemaVm)
+        public async Task<ActionResult> PostCinema([FromBody] CinemaVm cinemaVm)
         {
             _logger.LogInformation("add new Cinema");
             var cinema = _mapper.Map<CinemaVm, Cinema>(cinemaVm);
             var cinemaResult = await _cinemaService.AddCinemaAsync(cinema);
-            var result = _mapper.Map<Cinema, CinemaDto>(cinemaResult);
-            return Ok(result);
+            var cinemaDto = _mapper.Map<Cinema, CinemaDto>(cinemaResult);
+            return Ok(cinemaDto);
         }
 
         // PUT <CinemaController>
@@ -77,7 +78,7 @@ namespace BookMyShow.Controllers.V1
         [Route("{id}")]
         [HttpPut]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
-        public async Task<ActionResult> Put(int id, [FromBody] CinemaVm cinemaVm)
+        public async Task<ActionResult> PutCinema(int id, [FromBody] CinemaVm cinemaVm)
         {
             if (id <= 0)
             {
@@ -96,7 +97,7 @@ namespace BookMyShow.Controllers.V1
         [Route("{id}")]
         [HttpDelete]
         [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
-        public async Task Delete(int id)
+        public async Task DeleteCinema(int id)
         {
             if (id <= 0)
             {

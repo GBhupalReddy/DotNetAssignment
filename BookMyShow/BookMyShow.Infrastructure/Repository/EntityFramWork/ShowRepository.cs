@@ -22,7 +22,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         // Get all Shows
         public async Task<IEnumerable<ShowDto>> GetShowsAsync()
         {
-            var query = "execute GetShowes";
+            var query = "select * from Show";
             var result = await _dbConnection.QueryAsync<ShowDto>(query);
             return result;
 
@@ -31,7 +31,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         // Get Show using id
         public async Task<Show> GetShowAsync(int id)
         {
-            var query = "execute GetShowById @id";
+            var query = "select * from Show where ShowId = @id";
             var result = (await _dbConnection.QueryFirstOrDefaultAsync<Show>(query, new { id }));
             return result;
         }

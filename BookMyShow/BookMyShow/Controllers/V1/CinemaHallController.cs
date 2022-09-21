@@ -30,7 +30,7 @@ namespace BookMyShow.Controllers.V1
         [Route("")]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult<IEnumerable<CinemaHallDto>>> Get()
+        public async Task<ActionResult<IEnumerable<CinemaHallDto>>> GetCinemaHalls()
         {
             _logger.LogInformation("Getting list of all CinemaHalls");
             var result = await _cinemaHallService.GetCinemaHallsAsync();
@@ -42,7 +42,7 @@ namespace BookMyShow.Controllers.V1
         [Route("{id}")]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult> Get(int id)
+        public async Task<ActionResult> GetGetCinemaHall(int id)
         {
             if (id <= 0)
             {
@@ -62,7 +62,7 @@ namespace BookMyShow.Controllers.V1
         [Route("")]
         [HttpPost]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
-        public async Task<ActionResult> Post([FromBody] CinemaHallVm cinemaHallVm)
+        public async Task<ActionResult> PostGetCinemaHall([FromBody] CinemaHallVm cinemaHallVm)
         {
 
             _logger.LogInformation("add new CinemaHall");
@@ -78,7 +78,7 @@ namespace BookMyShow.Controllers.V1
         [Route("{id}")]
         [HttpPut]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
-        public async Task<ActionResult> Put(int id, [FromBody] CinemaHallVm cinemaHallVm)
+        public async Task<ActionResult> PutGetCinemaHall(int id, [FromBody] CinemaHallVm cinemaHallVm)
         {
             if (id <= 0)
             {
@@ -98,7 +98,7 @@ namespace BookMyShow.Controllers.V1
         [Route("{id}")]
         [HttpDelete]
         [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
-        public async Task Delete(int id)
+        public async Task DeleteGetCinemaHall(int id)
         {
             if (id <= 0)
             {

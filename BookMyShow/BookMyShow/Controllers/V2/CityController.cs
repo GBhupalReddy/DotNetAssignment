@@ -24,9 +24,9 @@ namespace BookMyShow.Controllers.V2
         [Route("CityCinema/{cityName}")]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult> GetCityCinema(string cityName)
+        public async Task<ActionResult> GetCityInCinema(string cityName)
         {
-            var result = await _cityService.GetCinemaCitysync(cityName);
+            var result = await _cityService.GetCityInCinemaAsync(cityName);
             return Ok(result);
 
         }
@@ -36,9 +36,9 @@ namespace BookMyShow.Controllers.V2
         [Route("CityMovies/{cityName}")]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult> GetCityMovie(string cityName)
+        public async Task<ActionResult> GetCityInMovie(string cityName)
         {
-            var result = await _cityService.GetCityMovie(cityName);
+            var result = await _cityService.GetCityInMovie(cityName);
             return Ok(result);
 
         }

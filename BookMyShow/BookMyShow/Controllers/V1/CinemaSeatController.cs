@@ -32,7 +32,7 @@ namespace BookMyShow.Controllers.V1
         [Route("")]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult<IEnumerable<CinemaSeatDto>>> Get()
+        public async Task<ActionResult<IEnumerable<CinemaSeatDto>>> GetCinemaSeats()
         {
             _logger.LogInformation("Getting list of all CinemaSeats");
             var result = await _cinemaSeatService.GetCinemaSeatsAsync();
@@ -44,7 +44,7 @@ namespace BookMyShow.Controllers.V1
         [Route("{id}")]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult> Get(int id)
+        public async Task<ActionResult> GetCinemaSeat(int id)
         {
             if (id <= 0)
             {
@@ -64,7 +64,7 @@ namespace BookMyShow.Controllers.V1
         [Route("")]
         [HttpPost]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
-        public async Task<ActionResult> Post([FromBody] CinemaSeatVm cinemaSeatVm)
+        public async Task<ActionResult> PostCinemaSeat([FromBody] CinemaSeatVm cinemaSeatVm)
         {
             _logger.LogInformation("add new CinemaSeat");
             var cinemaSeat = _mapper.Map<CinemaSeatVm, CinemaSeat>(cinemaSeatVm);
@@ -78,7 +78,7 @@ namespace BookMyShow.Controllers.V1
         [Route("{id}")]
         [HttpPut]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
-        public async Task<ActionResult> Put(int id, [FromBody] CinemaSeatVm cinemaSeatVm)
+        public async Task<ActionResult> PutCinemaSeat(int id, [FromBody] CinemaSeatVm cinemaSeatVm)
         {
             if (id <= 0)
             {
@@ -97,7 +97,7 @@ namespace BookMyShow.Controllers.V1
         [Route("{id}")]
         [HttpDelete]
         [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
-        public async Task Delete(int id)
+        public async Task DeleteCinemaSeat(int id)
         {
             if (id <= 0)
             {

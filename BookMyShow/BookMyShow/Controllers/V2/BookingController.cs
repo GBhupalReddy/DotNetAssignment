@@ -34,10 +34,10 @@ namespace BookMyShow.Controllers.V2
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
         public async Task<ActionResult<Booking>> Post([FromBody] BookingUser bokkingUser)
         {
-         var booking =  await _bookingService.CreateBooking(bokkingUser);
+         var booking =  await _bookingService.CreateBookingAsync(bokkingUser);
             var result = _mapper.Map<Booking, BookingDto>(booking);
             if (result is null)
-                return NotFound("Please Enter Valid Data");
+                return NotFound($"{bokkingUser.NumberOfSeats} tickets are Not available ");
             return Ok(result);
             
         }

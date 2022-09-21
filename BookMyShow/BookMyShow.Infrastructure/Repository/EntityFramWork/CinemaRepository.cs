@@ -20,18 +20,18 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         // Get all cinemas
         public async Task<IEnumerable<CinemaDto>> GetCinemasAsync()
         {
-            var query = "execute GetCinemas";
-            var result = await _dbConnection.QueryAsync<CinemaDto>(query);
-            return result;
+            var query = "select * from Cinema";
+            var Cinemas = await _dbConnection.QueryAsync<CinemaDto>(query);
+            return Cinemas;
 
         }
 
         // Get cinema using id
         public async Task<Cinema> GetCinemaAsync(int id)
         {
-            var query = "execute GetCinemaById @id";
-            var result = (await _dbConnection.QueryFirstOrDefaultAsync<Cinema>(query, new { id }));
-            return result;
+            var query = "select * from Cinema where CinemaId = @id";
+            var cinema = await _dbConnection.QueryFirstOrDefaultAsync<Cinema>(query, new { id });
+            return cinema;
 
         }
 

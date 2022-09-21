@@ -28,8 +28,8 @@ namespace BookMyShow.Infrastructure.Service
         // Add show
         public async Task<Show> AddShowAsync(Show show)
         {
-            var result = await _showRepository.AddShowAsync(show);
-            return result;  
+            var showResult = await _showRepository.AddShowAsync(show);
+            return showResult;  
         }
 
         // Update show using id
@@ -43,8 +43,8 @@ namespace BookMyShow.Infrastructure.Service
             showToBeUpdated.MovieId = show.MovieId;
             showToBeUpdated.AvailableSeats = show.AvailableSeats;
 
-            var result = await _showRepository.UpdateShowAsynce(showToBeUpdated);
-            return result;
+            var showResult = await _showRepository.UpdateShowAsynce(showToBeUpdated);
+            return showResult;
 
         }
 

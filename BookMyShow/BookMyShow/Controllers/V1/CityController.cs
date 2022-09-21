@@ -31,9 +31,9 @@ namespace BookMyShow.Controllers.V1
         [Route("")]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult<IEnumerable<CityDto>>> Get()
+        public async Task<ActionResult<IEnumerable<CityDto>>> GetCities()
         {
-            _logger.LogInformation("Getting list of all City's");
+            _logger.LogInformation("Getting list of all Cities");
             var result = await _cityService.GetCitysAsync();
             return Ok(result);
         }
@@ -42,7 +42,7 @@ namespace BookMyShow.Controllers.V1
         [ApiVersion("1.0")]
         [HttpGet("{id}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult> Get(int id)
+        public async Task<ActionResult> GetCity(int id)
         {
             if (id <= 0)
             {
@@ -73,7 +73,7 @@ namespace BookMyShow.Controllers.V1
         [Route("")]
         [HttpPost]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
-        public async Task<ActionResult> Post([FromBody] CityVm cityVm)
+        public async Task<ActionResult> PostCity([FromBody] CityVm cityVm)
         {
             _logger.LogInformation("add new City");
             var city = _mapper.Map<CityVm, City>(cityVm);
@@ -88,7 +88,7 @@ namespace BookMyShow.Controllers.V1
         [Route("{id}")]
         [HttpPut]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
-        public async Task<ActionResult> Put(int id, [FromBody] CityVm cityVm)
+        public async Task<ActionResult> PutCity(int id, [FromBody] CityVm cityVm)
         {
             if (id <= 0)
             {
@@ -108,7 +108,7 @@ namespace BookMyShow.Controllers.V1
         [Route("{id}")]
         [HttpDelete]
         [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
-        public async Task Delete(int id)
+        public async Task DeleteCity(int id)
         {
             if (id <= 0)
             {

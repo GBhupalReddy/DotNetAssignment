@@ -2,7 +2,6 @@
 using BookMyShow.Core.Contracts.Infrastructure.Service;
 using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
-using System.Data;
 
 namespace BookMyShow.Infrastructure.Service
 {
@@ -32,8 +31,8 @@ namespace BookMyShow.Infrastructure.Service
         // Add user
         public async Task<User> AddUserAsync(User user)
         {
-            var result= await _userRepository.AddUserAsync(user);
-            return result;
+            var userResult = await _userRepository.AddUserAsync(user);
+            return userResult;
         }
 
         //Update user using id
@@ -44,8 +43,8 @@ namespace BookMyShow.Infrastructure.Service
             userToBeUpdated.Email = user.Email;
             userToBeUpdated.Password = user.Password;
             userToBeUpdated.Phone = user.Phone;
-            var result = await _userRepository.UpdateUserAsynce(userToBeUpdated);
-            return result;
+            var userResult = await _userRepository.UpdateUserAsynce(userToBeUpdated);
+            return userResult;
 
         }
 

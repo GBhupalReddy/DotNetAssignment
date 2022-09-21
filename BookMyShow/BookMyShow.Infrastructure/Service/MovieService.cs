@@ -60,14 +60,9 @@ namespace BookMyShow.Infrastructure.Service
             await _movieRepository.DeleteMovieAsync(movie);
         }
 
-        public async Task<IEnumerable<MovieDetailes>> GetMovieByCityNameAsync(string cityName)
+        public async Task<IEnumerable<MovieDetailes>> GetCityInMovieAsync(string cityName, string movieName)
         {
-            var result =await _movieRepository.GetMovieCityAsync(cityName);
-            return result;
-        }
-        public async Task<IEnumerable<MovieDetailes>> GetMovieCityAsync(string cityName, string movieName)
-        {
-            var result = await _movieRepository.GetMovieCityAsync(cityName, movieName);
+            var result = await _movieRepository.GetCityInMovieAsync(cityName, movieName);
             return result;
 
         }

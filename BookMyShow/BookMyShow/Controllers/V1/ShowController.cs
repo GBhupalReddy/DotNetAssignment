@@ -30,7 +30,7 @@ namespace BookMyShow.Controllers.V1
         [Route("")]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult<IEnumerable<ShowDto>>> Get()
+        public async Task<ActionResult<IEnumerable<ShowDto>>> GetShows()
         {
             _logger.LogInformation("Getting list of all Shows");
             var result = await _showService.GetShowsAsync();
@@ -42,7 +42,7 @@ namespace BookMyShow.Controllers.V1
         [Route("{id}")]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult> Get(int id)
+        public async Task<ActionResult> GetShow(int id)
         {
             if (id <= 0)
             {
@@ -62,7 +62,7 @@ namespace BookMyShow.Controllers.V1
         [Route("")]
         [HttpPost]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
-        public async Task<ActionResult> Post([FromBody] ShowVm showVm)
+        public async Task<ActionResult> PostShow([FromBody] ShowVm showVm)
         {
             _logger.LogInformation("add new Show");
             var show = _mapper.Map<ShowVm, Show>(showVm);
@@ -76,7 +76,7 @@ namespace BookMyShow.Controllers.V1
         [Route("{id}")]
         [HttpPut]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
-        public async Task<ActionResult> Put(int id, [FromBody] ShowVm showVm)
+        public async Task<ActionResult> PutShow(int id, [FromBody] ShowVm showVm)
         {
             if (id <= 0)
             {

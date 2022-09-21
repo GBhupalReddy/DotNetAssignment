@@ -3,8 +3,7 @@
     public class UserBookingDto
     {
         public int UserId { get; set; }
-        public string? Name { get; set; }
-        public string Passoword { get; set; } = null!;
+        public string? UserName { get; set; }
         public string Email { get; set; } = null!;
         public string Phone { get; set; } = null!;
         public int BookingId { get; set; }
