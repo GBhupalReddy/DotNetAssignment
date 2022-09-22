@@ -70,6 +70,8 @@ namespace BookMyShow.Controllers.V1
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
         public async Task<ActionResult> Post([FromBody] UserVm userVm)
         {
+             await _userService.UserExitByEmail(userVm.Email);
+            
             _logger.LogInformation("add new user");
             var user = _mapper.Map<UserVm, User>(userVm);
             var userresult = await _userService.AddUserAsync(user);

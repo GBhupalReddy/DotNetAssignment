@@ -22,12 +22,11 @@ namespace BookMyShow.Controllers.V2
         }
 
 
-        // GET: <UserController>
-        
+      
 
         // GET <UserController>/5
         [ApiVersion("2.0")]
-        [Route("{id}")]
+        [Route("UaerBokingDetails/{id}")]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
 

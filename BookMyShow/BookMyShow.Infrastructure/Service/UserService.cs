@@ -2,6 +2,7 @@
 using BookMyShow.Core.Contracts.Infrastructure.Service;
 using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
+using BookMyShow.Core.Exceptions;
 
 namespace BookMyShow.Infrastructure.Service
 {
@@ -58,6 +59,20 @@ namespace BookMyShow.Infrastructure.Service
         {
             var result=await _userRepository.GetUserBookingDetalisAsync(id);
             return result;
+        }
+
+        public async Task UserExitByEmail(string email)
+        {
+            var userExit = await _userRepository.UserExitByEmail(email);
+            if(userExit != null)
+            {
+                throw email switch
+                {
+
+                    _ => new DuplicateException("User exits ", new Exception($"User already existed with this  {email} mail"))
+                };
+            }
+          
         }
     }
 }

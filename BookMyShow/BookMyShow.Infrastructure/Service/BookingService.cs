@@ -3,6 +3,7 @@ using BookMyShow.Core.Contracts.Infrastructure.Repository;
 using BookMyShow.Core.Contracts.Infrastructure.Service;
 using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
+using BookMyShow.Core.Exceptions;
 
 namespace BookMyShow.Infrastructure.Service
 {
@@ -70,7 +71,6 @@ namespace BookMyShow.Infrastructure.Service
             
              int seatType = bookingUser.SeatType;
              var seatNumbers = await _bookingRepository.GetCinemaSeatsAsync(seatType, bookingUser.ShowId);
-             decimal a = 0;
              int cinemaHallId = await _bookingRepository.GetcinemaHallIdAsync(bookingUser.ShowId);
 
              List<int> thirdClass = new List<int> { 1, 2 };
@@ -79,49 +79,48 @@ namespace BookMyShow.Infrastructure.Service
 
              if (seatType == 1)
              {
-                 a = 200;
+                 decimal price = 200;
                  foreach (var ab in seatNumbers)
                  {
                          thirdClass.Remove((int)ab);
                  }
                  if(thirdClass.Count() >= bookingUser.NumberOfSeats)
                   {
-                   var result =   await  CreateBookingShowSeatAsync(bookingUser, thirdClass, a, cinemaHallId);
+                   var result =   await  CreateBookingShowSeatAsync(bookingUser, thirdClass, price, cinemaHallId);
                     return result;
                   }
                  
              }
               if (seatType == 2)
               {
-                a = 300;
+                decimal price = 300;
                   foreach (var ab in seatNumbers)
                   {
                   secondClass.Remove((int)ab);
                   }
                   if (secondClass.Count() >= bookingUser.NumberOfSeats)
                   {
-                    var result = await CreateBookingShowSeatAsync(bookingUser, secondClass, a, cinemaHallId);
+                    var result = await CreateBookingShowSeatAsync(bookingUser, secondClass, price, cinemaHallId);
                     return result;
                    }
                }
               if (seatType == 3)
               {
-                   a = 400;
+                decimal price = 400;
                   foreach (var ab in seatNumbers)
                   {
                       firstClass.Remove((int)ab);
                   }
                   if (firstClass.Count() >= bookingUser.NumberOfSeats)
                   {
-                    var result =  await CreateBookingShowSeatAsync(bookingUser, firstClass, a, cinemaHallId);
+                    var result =  await CreateBookingShowSeatAsync(bookingUser, firstClass, price, cinemaHallId);
                     return result;
                    }
                }
              
-             
             return null;
         }
-        public async Task<Booking> CreateBookingShowSeatAsync(BookingUser bookingUser,List<int> list,decimal payment,int cinemaHallId)
+        public async Task<Booking> CreateBookingShowSeatAsync(BookingUser bookingUser,List<int> list,decimal price,int cinemaHallId)
         {
             var booking = _mapper.Map<BookingUser, Booking>(bookingUser);
             var data = await AddBookingAsync(booking);
@@ -133,9 +132,8 @@ namespace BookMyShow.Infrastructure.Service
                     var cinemaseaid = await _bookingRepository.GetCinemaSeatIdAsync(list[i], cinemaHallId);
                     ShowSeat showSeat1 = new()
                     {
-                        ShowSeatId = 0,
                         Status = 1,
-                        Price = payment,
+                        Price = price,
                         CinemaSeatId = cinemaseaid,
                         ShowId = bookingUser.ShowId,
                         BookingId = data.BookingId,
@@ -145,6 +143,23 @@ namespace BookMyShow.Infrastructure.Service
                 }
             }
             return booking;
+        }
+
+
+        public Task<int> VerifyBookingExist(int id)
+        {
+            if (id <= 0)
+            {
+                throw id switch
+                {
+                    _ => new AppException("Input request is invalid")
+                };
+            }
+            throw id switch
+            {
+
+                _ => new DuplicateException("Booking exits ", new Exception($"Booking not existed with this {id} Id"))
+            };
         }
     }
 }

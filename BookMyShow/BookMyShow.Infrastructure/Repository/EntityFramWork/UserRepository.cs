@@ -67,6 +67,12 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
             var UserBookingDetalis= await _dbConnection.QueryAsync<UserBookingDto>(UserBookingDetalisQuery, new {id});
             return UserBookingDetalis;
         }
-        
+        public async Task<User> UserExitByEmail(string email)
+        {
+            var UserExitQuery = "select * from [User] where Email = @email";
+            var UserExit = await _dbConnection.QueryFirstOrDefaultAsync<User>(UserExitQuery, new { email });
+            return UserExit;
+        }
+
     }
 }

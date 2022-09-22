@@ -1,10 +1,8 @@
-﻿using AutoMapper;
-using BookMyShow.Core.Contracts.Infrastructure.Repository;
+﻿using BookMyShow.Core.Contracts.Infrastructure.Repository;
 using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
 using BookMyShow.Infrastructure.Data;
 using Dapper;
-using Microsoft.EntityFrameworkCore;
 using System.Data;
 
 namespace BookMyShow.Infrastructure.Repository.EntityFramWork
@@ -78,7 +76,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         
         public async Task<Show> GetUpdateShow(int bookiniId)
         {
-            var updateShowQuery = "execute GetShowByBookigId";
+            var updateShowQuery = "execute GetShowByBookigId @bookiniId";
             var updateShow = await _dbConnection.QueryFirstOrDefaultAsync<Show>(updateShowQuery, new { bookiniId });
 
             return updateShow;

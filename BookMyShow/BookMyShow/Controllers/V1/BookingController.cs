@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using BookMyShow.Core.Contracts.Infrastructure.Repository;
 using BookMyShow.Core.Contracts.Infrastructure.Service;
 using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
@@ -49,15 +48,17 @@ namespace BookMyShow.Controllers.V1
         {
             if (id <= 0)
             {
-                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
-                return BadRequest("Please Enter Valid Data");
+                _logger.LogWarning("Id field can't be <= zero OR it doesn't match with model's {Id}", id);
+                await _bookingService.VerifyBookingExist(id);
             }
 
             _logger.LogInformation("Getting Id : {id} Booking", id);
             var booking = await _bookingService.GetBookingByIdAsync(id);
             var result = _mapper.Map<Booking, BookingDto>(booking);
             if (result is null)
-                return NotFound("Please Enter Valid Data");
+            {
+                 await  _bookingService.VerifyBookingExist(id);
+            }
             return Ok(result);
         }
 
@@ -89,8 +90,8 @@ namespace BookMyShow.Controllers.V1
         {
             if (id <= 0)
             {
-                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
-                return BadRequest("Please Enter Valid Data");
+                _logger.LogWarning("Id field can't be <= zero OR it doesn't match with model's {Id}", id);
+                await _bookingService.VerifyBookingExist(id); 
             }
             _logger.LogInformation("Update Id: {id} Booking", id);
             var booking = _mapper.Map<BookingVm, Booking>(bookingVm);
@@ -108,8 +109,8 @@ namespace BookMyShow.Controllers.V1
         {
             if (id <= 0)
             {
-                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
-                BadRequest("Please Enter Valid Data");
+                _logger.LogWarning( "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
+                await _bookingService.VerifyBookingExist(id);
 
             }
             _logger.LogInformation("Deleted Id :  {id}  Booking", id);

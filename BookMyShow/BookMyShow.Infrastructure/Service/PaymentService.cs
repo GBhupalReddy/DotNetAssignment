@@ -85,7 +85,7 @@ namespace BookMyShow.Infrastructure.Service
           //  int bokkedTikets = bookinagAmount.Select(c => c.CinemaSeatId).Count();
 
             var updateShow = await _paymentRepository.GetUpdateShow(payment.BookingId);
-            updateShow.AvailableSeats = updateShow.AvailableSeats + bookingAmount.NoOfBookings;
+            updateShow.AvailableSeats =  updateShow.AvailableSeats + bookingAmount.NoOfBookings;
 
             await _showRepository.UpdateShowAsynce(updateShow);
 
