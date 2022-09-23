@@ -20,6 +20,8 @@ namespace BookMyShow.Infrastructure.Configuration
             CreateMap<ShowSeatVm, ShowSeat>();
             CreateMap<ShowVm, Show>();
             CreateMap<UserVm, User>();
+            CreateMap<SeatTypePriceVm,SeatTypePrice>();
+            CreateMap<BookingUserVm, BookingUser>();
 
             // entities to Dto
 

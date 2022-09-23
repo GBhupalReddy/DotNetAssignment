@@ -1,9 +1,5 @@
 ﻿using AutoMapper;
-using BookMyShow.Core.Contracts.Infrastructure.Repository;
 using BookMyShow.Core.Contracts.Infrastructure.Service;
-using BookMyShow.Core.Dto;
-using BookMyShow.Core.Entities;
-using BookMyShow.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -27,20 +23,7 @@ namespace BookMyShow.Controllers.V2
         }
 
 
-        // POST <BookingController>
-        [MapToApiVersion("2.0")]
-        [Route("")]
-        [HttpPost]
-        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
-        public async Task<ActionResult<Booking>> Post([FromBody] BookingUser bokkingUser)
-        {
-         var booking =  await _bookingService.CreateBookingAsync(bokkingUser);
-            var result = _mapper.Map<Booking, BookingDto>(booking);
-            if (result is null)
-                return NotFound($"{bokkingUser.NumberOfSeats} tickets are Not available ");
-            return Ok(result);
-            
-        }
+        
 
         
     }

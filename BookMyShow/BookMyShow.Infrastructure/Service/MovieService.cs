@@ -16,7 +16,7 @@ namespace BookMyShow.Infrastructure.Service
         // Get Movies
         public async Task<IEnumerable<MovieDto>> GetMoviesAsync()
         {
-           var movies = await _movieRepository.GetMoviesAsync();
+            var movies = await _movieRepository.GetMoviesAsync();
             return movies;
         }
 
@@ -60,15 +60,9 @@ namespace BookMyShow.Infrastructure.Service
             await _movieRepository.DeleteMovieAsync(movie);
         }
 
-        public async Task<IEnumerable<MovieDetailes>> GetCityInMovieAsync(string cityName, string movieName)
-        {
-            var result = await _movieRepository.GetCityInMovieAsync(cityName, movieName);
-            return result;
 
-        }
 
-        
-        public async Task<IEnumerable<MovieDetailes>> GetMovieLanguageGenreAsync(string cityName, string? language=null, string? genre=null,string? movieName=null)
+        public async Task<IEnumerable<MovieDetailes>> GetMovieLanguageGenreAsync(string cityName, string? language = null, string? genre = null, string? movieName = null)
         {
             var result = await _movieRepository.GetMovieLanguageGenreAsync(cityName, language: language, genre: genre, movieName: movieName);
             return result;

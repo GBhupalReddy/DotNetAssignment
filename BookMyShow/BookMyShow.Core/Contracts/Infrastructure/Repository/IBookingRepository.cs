@@ -12,7 +12,7 @@ namespace BookMyShow.Core.Contracts.Infrastructure.Repository
         Task<Booking> UpdateBookingAsynce( Booking booking);
         Task<int> GetcinemaHallIdAsync(int showId);
         Task<IEnumerable<int>> GetCinemaSeatsAsync(int seatType,int bookingUser);
-        //Task<IEnumerable<ShowSeat>> GetBookedTicketsAsync(decimal a, BookingUser bookingUser);
+        Task<decimal> GetSeatPrice(int seatType);
         Task<int> GetCinemaSeatIdAsync(int id, int cinemaHallId);
     }
 }

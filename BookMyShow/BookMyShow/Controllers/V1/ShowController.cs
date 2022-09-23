@@ -46,7 +46,7 @@ namespace BookMyShow.Controllers.V1
         {
             if (id <= 0)
             {
-                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
+                _logger.LogWarning("Id field can't be <= zero OR it doesn't match with model's {Id}", id);
                 return BadRequest("Please Enter Valid Data");
             }
             _logger.LogInformation("Getting Id : {id} Show", id);
@@ -80,7 +80,7 @@ namespace BookMyShow.Controllers.V1
         {
             if (id <= 0)
             {
-                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
+                _logger.LogWarning("Id field can't be <= zero OR it doesn't match with model's {Id}", id);
                 return BadRequest("Please Enter Valid Data");
             }
             _logger.LogInformation("Update Id: {id} Show", id);
@@ -99,7 +99,7 @@ namespace BookMyShow.Controllers.V1
         {
             if (id <= 0)
             {
-                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
+                _logger.LogWarning("Id field can't be <= zero OR it doesn't match with model's {Id}", id);
                 BadRequest("Please Enter Valid Data");
             }
             _logger.LogInformation("Deleted Id :  {id}  Show", id);

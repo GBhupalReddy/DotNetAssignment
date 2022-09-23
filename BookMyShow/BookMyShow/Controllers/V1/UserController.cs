@@ -27,7 +27,7 @@ namespace BookMyShow.Controllers.V1
         }
 
 
-        // GET: <UserController>
+        // GET: 
         [ApiVersion("1.0")]
         [Route("")]
         [HttpGet]
@@ -41,7 +41,7 @@ namespace BookMyShow.Controllers.V1
             return Ok(result);
         }
 
-        // GET <UserController>/5
+        // GET 
         [ApiVersion("1.0")]
         [Route("{id}")]
         [HttpGet]
@@ -51,7 +51,7 @@ namespace BookMyShow.Controllers.V1
         {
             if (id <= 0)
             {
-                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
+                _logger.LogWarning( "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
                 return BadRequest("Please Enter Valid Data");
             }
             _logger.LogInformation("Getting Id : {id} User", id);
@@ -63,7 +63,7 @@ namespace BookMyShow.Controllers.V1
 
         }
 
-        // POST <UserController>
+        // POST 
         [ApiVersion("1.0")]
         [Route("")]
         [HttpPost]
@@ -79,7 +79,7 @@ namespace BookMyShow.Controllers.V1
             return Ok(result);
         }
 
-        // PUT <UserController>/5
+        // PUT 
         [ApiVersion("1.0")]
         [Route("{id}")]
         [HttpPut]
@@ -88,7 +88,7 @@ namespace BookMyShow.Controllers.V1
         {
             if (id <= 0)
             {
-                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's Id.");
+                _logger.LogWarning("Id field can't be <= zero OR it doesn't match with model's Id.");
                 return BadRequest("Please Enter Valid Data");
             }
             _logger.LogInformation("Update Id: {id} User", id);
@@ -108,11 +108,33 @@ namespace BookMyShow.Controllers.V1
         {
             if (id <= 0)
             {
-                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
+                _logger.LogWarning("Id field can't be <= zero OR it doesn't match with model's {Id}", id);
                 BadRequest("Please Enter Valid Data");
             }
             _logger.LogInformation("Deleted Id :  {id}  User", id);
             await _userService.DeleteUserAsync(id);
+        }
+
+        // GET UserBokingDetails
+
+        [ApiVersion("1.0")]
+        [Route("UserBokingDetails/{id}")]
+        [HttpGet]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+
+        public async Task<ActionResult> GetBookingDeatils(int id)
+        {
+            if (id <= 0)
+            {
+                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
+                return BadRequest("Please Enter Valid Data");
+            }
+            _logger.LogInformation("Getting Id : {id} User", id);
+            var result = await _userService.GetUserBookingDetalisAsync(id);
+            if (result is null)
+                return NotFound("Please Enter Valid Data");
+            return Ok(result);
+
         }
     }
 }

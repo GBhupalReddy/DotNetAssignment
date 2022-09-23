@@ -61,14 +61,6 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         }
 
         
-        public async Task<IEnumerable<MovieDetailes>> GetCityInMovieAsync(string cityName, string movieName)
-        {
-           
-            var CityInMovieQuery = "execute  GetCityInMovie @cityName, @movieName";
-            var CityInMovie = await _dbConnection.QueryAsync<MovieDetailes>(CityInMovieQuery, new { cityName, movieName });
-            return CityInMovie;
-
-        }
         
         
         public async Task<IEnumerable<MovieDetailes>> GetMovieLanguageGenreAsync(string cityName,string? language=null,string? genre=null, string? movieName = null)

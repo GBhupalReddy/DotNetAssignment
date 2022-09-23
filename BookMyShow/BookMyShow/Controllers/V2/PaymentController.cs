@@ -25,6 +25,6 @@ namespace BookMyShow.Controllers.V2
             _mapper = mapper;
         }
 
-      
+       
     }
 }

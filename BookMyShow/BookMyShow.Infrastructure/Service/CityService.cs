@@ -27,10 +27,10 @@ namespace BookMyShow.Infrastructure.Service
             return city;
 
         }
-        public async Task<IEnumerable<CinemaDto>> GetCityInCinemaAsync(string cityName)
+        public async Task<IEnumerable<CinemaDto>> GetCinemaInCityAsync(string cityName)
         {
 
-            var cityCinema = await _cityRepository.GetCityInCinemaAsync(cityName);
+            var cityCinema = await _cityRepository.GetCinemaInCityAsync(cityName);
             return cityCinema;
         }
 
@@ -60,9 +60,9 @@ namespace BookMyShow.Infrastructure.Service
             await _cityRepository.DeleteCityAsync(city);
         }
 
-        public async Task<IEnumerable<MovieDto>> GetCityInMovie(string cityName)
+        public async Task<IEnumerable<MovieDto>> GetMovieInCity(string cityName)
         {
-            var cityMovie = await _cityRepository.GetCityInMovie(cityName);
+            var cityMovie = await _cityRepository.GetMovieInCity(cityName);
             return cityMovie;
         }
         public async Task<IEnumerable<MovieDetailes>> GetCityCinemaMovieAsync(string cityName, string? cinemaName = null)

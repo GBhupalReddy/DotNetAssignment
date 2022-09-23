@@ -79,7 +79,7 @@ namespace BookMyShow.Infrastructure.Service
 
              if (seatType == 1)
              {
-                 decimal price = 200;
+                var price = await _bookingRepository.GetSeatPrice(seatType);
                  foreach (var ab in seatNumbers)
                  {
                          thirdClass.Remove((int)ab);
@@ -93,8 +93,8 @@ namespace BookMyShow.Infrastructure.Service
              }
               if (seatType == 2)
               {
-                decimal price = 300;
-                  foreach (var ab in seatNumbers)
+                var price = await _bookingRepository.GetSeatPrice(seatType);
+                foreach (var ab in seatNumbers)
                   {
                   secondClass.Remove((int)ab);
                   }
@@ -106,8 +106,8 @@ namespace BookMyShow.Infrastructure.Service
                }
               if (seatType == 3)
               {
-                decimal price = 400;
-                  foreach (var ab in seatNumbers)
+                var price = await _bookingRepository.GetSeatPrice(seatType);
+                foreach (var ab in seatNumbers)
                   {
                       firstClass.Remove((int)ab);
                   }

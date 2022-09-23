@@ -21,6 +21,7 @@ namespace BookMyShow.Infrastructure.Data
         public virtual DbSet<City> Cities { get; set; } = null!;
         public virtual DbSet<Movie> Movies { get; set; } = null!;
         public virtual DbSet<Payment> Payments { get; set; } = null!;
+        public virtual DbSet<SeatTypePrice> SeatTypePrices { get; set; } = null!;   
         public virtual DbSet<Show> Shows { get; set; } = null!;
         public virtual DbSet<ShowSeat> ShowSeats { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;

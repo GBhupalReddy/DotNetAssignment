@@ -58,6 +58,7 @@ namespace BookMyShow.Extension
             services.AddTransient<IShowSeatRepository, ShowSeatRepository>();
             services.AddTransient<IShowRepository, ShowRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<ISeatTypePriceRepository, SeatTypePriceRepository>();
 
             //Service
 
@@ -71,6 +72,7 @@ namespace BookMyShow.Extension
             services.AddTransient<IShowSeatService, ShowSeatService>();
             services.AddTransient<IShowService, ShowService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<ISeatTypePriceService, SeatTypePriceService>();
             
         }
     }

@@ -46,7 +46,7 @@ namespace BookMyShow.Controllers.V1
         {
             if (id <= 0)
             {
-                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
+                _logger.LogWarning("Id field can't be <= zero OR it doesn't match with model's {Id}", id);
                 return BadRequest("Please Enter Valid Data");
             }
             _logger.LogInformation("Getting Id {id} City", id);
@@ -56,17 +56,6 @@ namespace BookMyShow.Controllers.V1
                 return NotFound("Please Enter Valid Data");
             return Ok(result);
         }
-
-        //[ApiVersion("1.0")]
-        //[Route("cityName")]
-        //[HttpGet]
-        //[ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        //public async Task<ActionResult> Get(string cityName)
-        //{
-        //    var result = await _cityService.GetCinemaCitysync(cityName);
-        //    return Ok(result);
-
-        //}
 
         // POST <CityController>
         [ApiVersion("1.0")]
@@ -92,7 +81,7 @@ namespace BookMyShow.Controllers.V1
         {
             if (id <= 0)
             {
-                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
+                _logger.LogWarning("Id field can't be <= zero OR it doesn't match with model's {Id}", id);
                 return BadRequest("Please Enter Valid Data");
             }
             _logger.LogInformation("Update Id: {id} City", id);
@@ -112,12 +101,47 @@ namespace BookMyShow.Controllers.V1
         {
             if (id <= 0)
             {
-                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
+                _logger.LogWarning("Id field can't be <= zero OR it doesn't match with model's {Id}", id);
                 BadRequest("Please Enter Valid Data");
             }
             _logger.LogInformation("Deleted  {id}  City", id);
             await _cityService.DeleteCityAsync(id);
         }
+        [ApiVersion("1.0")]
+        [Route("cinema/{cityName}")]
+        [HttpGet]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        public async Task<ActionResult> GetCinemaInCity(string cityName)
+        {
+
+            var result = await _cityService.GetCinemaInCityAsync(cityName);
+            return Ok(result);
+
+        }
+
+
+        [ApiVersion("1.0")]
+        [Route("movies/{cityName}")]
+        [HttpGet]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        public async Task<ActionResult> GetMovieInCity(string cityName)
+        {
+            var result = await _cityService.GetMovieInCity(cityName);
+            return Ok(result);
+
+        }
+
+        [ApiVersion("1.0")]
+        [Route("movie-{cityName}")]
+        [HttpGet]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        public async Task<ActionResult> GetCityCinemaMovie(string cityName, string? cinemaName = null)
+        {
+            var result = await _cityService.GetCityCinemaMovieAsync(cityName, cinemaName);
+            return Ok(result);
+
+        }
+
 
     }
 }

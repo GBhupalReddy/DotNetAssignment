@@ -90,6 +90,14 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
                                      select cinemaSeat.CinemaSeatId).FirstAsync();
             return cinemaseatid;
         }
+
+        public async Task<decimal> GetSeatPrice(int seatType)
+        {
+            var Query = "select Price from SeatTypePrice where SeatType = @seatType";
+            var Price = await _dbConnection.QueryFirstOrDefaultAsync<decimal>(Query, new {seatType});
+
+            return Price;
+        }
         
     }
 }

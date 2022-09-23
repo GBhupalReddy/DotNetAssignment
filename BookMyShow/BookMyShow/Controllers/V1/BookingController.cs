@@ -57,7 +57,7 @@ namespace BookMyShow.Controllers.V1
             var result = _mapper.Map<Booking, BookingDto>(booking);
             if (result is null)
             {
-                 await  _bookingService.VerifyBookingExist(id);
+                await _bookingService.VerifyBookingExist(id);
             }
             return Ok(result);
         }
@@ -67,18 +67,15 @@ namespace BookMyShow.Controllers.V1
         [Route("")]
         [HttpPost]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
-        public async Task<ActionResult> PostBooking([FromBody] BookingVm bookingVm)
+        public async Task<ActionResult<Booking>> Post([FromBody] BookingUserVm bokkingUserVm)
         {
-
-            _logger.LogInformation("add new Booking");
-            var booking = _mapper.Map<BookingVm, Booking>(bookingVm);
-            var bookingResult = await _bookingService.AddBookingAsync(booking);
-            var result = _mapper.Map<Booking, BookingDto>(bookingResult);
-            if(result is null)
-            {
-                return NotFound($"{booking.NumberOfSeats} not available");
-            }
+            var bookingUser = _mapper.Map<BookingUserVm, BookingUser>(bokkingUserVm);
+            var booking = await _bookingService.CreateBookingAsync(bookingUser);
+            var result = _mapper.Map<Booking, BookingDto>(booking);
+            if (result is null)
+                return NotFound($"{bookingUser.NumberOfSeats} tickets are Not available ");
             return Ok(result);
+
         }
 
         // PUT <BookingController>
@@ -91,7 +88,7 @@ namespace BookMyShow.Controllers.V1
             if (id <= 0)
             {
                 _logger.LogWarning("Id field can't be <= zero OR it doesn't match with model's {Id}", id);
-                await _bookingService.VerifyBookingExist(id); 
+                await _bookingService.VerifyBookingExist(id);
             }
             _logger.LogInformation("Update Id: {id} Booking", id);
             var booking = _mapper.Map<BookingVm, Booking>(bookingVm);
@@ -109,7 +106,7 @@ namespace BookMyShow.Controllers.V1
         {
             if (id <= 0)
             {
-                _logger.LogWarning( "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
+                _logger.LogWarning("Id field can't be <= zero OR it doesn't match with model's {Id}", id);
                 await _bookingService.VerifyBookingExist(id);
 
             }

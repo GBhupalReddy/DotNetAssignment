@@ -34,7 +34,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
             return result;
            
         }
-        public async Task<IEnumerable<CinemaDto>> GetCityInCinemaAsync(string cityName)
+        public async Task<IEnumerable<CinemaDto>> GetCinemaInCityAsync(string cityName)
         {
             
             var query = "execute GetCityCinema  @cityName";
@@ -65,7 +65,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
             _bookMyShowContext.Cities.Remove(city);
             await _bookMyShowContext.SaveChangesAsync();
         }
-        public async Task<IEnumerable<MovieDto>> GetCityInMovie(string cityName)
+        public async Task<IEnumerable<MovieDto>> GetMovieInCity(string cityName)
         {
             
             var cityMovieQuery = "execute GetCityMovie @cityName";

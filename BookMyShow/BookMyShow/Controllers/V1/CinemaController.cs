@@ -48,7 +48,7 @@ namespace BookMyShow.Controllers.V1
         {
             if (id <= 0)
             {
-                _logger.LogWarning( "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
+                _logger.LogWarning("Id field can't be <= zero OR it doesn't match with model's {Id}", id);
                 return BadRequest("Please Enter Valid Data");
             }
             _logger.LogInformation("Getting Id {id} Cinema", id);

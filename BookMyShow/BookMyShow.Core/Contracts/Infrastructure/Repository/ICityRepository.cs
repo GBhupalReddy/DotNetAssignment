@@ -8,10 +8,10 @@ namespace BookMyShow.Core.Contracts.Infrastructure.Repository
         Task<City> AddCityAsync(City city);
         Task DeleteCityAsync(City city);
         Task<City> GetCityAsync(int id);
-        Task<IEnumerable<CinemaDto>> GetCityInCinemaAsync(string cityName);
+        Task<IEnumerable<CinemaDto>> GetCinemaInCityAsync(string cityName);
         Task<IEnumerable<CityDto>> GetCitysAsync();
         Task<City> UpdateCityAsynce( City city);
-        Task<IEnumerable<MovieDto>> GetCityInMovie(string cityName);
+        Task<IEnumerable<MovieDto>> GetMovieInCity(string cityName);
         Task<IEnumerable<MovieDetailes>> GetCityCinemaMovieAsync(string cityName, string? cinemaName = null);
     }
 }

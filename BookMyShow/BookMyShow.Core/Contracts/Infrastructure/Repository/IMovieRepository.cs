@@ -9,7 +9,6 @@ namespace BookMyShow.Core.Contracts.Infrastructure.Repository
         Task DeleteMovieAsync(Movie movie);
         Task<IEnumerable<MovieDto>> GetMoviesAsync();
         Task<Movie> GetMovieAsync(int id);
-        Task<IEnumerable<MovieDetailes>> GetCityInMovieAsync(string cityName, string movieName);
         Task<IEnumerable<MovieDetailes>> GetMovieLanguageGenreAsync(string city,string? language=null, string? genre= null, string ? movieName = null);
         Task<Movie> UpdateMovieAsynce (Movie movie);
     }

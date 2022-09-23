@@ -39,7 +39,7 @@ namespace BookMyShow.Infrastructure.Service
         {
             var cinemaSeatToBeUpdated = await GetCinemaSeatByIdAsync(id);
             cinemaSeatToBeUpdated.SeatNumber = cinemaSeat.SeatNumber;
-            cinemaSeatToBeUpdated.Type = cinemaSeat.Type;
+            cinemaSeatToBeUpdated.SeatType = cinemaSeat.SeatType;
             cinemaSeatToBeUpdated.CinemaHallId = cinemaSeat.CinemaHallId;
 
             var cinemaseatResult = await _cinemaSeatRepository.UpdateCinemaSeatAsynce( cinemaSeatToBeUpdated);

@@ -49,7 +49,7 @@ namespace BookMyShow.Controllers.V1
         {
             if (id <= 0)
             {
-                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
+                _logger.LogWarning("Id field can't be <= zero OR it doesn't match with model's {Id}", id);
                 return BadRequest("Please Enter Valid Data");
             }
             _logger.LogInformation("Get Id {id} Movie", id);
@@ -59,9 +59,9 @@ namespace BookMyShow.Controllers.V1
                 return NotFound("Please Enter Valid Data");
             return Ok(result);
         }
-   
 
-    
+
+
 
         // POST <MovieController>
         [ApiVersion("1.0")]
@@ -87,7 +87,7 @@ namespace BookMyShow.Controllers.V1
         {
             if (id <= 0)
             {
-                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {id}", id);
+                _logger.LogWarning("Id field can't be <= zero OR it doesn't match with model's {id}", id);
                 return BadRequest("Please Enter Valid Data");
             }
             _logger.LogInformation("Update Id: {id} Movie", id);
@@ -106,11 +106,25 @@ namespace BookMyShow.Controllers.V1
         {
             if (id <= 0)
             {
-                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
+                _logger.LogWarning("Id field can't be <= zero OR it doesn't match with model's {Id}", id);
                 BadRequest("Please Enter Valid Data");
             }
             _logger.LogInformation("Deleted  {id}  Movie", id);
             await _movieService.DeleteMovieAsync(id);
+        }
+        // GET<MovieController> Movie/City/language/genre
+
+        [ApiVersion("1.0")]
+        [Route("movies-{cityName}")]
+        [HttpGet]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        public async Task<ActionResult> GetCityMovies(string cityName, string? language = null, string? genres = null, string? movieName = null)
+        {
+            _logger.LogInformation($"Get list of{cityName} {language}{genres} {movieName} ");
+            var result = await _movieService.GetMovieLanguageGenreAsync(cityName, language, genres, movieName);
+            if (result is null)
+                return NotFound("Please Enter Valid Data");
+            return Ok(result);
         }
     }
 }
