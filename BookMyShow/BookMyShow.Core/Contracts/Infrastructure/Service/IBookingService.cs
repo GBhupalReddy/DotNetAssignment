@@ -11,6 +11,5 @@ namespace BookMyShow.Core.Contracts.Infrastructure.Service
         Task<Booking> GetBookingByIdAsync(int id);
         Task<Booking> UpdateBookingAsynce(int id, Booking booking);
         Task<Booking> CreateBookingAsync(BookingUser bookingUser);
-        Task<int> VerifyBookingExist(int id);
     }
 }

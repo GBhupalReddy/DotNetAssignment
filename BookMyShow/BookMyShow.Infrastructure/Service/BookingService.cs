@@ -145,22 +145,6 @@ namespace BookMyShow.Infrastructure.Service
             return booking;
         }
 
-
-        public Task<int> VerifyBookingExist(int id)
-        {
-            if (id <= 0)
-            {
-                throw id switch
-                {
-                    _ => new AppException("Input request is invalid")
-                };
-            }
-            throw id switch
-            {
-
-                _ => new DuplicateException("Booking exits ", new Exception($"Booking not existed with this {id} Id"))
-            };
-        }
     }
 }
 

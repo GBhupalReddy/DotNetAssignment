@@ -11,17 +11,19 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookMyShow.Controllers.V1
 {
     [ApiVersion("1.0")]
-    [ApiVersion("1.1")]
+    [Route("payment")]
     [ApiConventionType(typeof(DefaultApiConventions))]
     public class PaymentController : ApiControllerBase
     {
 
         private readonly IPaymentService _paymentService;
+        private readonly IExceptionService _exceptionService;
         private readonly ILogger<PaymentController> _logger;
         private readonly IMapper _mapper;
-        public PaymentController(IPaymentService paymentService, ILogger<PaymentController> logger, IMapper mapper)
+        public PaymentController(IPaymentService paymentService, IExceptionService exceptionService, ILogger<PaymentController> logger, IMapper mapper)
         {
             _paymentService = paymentService;
+            _exceptionService = exceptionService;
             _logger = logger;
             _mapper = mapper;
         }
@@ -49,13 +51,13 @@ namespace BookMyShow.Controllers.V1
             if (id <= 0)
             {
                 _logger.LogWarning("Id field can't be <= zero OR it doesn't match with model's {Id}", id);
-                return BadRequest("Please Enter Valid Data");
+                await _exceptionService.VerifyIdExist(id);
             }
             _logger.LogInformation("Getting Id : {id} Payment", id);
             var paymentResult = await _paymentService.GetPaymentByIdAsync(id);
             var result = _mapper.Map<Payment, PaymentDto>(paymentResult);
             if (result is null)
-                return NotFound("Please Enter Valid Data");
+                await _exceptionService.VerifyIdExist(id,"Payment");
             return Ok(result);
         }
 
@@ -88,14 +90,14 @@ namespace BookMyShow.Controllers.V1
             if (id <= 0)
             {
                 _logger.LogWarning("Id field can't be <= zero OR it doesn't match with model's {Id}", id);
-                return BadRequest("Please Enter Valid Data");
+                await _exceptionService.VerifyIdExist(id);
             }
             _logger.LogInformation("Update Id: {id} Payment", id);
             var payment = _mapper.Map<PaymentVm, Payment>(paymentVm);
             var paymentResult = await _paymentService.UpdatePaymentAsynce(id, payment);
             var result = _mapper.Map<Payment, PaymentDto>(paymentResult);
             if (result.Equals(null))
-                return NotFound();
+                await _exceptionService.VerifyIdExist(id,"Payment");
             return Ok(result);
         }
 
@@ -109,7 +111,7 @@ namespace BookMyShow.Controllers.V1
             if (id <= 0)
             {
                 _logger.LogWarning("Id field can't be <= zero OR it doesn't match with model's {Id}", id);
-                BadRequest("Please Enter Valid Data");
+                await _exceptionService.VerifyIdExist(id);
             }
             _logger.LogInformation("Deleted Id :  {id}  Payment", id);
             await _paymentService.DeletePaymentAsync(id);

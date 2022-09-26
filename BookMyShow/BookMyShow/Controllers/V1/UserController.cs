@@ -11,17 +11,19 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookMyShow.Controllers.V1
 {
     [ApiVersion("1.0")]
-    [ApiVersion("1.1")]
+    [Route("user")]
     [ApiConventionType(typeof(DefaultApiConventions))]
     public class UserController : ApiControllerBase
     {
 
         private readonly IUserService _userService;
+        private readonly IExceptionService _exceptionService;
         private readonly ILogger<UserController> _logger;
         private readonly IMapper _mapper;
-        public UserController(IUserService userService, ILogger<UserController> logger, IMapper mapper)
+        public UserController(IUserService userService, IExceptionService exceptionService, ILogger<UserController> logger, IMapper mapper)
         {
             _userService = userService;
+            _exceptionService = exceptionService;
             _logger = logger;
             _mapper = mapper;
         }
@@ -36,8 +38,6 @@ namespace BookMyShow.Controllers.V1
         {
             _logger.LogInformation("Getting list of all Users");
             var result = await _userService.GetUsersAsync();
-            if (!result.Any())
-                return NotFound();
             return Ok(result);
         }
 
@@ -51,14 +51,14 @@ namespace BookMyShow.Controllers.V1
         {
             if (id <= 0)
             {
-                _logger.LogWarning( "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
-                return BadRequest("Please Enter Valid Data");
+                _logger.LogWarning("Id field can't be <= zero OR it doesn't match with model's {Id}", id);
+                await _exceptionService.VerifyIdExist(id);
             }
             _logger.LogInformation("Getting Id : {id} User", id);
             var user = await _userService.GetUserByIdAsync(id);
             var result = _mapper.Map<User, UserDto>(user);
             if (result is null)
-                return NotFound("Please Enter Valid Data");
+                await _exceptionService.VerifyIdExist(id, "User");
             return Ok(result);
 
         }
@@ -70,8 +70,8 @@ namespace BookMyShow.Controllers.V1
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
         public async Task<ActionResult> Post([FromBody] UserVm userVm)
         {
-             await _userService.UserExitByEmail(userVm.Email);
-            
+            await _userService.UserExitByEmail(userVm.Email);
+
             _logger.LogInformation("add new user");
             var user = _mapper.Map<UserVm, User>(userVm);
             var userresult = await _userService.AddUserAsync(user);
@@ -89,13 +89,13 @@ namespace BookMyShow.Controllers.V1
             if (id <= 0)
             {
                 _logger.LogWarning("Id field can't be <= zero OR it doesn't match with model's Id.");
-                return BadRequest("Please Enter Valid Data");
+                await _exceptionService.VerifyIdExist(id);
             }
             _logger.LogInformation("Update Id: {id} User", id);
             var user = await _userService.UpdateUserAsynce(id, _mapper.Map<UserVm, User>(userVm));
             var result = _mapper.Map<User, UserDto>(user);
             if (result.Equals(null))
-                return NoContent();
+                await _exceptionService.VerifyIdExist(id, "User");
             return Ok(result);
         }
 
@@ -109,7 +109,7 @@ namespace BookMyShow.Controllers.V1
             if (id <= 0)
             {
                 _logger.LogWarning("Id field can't be <= zero OR it doesn't match with model's {Id}", id);
-                BadRequest("Please Enter Valid Data");
+                await _exceptionService.VerifyIdExist(id);
             }
             _logger.LogInformation("Deleted Id :  {id}  User", id);
             await _userService.DeleteUserAsync(id);
@@ -118,7 +118,7 @@ namespace BookMyShow.Controllers.V1
         // GET UserBokingDetails
 
         [ApiVersion("1.0")]
-        [Route("UserBokingDetails/{id}")]
+        [Route("userbokingdetails/{id}")]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
 
@@ -127,12 +127,12 @@ namespace BookMyShow.Controllers.V1
             if (id <= 0)
             {
                 _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
-                return BadRequest("Please Enter Valid Data");
+                await _exceptionService.VerifyIdExist(id);
             }
             _logger.LogInformation("Getting Id : {id} User", id);
             var result = await _userService.GetUserBookingDetalisAsync(id);
             if (result is null)
-                return NotFound("Please Enter Valid Data");
+                await _exceptionService.VerifyIdExist(id, "User");
             return Ok(result);
 
         }

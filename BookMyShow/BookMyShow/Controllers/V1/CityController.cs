@@ -11,17 +11,19 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookMyShow.Controllers.V1
 {
     [ApiVersion("1.0")]
-    [ApiVersion("1.1")]
+    [Route("city")]
     [ApiConventionType(typeof(DefaultApiConventions))]
     public class CityController : ApiControllerBase
     {
         private readonly ICityService _cityService;
+        private readonly IExceptionService _exceptionService;
         private readonly ILogger<CityController> _logger;
         private readonly IMapper _mapper;
 
-        public CityController(ICityService cityService, ILogger<CityController> logger, IMapper mapper)
+        public CityController(ICityService cityService, IExceptionService exceptionService, ILogger<CityController> logger, IMapper mapper)
         {
             _cityService = cityService;
+            _exceptionService = exceptionService;
             _logger = logger;
             _mapper = mapper;
         }
@@ -47,13 +49,13 @@ namespace BookMyShow.Controllers.V1
             if (id <= 0)
             {
                 _logger.LogWarning("Id field can't be <= zero OR it doesn't match with model's {Id}", id);
-                return BadRequest("Please Enter Valid Data");
+                await _exceptionService.VerifyIdExist(id);
             }
             _logger.LogInformation("Getting Id {id} City", id);
             var city = await _cityService.GetCityByIdAsync(id);
             var result = _mapper.Map<City, CityDto>(city);
             if (result is null)
-                return NotFound("Please Enter Valid Data");
+                await _exceptionService.VerifyIdExist(id,"City");
             return Ok(result);
         }
 
@@ -82,12 +84,16 @@ namespace BookMyShow.Controllers.V1
             if (id <= 0)
             {
                 _logger.LogWarning("Id field can't be <= zero OR it doesn't match with model's {Id}", id);
-                return BadRequest("Please Enter Valid Data");
+                await _exceptionService.VerifyIdExist(id);
             }
             _logger.LogInformation("Update Id: {id} City", id);
             var city = _mapper.Map<CityVm, City>(cityVm);
             var cityResult = await _cityService.UpdateCityAsynce(id, city);
             var result = _mapper.Map<City, CityDto>(cityResult);
+            if(result is null)
+            {
+                await _exceptionService.VerifyIdExist(id,"City");
+            }
             return Ok(result);
         }
 
@@ -102,7 +108,7 @@ namespace BookMyShow.Controllers.V1
             if (id <= 0)
             {
                 _logger.LogWarning("Id field can't be <= zero OR it doesn't match with model's {Id}", id);
-                BadRequest("Please Enter Valid Data");
+                await _exceptionService.VerifyIdExist(id);
             }
             _logger.LogInformation("Deleted  {id}  City", id);
             await _cityService.DeleteCityAsync(id);

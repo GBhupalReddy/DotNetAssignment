@@ -11,16 +11,18 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookMyShow.Controllers.V1
 {
     [ApiVersion("1.0")]
-    [ApiVersion("1.1")]
+    [Route("cinemahall")]
     [ApiConventionType(typeof(DefaultApiConventions))]
     public class CinemaHallController : ApiControllerBase
     {
         private readonly ICinemaHallService _cinemaHallService;
+        private readonly IExceptionService _exceptionService;
         private readonly ILogger<CinemaHallController> _logger;
         private readonly IMapper _mapper;
-        public CinemaHallController(ICinemaHallService cinemaHallService, ILogger<CinemaHallController> logger, IMapper mapper)
+        public CinemaHallController(ICinemaHallService cinemaHallService,IExceptionService exceptionService, ILogger<CinemaHallController> logger, IMapper mapper)
         {
             _cinemaHallService = cinemaHallService;
+            _exceptionService = exceptionService;
             _logger = logger;
             _mapper = mapper;
         }
@@ -47,13 +49,13 @@ namespace BookMyShow.Controllers.V1
             if (id <= 0)
             {
                 _logger.LogWarning("Id field can't be <= zero OR it doesn't match with model's {Id}", id);
-                return BadRequest("Please Enter Valid Data");
+                await _exceptionService.VerifyIdExist(id);
             }
             _logger.LogInformation("Getting Id {id} CinemaHall", id);
             var cinemaHall = await _cinemaHallService.GetCinemaHallByIdAsync(id);
             var result = _mapper.Map<CinemaHall, CinemaHallDto>(cinemaHall);
             if (result is null)
-                return NotFound("Please Enter Valid Data");
+                await _exceptionService.VerifyIdExist(id,"CinemaHall");
             return Ok(result);
         }
 
@@ -83,12 +85,16 @@ namespace BookMyShow.Controllers.V1
             if (id <= 0)
             {
                 _logger.LogWarning("Id field can't be <= zero OR it doesn't match with model's {Id}", id);
-                return BadRequest("Please Enter Valid Data");
+                await _exceptionService.VerifyIdExist(id);
             }
             _logger.LogInformation("Update Id: {id} CinemaHall", id);
             var cinemaHall = _mapper.Map<CinemaHallVm, CinemaHall>(cinemaHallVm);
             var cinemaHallResult = await _cinemaHallService.UpdateCinemaHallAsynce(id, cinemaHall);
             var result = _mapper.Map<CinemaHall, CinemaHallDto>(cinemaHallResult);
+            if(result is null)
+            {
+                await _exceptionService.VerifyIdExist(id,"CinemaHall");
+            }
             return Ok(result);
 
         }
@@ -103,7 +109,7 @@ namespace BookMyShow.Controllers.V1
             if (id <= 0)
             {
                 _logger.LogWarning("Id field can't be <= zero OR it doesn't match with model's {Id}", id);
-                BadRequest("Please Enter Valid Data");
+                await _exceptionService.VerifyIdExist(id);
             }
             _logger.LogInformation("Deleted  {id}  CinemaHall", id);
             await _cinemaHallService.DeleteCinemaHallrAsync(id);

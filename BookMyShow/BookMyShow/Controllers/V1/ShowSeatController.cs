@@ -11,17 +11,19 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookMyShow.Controllers.V1
 {
     [ApiVersion("1.0")]
-    [ApiVersion("1.1")]
+    [Route("showseat")]
     [ApiConventionType(typeof(DefaultApiConventions))]
     public class ShowSeatController : ApiControllerBase
     {
         private readonly IShowSeatService _showSeatService;
+        private readonly IExceptionService _exceptionService;
         private readonly ILogger<ShowSeatController> _logger;
         private readonly IMapper _mapper;
 
-        public ShowSeatController(IShowSeatService showSeatService, ILogger<ShowSeatController> logger, IMapper mapper)
+        public ShowSeatController(IShowSeatService showSeatService, IExceptionService exceptionService, ILogger<ShowSeatController> logger, IMapper mapper)
         {
             _showSeatService = showSeatService;
+            _exceptionService = exceptionService;   
             _logger = logger;
             _mapper = mapper;
         }
@@ -35,8 +37,6 @@ namespace BookMyShow.Controllers.V1
         {
             _logger.LogInformation("Getting list of all ShowSeats");
             var result = await _showSeatService.GetShowSeatsAsync();
-            if (result is null)
-                return NotFound("Please Enter Valid Data");
             return Ok(result);
         }
 
@@ -50,13 +50,13 @@ namespace BookMyShow.Controllers.V1
             if (id <= 0)
             {
                 _logger.LogWarning("Id field can't be <= zero OR it doesn't match with model's {Id}", id);
-                return BadRequest("Please Enter Valid Data");
+                await _exceptionService.VerifyIdExist(id);
             }
             _logger.LogInformation("Getting Id : {id} ShowSeat", id);
             var showSeaRtesult = await _showSeatService.GetShowSaetByIdAsync(id);
             var result = _mapper.Map<ShowSeat, ShowSeatDto>(showSeaRtesult);
             if (result is null)
-                return NotFound("Please Enter Valid Data");
+                await _exceptionService.VerifyIdExist(id,"ShowSeat");
             return Ok(result);
         }
 
@@ -84,12 +84,14 @@ namespace BookMyShow.Controllers.V1
             if (id <= 0)
             {
                 _logger.LogWarning("Id field can't be <= zero OR it doesn't match with model's {Id} ", id);
-                return BadRequest("Please Enter Valid Data");
+                await _exceptionService.VerifyIdExist(id);
             }
             _logger.LogInformation("Update Id: {id} ShowSeat", id);
             var showSeat = _mapper.Map<ShowSeatVm, ShowSeat>(showSeatVm);
             var showSeaRtesult = await _showSeatService.UpdateShowSeatAsynce(id, showSeat);
             var result = _mapper.Map<ShowSeat, ShowSeatDto>(showSeaRtesult);
+            if(result is null)
+                await _exceptionService.VerifyIdExist(id,"ShowSeat");
             return Ok(result);
         }
 
@@ -103,7 +105,7 @@ namespace BookMyShow.Controllers.V1
             if (id <= 0)
             {
                 _logger.LogWarning("Id field can't be <= zero OR it doesn't match with model's {Id}", id);
-                BadRequest("Please Enter Valid Data");
+                await _exceptionService.VerifyIdExist(id);
             }
             _logger.LogInformation("Deleted Id :  {id}  ShowSeat", id);
             await _showSeatService.DeleteShowSeatAsync(id);

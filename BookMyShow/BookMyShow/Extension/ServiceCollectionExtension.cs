@@ -73,6 +73,7 @@ namespace BookMyShow.Extension
             services.AddTransient<IShowService, ShowService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<ISeatTypePriceService, SeatTypePriceService>();
+            services.AddTransient<IExceptionService, ExceptionService>();   
             
         }
     }

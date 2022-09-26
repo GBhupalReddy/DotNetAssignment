@@ -11,16 +11,18 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookMyShow.Controllers.V1
 {
     [ApiVersion("1.0")]
-    [ApiVersion("1.1")]
+    [Route("show")]
     [ApiConventionType(typeof(DefaultApiConventions))]
     public class ShowController : ApiControllerBase
     {
         private readonly IShowService _showService;
+        private readonly IExceptionService _exceptionService;
         private readonly ILogger<ShowController> _logger;
         private readonly IMapper _mapper;
-        public ShowController(IShowService showService, ILogger<ShowController> logger, IMapper mapper)
+        public ShowController(IShowService showService, IExceptionService exceptionService, ILogger<ShowController> logger, IMapper mapper)
         {
             _showService = showService;
+            _exceptionService = exceptionService;
             _logger = logger;
             _mapper = mapper;
         }
@@ -47,13 +49,13 @@ namespace BookMyShow.Controllers.V1
             if (id <= 0)
             {
                 _logger.LogWarning("Id field can't be <= zero OR it doesn't match with model's {Id}", id);
-                return BadRequest("Please Enter Valid Data");
+                await _exceptionService.VerifyIdExist(id);
             }
             _logger.LogInformation("Getting Id : {id} Show", id);
             var ShowResult = await _showService.GetShowByIdAsync(id);
             var result = _mapper.Map<Show, ShowDto>(ShowResult);
             if (result is null)
-                return NotFound("Please Enter Valid Data");
+                await _exceptionService.VerifyIdExist(id,"Show");
             return Ok(result);
         }
 
@@ -81,12 +83,16 @@ namespace BookMyShow.Controllers.V1
             if (id <= 0)
             {
                 _logger.LogWarning("Id field can't be <= zero OR it doesn't match with model's {Id}", id);
-                return BadRequest("Please Enter Valid Data");
+                await _exceptionService.VerifyIdExist(id);
             }
             _logger.LogInformation("Update Id: {id} Show", id);
             var show = _mapper.Map<ShowVm, Show>(showVm);
             var ShowResult = await _showService.UpdateShowAsynce(id, show);
             var result = _mapper.Map<Show, ShowDto>(ShowResult);
+            if(result is null)
+            {
+                await _exceptionService.VerifyIdExist(id,"Payment");
+            }
             return Ok(result);
         }
 
@@ -100,7 +106,7 @@ namespace BookMyShow.Controllers.V1
             if (id <= 0)
             {
                 _logger.LogWarning("Id field can't be <= zero OR it doesn't match with model's {Id}", id);
-                BadRequest("Please Enter Valid Data");
+                await _exceptionService.VerifyIdExist(id);
             }
             _logger.LogInformation("Deleted Id :  {id}  Show", id);
             await _showService.DeleteShowAsync(id);
