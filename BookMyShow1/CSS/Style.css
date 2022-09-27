@@ -1,0 +1,167 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto Condensed', sans-serif;
+}
+body
+{
+    font-size: 100%;
+}
+  
+li
+{
+    list-style: none;
+}
+header
+{
+    display: flex;
+    background-color:  #353444;
+}
+
+.logo img
+{
+    width: 15em;
+}
+.searchfilter input
+{
+    height: 40px;
+    margin-top: 3%;
+    padding: 1%;
+    border: white;
+    border-radius: 4px;
+}
+input[type=search]:focus,select:focus{
+outline: none;
+}
+.citylist 
+{
+    margin-left: 18%;
+    padding: 30px 10px;
+    background: #353444;
+    color: #353444;
+}
+.citylist select
+{
+    background: #353444;
+    border: #353444;
+    color: aliceblue;
+}
+.loginbutton
+{
+    background-color: red;
+    color: white;
+    border: red;
+    margin: 1.4% 1% 2.1% 1% ;
+    padding: 5px 20px; 
+    border-radius: 3px;
+}
+
+.list-menu
+{
+    color: white;
+    margin: 2% 2% 2.1% 1% ;
+}
+nav{
+    display: flex;
+    background-color: black;
+    padding-top: 1%;
+    padding-bottom: 1%;
+}
+.Entertainment 
+{
+     display: flex;
+     color: rgb(228, 217, 217);
+     width: 50%;
+     padding-left: 3%;
+}
+.Offer
+{
+     display: flex;
+     color: rgb(228, 217, 217);
+     padding-left: 18%;
+     
+}
+.Entertainment li
+{
+    padding-right:  3%; 
+}
+.Offer li
+{
+    padding-right: 6%;
+}
+main {
+    display: inline;
+}
+#bimbisara{
+    background-image: url('https://i.redd.it/hm0plsjz3m991.jpg');
+    display: flex;
+}
+#oke-oka-jeevitham
+{
+    background-image: url('https://assets-in.bmscdn.com/iedb/movies/images/mobile/listing/xxlarge/oke-oka-jeevitham-et00322816-1662121157.jpg');
+    display: flex;
+}
+#sita-ramam
+{
+    background-image: url('https://assets-in.bmscdn.com/iedb/movies/images/mobile/listing/xxlarge/sita-ramam-et00329656-30-05-2022-06-32-41.jpg');
+    display: flex;
+}
+#Brahmastra
+{
+    background-image: url('https://assets-in.bmscdn.com/iedb/movies/images/mobile/listing/xxlarge/brahmastra-et00063710-1661162101.jpg');
+    display: flex;
+}
+ #cobra
+{
+    background-image: url('https://assets-in.bmscdn.com/iedb/movies/images/mobile/listing/xxlarge/cobra-et00103189-1656312188.jpg');
+    display: flex;
+} 
+#Thiruchitrambalam
+{
+    background-image: url('https://nlk.bmscdn.com/iedb/movies/images/mobile/listing/xxlarge/thiruchitrambalam-et00004561-15-08-2022-05-10-35.jpg');
+    display: flex;
+}
+#Liger
+{
+    background-image: url('https://assets-in.bmscdn.com/iedb/movies/images/mobile/listing/xxlarge/liger-et00304943-1661158092.jpg');
+    display: flex;
+}
+ .movielogo
+{
+    padding: 2%;
+   
+}
+ .movielogo img
+{
+    border-radius: 20px;
+    image-resolution: none;
+}
+ .booking
+{
+    padding-top: 10%;
+    color: antiquewhite;
+}
+#oke-oka-jeevitham .booking,#sita-ramam .booking
+{
+    padding-top: 10%;
+    color: black;
+}
+.booking h3{
+    padding-top: 20%;
+}
+.booking button
+{
+    background-color: red;
+    color: white;
+    border: red;
+    margin: 20% 1% 2.1% 1% ;
+    padding: 10px 40px; 
+    border-radius: 3px;
+}
+.aboutnovie
+{
+    margin: 2%;
+}
+.aboutnovie h2{
+    margin-bottom: 2%;
+}
