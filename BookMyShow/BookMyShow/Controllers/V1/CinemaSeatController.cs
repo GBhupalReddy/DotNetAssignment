@@ -92,7 +92,7 @@ namespace BookMyShow.Controllers.V1
             _logger.LogInformation("Update Id: {id} CinemaSeat", id);
             var cinemaSeat = _mapper.Map<CinemaSeatVm, CinemaSeat>(cinemaSeatVm);
             var cinemaSeatResult = await _cinemaSeatService.UpdateCinemaSeatAsynce(id, cinemaSeat);
-            var result = _mapper.Map<CinemaSeat, CinemaSeatDto>(cinemaSeat);
+            var result = _mapper.Map<CinemaSeat, CinemaSeatDto>(cinemaSeatResult);
             if(result is null)
             {
                 await _exceptionService.VerifyIdExist(id,"Cinema Seat");

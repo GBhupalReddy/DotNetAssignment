@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BookMyShow.Core.Dto
+﻿namespace BookMyShow.Core.Dto
 {
     public class MovieDetailes
     {
@@ -15,5 +9,6 @@ namespace BookMyShow.Core.Dto
         public string Genre { get; set; } = null!;
         public string CinemaHallName { get; set; } = null!;
         public string CityName { get; set; } = null!;
+        public int AvailableSeats { get; set; }
     }
 }

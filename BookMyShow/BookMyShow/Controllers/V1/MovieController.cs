@@ -126,7 +126,7 @@ namespace BookMyShow.Controllers.V1
         {
             _logger.LogInformation($"Get list of{cityName} {language}{genres} {movieName} ");
             var result = await _movieService.GetMovieLanguageGenreAsync(cityName, language, genres, movieName);
-            if (result is null)
+            if (!result.Any())
                 return NotFound("Please Enter Valid Data");
             return Ok(result);
         }

@@ -131,8 +131,10 @@ namespace BookMyShow.Controllers.V1
             }
             _logger.LogInformation("Getting Id : {id} User", id);
             var result = await _userService.GetUserBookingDetalisAsync(id);
-            if (result is null)
+            if (!result.Any())
+            {
                 await _exceptionService.VerifyIdExist(id, "User");
+            }
             return Ok(result);
 
         }

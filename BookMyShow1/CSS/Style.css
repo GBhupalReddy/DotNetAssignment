@@ -92,6 +92,51 @@ nav{
 main {
     display: inline;
 }
+.HomeMovie
+{
+    width: 80%;
+    display: flex;
+    padding: 10px;
+    flex-wrap: wrap;
+}
+.HomeMovie div{
+    padding: 10px;
+    
+}
+.HomeMovie div img{
+    border-radius: 10px;
+}
+.Home{
+ display: flex;
+}
+.Filter
+{
+    width: 20%;
+    padding: 15px;
+   
+}
+.Filter h1
+{
+    color: #353444;
+}
+.Filter h2{
+    padding: 10px 0;
+    color: #353444;
+}
+.Filter button 
+{
+    background-color: white;
+    border-radius: 4px;
+    padding: 3px;
+    margin: 3px;
+    border: 1px solid rgb(163, 147, 147);
+    color: orangered;
+}
+.Filter button:hover
+{
+    background-color: orangered;
+    color: white;
+}
 #bimbisara{
     background-image: url('https://i.redd.it/hm0plsjz3m991.jpg');
     display: flex;

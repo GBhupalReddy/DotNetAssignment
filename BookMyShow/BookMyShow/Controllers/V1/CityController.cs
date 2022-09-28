@@ -121,6 +121,10 @@ namespace BookMyShow.Controllers.V1
         {
 
             var result = await _cityService.GetCinemaInCityAsync(cityName);
+            if (!result.Any())
+            {
+                return NotFound("data not found");
+            }
             return Ok(result);
 
         }
@@ -133,6 +137,10 @@ namespace BookMyShow.Controllers.V1
         public async Task<ActionResult> GetMovieInCity(string cityName)
         {
             var result = await _cityService.GetMovieInCity(cityName);
+            if (!result.Any())
+            {
+                return NotFound("data not found");
+            }
             return Ok(result);
 
         }
@@ -144,6 +152,10 @@ namespace BookMyShow.Controllers.V1
         public async Task<ActionResult> GetCityCinemaMovie(string cityName, string? cinemaName = null)
         {
             var result = await _cityService.GetCityCinemaMovieAsync(cityName, cinemaName);
+            if(!result.Any())
+            {
+                return NotFound("data not found");
+            }
             return Ok(result);
 
         }
