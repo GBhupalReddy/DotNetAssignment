@@ -4,6 +4,7 @@ using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
 using BookMyShow.Infrastructure.Specs;
 using BookMyShow.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookMyShow.Controllers.V1
 {
     [ApiVersion("1.0")]
+    [Authorize]
     [Route("show")]
     [ApiConventionType(typeof(DefaultApiConventions))]
     public class ShowController : ApiControllerBase
@@ -29,7 +31,7 @@ namespace BookMyShow.Controllers.V1
 
         // GET: <ShowController>
         [ApiVersion("1.0")]
-        [Route("")]
+        [Route(""), AllowAnonymous]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult<IEnumerable<ShowDto>>> GetShows()
@@ -41,10 +43,10 @@ namespace BookMyShow.Controllers.V1
 
         // GET <ShowController>/5
         [ApiVersion("1.0")]
-        [Route("{id}")]
+        [Route("{id}"), AllowAnonymous]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult> GetShow(int id)
+        public async Task<ActionResult<ShowDto>> GetShow(int id)
         {
             if (id <= 0)
             {
@@ -63,8 +65,9 @@ namespace BookMyShow.Controllers.V1
         [ApiVersion("1.0")]
         [Route("")]
         [HttpPost]
+        [Authorize(Roles = "admin")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
-        public async Task<ActionResult> PostShow([FromBody] ShowVm showVm)
+        public async Task<ActionResult<ShowDto>> PostShow([FromBody] ShowVm showVm)
         {
             _logger.LogInformation("add new Show");
             var show = _mapper.Map<ShowVm, Show>(showVm);
@@ -77,8 +80,9 @@ namespace BookMyShow.Controllers.V1
         [ApiVersion("1.0")]
         [Route("{id}")]
         [HttpPut]
+        [Authorize(Roles = "admin")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
-        public async Task<ActionResult> PutShow(int id, [FromBody] ShowVm showVm)
+        public async Task<ActionResult<ShowDto>> PutShow(int id, [FromBody] ShowVm showVm)
         {
             if (id <= 0)
             {
@@ -100,6 +104,7 @@ namespace BookMyShow.Controllers.V1
         [ApiVersion("1.0")]
         [Route("{id}")]
         [HttpDelete]
+        [Authorize(Roles = "admin")]
         [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
         public async Task Delete(int id)
         {

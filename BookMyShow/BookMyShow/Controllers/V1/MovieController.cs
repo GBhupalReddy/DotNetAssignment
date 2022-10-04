@@ -4,6 +4,7 @@ using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
 using BookMyShow.Infrastructure.Specs;
 using BookMyShow.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookMyShow.Controllers.V1
 {
     [ApiVersion("1.0")]
+    [Authorize]
     [Route("movie")]
     [ApiConventionType(typeof(DefaultApiConventions))]
     public class MovieController : ApiControllerBase
@@ -32,7 +34,7 @@ namespace BookMyShow.Controllers.V1
 
         // GET: <MovieController>
         [ApiVersion("1.0")]
-        [Route("")]
+        [Route(""), AllowAnonymous]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult<IEnumerable<MovieDto>>> GetMovies()
@@ -44,10 +46,10 @@ namespace BookMyShow.Controllers.V1
 
         // GET <MovieController>/5
         [ApiVersion("1.0")]
-        [Route("{id}")]
+        [Route("{id}"), AllowAnonymous]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult> GetMovieById(int id)
+        public async Task<ActionResult<MovieDto>> GetMovieById(int id)
         {
             if (id <= 0)
             {
@@ -69,8 +71,9 @@ namespace BookMyShow.Controllers.V1
         [ApiVersion("1.0")]
         [Route("")]
         [HttpPost]
+        [Authorize(Roles = "admin")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
-        public async Task<ActionResult> PostMovie([FromBody] MovieVm movieVm)
+        public async Task<ActionResult<MovieDto>> PostMovie([FromBody] MovieVm movieVm)
         {
 
             _logger.LogInformation("add new Movie");
@@ -84,8 +87,9 @@ namespace BookMyShow.Controllers.V1
         [ApiVersion("1.0")]
         [Route("{id}")]
         [HttpPut]
+        [Authorize(Roles = "admin")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
-        public async Task<ActionResult> PutMovie(int id, [FromBody] MovieVm movieVm)
+        public async Task<ActionResult<MovieDto>> PutMovie(int id, [FromBody] MovieVm movieVm)
         {
             if (id <= 0)
             {
@@ -105,6 +109,7 @@ namespace BookMyShow.Controllers.V1
         [ApiVersion("1.0")]
         [Route("{id}")]
         [HttpDelete]
+        [Authorize(Roles = "admin")]
         [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
         public async Task DeleteMovie(int id)
         {
@@ -119,10 +124,10 @@ namespace BookMyShow.Controllers.V1
         // GET<MovieController> Movie/City/language/genre
 
         [ApiVersion("1.0")]
-        [Route("movies-{cityName}")]
+        [Route("movies-{cityName}"), AllowAnonymous]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult> GetCityMovies(string cityName, string? language = null, string? genres = null, string? movieName = null)
+        public async Task<ActionResult<IEnumerable<MovieDetailes>>> GetCityMovies(string cityName, string? language = null, string? genres = null, string? movieName = null)
         {
             _logger.LogInformation($"Get list of{cityName} {language}{genres} {movieName} ");
             var result = await _movieService.GetMovieLanguageGenreAsync(cityName, language, genres, movieName);

@@ -4,6 +4,7 @@ using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
 using BookMyShow.Infrastructure.Specs;
 using BookMyShow.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookMyShow.Controllers.V1
 {
     [ApiVersion("1.0")]
+    [Authorize]
     [Route("showseat")]
     [ApiConventionType(typeof(DefaultApiConventions))]
     public class ShowSeatController : ApiControllerBase
@@ -30,7 +32,7 @@ namespace BookMyShow.Controllers.V1
 
         // GET: <ShoeSeatController>
         [ApiVersion("1.0")]
-        [Route("")]
+        [Route(""), AllowAnonymous]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult<IEnumerable<ShowSeatDto>>> GetShowSeats()
@@ -42,10 +44,10 @@ namespace BookMyShow.Controllers.V1
 
         // GET <ShoeSeatController>/5
         [ApiVersion("1.0")]
-        [Route("{id}")]
+        [Route("{id}"), AllowAnonymous]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult> GetShowSeat(int id)
+        public async Task<ActionResult<ShowSeatDto>> GetShowSeat(int id)
         {
             if (id <= 0)
             {
@@ -64,8 +66,9 @@ namespace BookMyShow.Controllers.V1
         [ApiVersion("1.0")]
         [Route("")]
         [HttpPost]
+        [Authorize(Roles = "admin")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
-        public async Task<ActionResult> PostShowSeat([FromBody] ShowSeatVm showSeatVm)
+        public async Task<ActionResult<ShowSeatDto>> PostShowSeat([FromBody] ShowSeatVm showSeatVm)
         {
             _logger.LogInformation("add new ShowSeat");
             var showSeat = _mapper.Map<ShowSeatVm, ShowSeat>(showSeatVm);
@@ -78,8 +81,9 @@ namespace BookMyShow.Controllers.V1
         [ApiVersion("1.0")]
         [Route("{id}")]
         [HttpPut]
+        [Authorize(Roles = "admin")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
-        public async Task<ActionResult> PutShowSeat(int id, [FromBody] ShowSeatVm showSeatVm)
+        public async Task<ActionResult<ShowSeatDto>> PutShowSeat(int id, [FromBody] ShowSeatVm showSeatVm)
         {
             if (id <= 0)
             {
@@ -99,6 +103,7 @@ namespace BookMyShow.Controllers.V1
         [ApiVersion("1.0")]
         [Route("{id}")]
         [HttpDelete]
+        [Authorize(Roles = "admin")]
         [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
         public async Task DeleteShowSeat(int id)
         {

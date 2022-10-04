@@ -2,6 +2,7 @@
 using BookMyShow.Core.Contracts.Infrastructure.Service;
 using BookMyShow.Core.Entities;
 using BookMyShow.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookMyShow.Controllers.V1
 {
     [ApiVersion("1.0")]
+    [Authorize]
     [Route("seattypeprice")]
     [ApiConventionType(typeof(DefaultApiConventions))]
     public class SeatTypePriceController : ApiControllerBase
@@ -29,10 +31,10 @@ namespace BookMyShow.Controllers.V1
 
         // GET: api/<SeatTypePriceController>
         [ApiVersion("1.0")]
-        [Route("")]
+        [Route(""), AllowAnonymous]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult> Get()
+        public async Task<ActionResult<IEnumerable<SeatTypePrice>>> Get()
         {
             var result = await _seatTypePriceService.GetSeatTypePrices();
             return Ok(result);
@@ -40,10 +42,10 @@ namespace BookMyShow.Controllers.V1
 
         // GET api/<SeatTypePriceController>/5
         [ApiVersion("1.0")]
-        [Route("{seatType}")]
+        [Route("{seatType}"), AllowAnonymous]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult> Get(int seatType)
+        public async Task<ActionResult<SeatTypePrice>> Get(int seatType)
         {
             if(seatType <=0 )
             {
@@ -62,12 +64,13 @@ namespace BookMyShow.Controllers.V1
         [ApiVersion("1.0")]
         [Route("")]
         [HttpPost]
+        [Authorize(Roles = "admin")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
-        public async Task<SeatTypePrice> Post([FromBody] SeatTypePriceVm seatTypePriceVm)
+        public async Task<ActionResult<SeatTypePrice>> Post([FromBody] SeatTypePriceVm seatTypePriceVm)
         {
             var seatTypePrice = _mapper.Map<SeatTypePriceVm, SeatTypePrice>(seatTypePriceVm);
             var result = await _seatTypePriceService.AddSeatTypePriceAsync(seatTypePrice);
-            return result;
+            return Ok(result);
 
         }
 
@@ -75,8 +78,9 @@ namespace BookMyShow.Controllers.V1
         [ApiVersion("1.0")]
         [Route("{seatType}")]
         [HttpPut]
+        [Authorize(Roles = "admin")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
-        public async Task<ActionResult> Put(int seatType, [FromBody] SeatTypePriceVm seatTypePriceVm)
+        public async Task<ActionResult<SeatTypePrice>> Put(int seatType, [FromBody] SeatTypePriceVm seatTypePriceVm)
         {
             if (seatType <= 0)
             {
@@ -89,7 +93,9 @@ namespace BookMyShow.Controllers.V1
         }
 
         // DELETE api/<SeatTypePriceController>/5
-        [HttpDelete("{seatType}")]
+        [Route("{seatType}")]
+        [HttpDelete]
+        [Authorize(Roles = "admin")]
         public async Task Delete(int seatType)
         {
             if (seatType <= 0)

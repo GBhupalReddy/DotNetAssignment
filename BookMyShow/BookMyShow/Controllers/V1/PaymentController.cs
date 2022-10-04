@@ -4,6 +4,7 @@ using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
 using BookMyShow.Infrastructure.Specs;
 using BookMyShow.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookMyShow.Controllers.V1
 {
     [ApiVersion("1.0")]
+    [Authorize]
     [Route("payment")]
     [ApiConventionType(typeof(DefaultApiConventions))]
     public class PaymentController : ApiControllerBase
@@ -31,7 +33,7 @@ namespace BookMyShow.Controllers.V1
 
         // GET: <PaymentController>
         [ApiVersion("1.0")]
-        [Route("")]
+        [Route(""), AllowAnonymous]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult<IEnumerable<PaymentDto>>> GetPayments()
@@ -43,10 +45,10 @@ namespace BookMyShow.Controllers.V1
 
         // GET <PaymentController>/5
         [ApiVersion("1.0")]
-        [Route("{id}")]
+        [Route("{id}"), AllowAnonymous]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult> GetPayment(int id)
+        public async Task<ActionResult<PaymentDto>> GetPayment(int id)
         {
             if (id <= 0)
             {
@@ -63,10 +65,10 @@ namespace BookMyShow.Controllers.V1
 
         // POST <PaymentController>
         [ApiVersion("1.0")]
-        [Route("")]
+        [Route(""), AllowAnonymous]
         [HttpPost]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
-        public async Task<ActionResult> PostPayment([FromBody] PaymentVm paymentVm)
+        public async Task<ActionResult<PaymentDto>> PostPayment([FromBody] PaymentVm paymentVm)
         {
             _logger.LogInformation("add new Payment");
             var paymentExit = await _paymentService.GetPaymentByBookinId(paymentVm.BookingId);
@@ -82,10 +84,10 @@ namespace BookMyShow.Controllers.V1
 
         // PUT <PaymentController>/5
         [ApiVersion("1.0")]
-        [Route("{id}")]
+        [Route("{id}"), AllowAnonymous]
         [HttpPut]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
-        public async Task<ActionResult> PutPayment(int id, [FromBody] PaymentVm paymentVm)
+        public async Task<ActionResult<PaymentDto>> PutPayment(int id, [FromBody] PaymentVm paymentVm)
         {
             if (id <= 0)
             {
@@ -103,7 +105,7 @@ namespace BookMyShow.Controllers.V1
 
         // DELETE <PaymentController>/5
         [ApiVersion("1.0")]
-        [Route("{id}")]
+        [Route("{id}"), AllowAnonymous]
         [HttpDelete]
         [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
         public async Task DeletePayment(int id)

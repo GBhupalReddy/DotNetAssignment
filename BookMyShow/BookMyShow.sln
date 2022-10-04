@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32819.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookMyShow", "BookMyShow\BookMyShow.csproj", "{B82D145A-ED66-4CA0-B564-64350B6915A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookMyShow", "BookMyShow\BookMyShow.csproj", "{B82D145A-ED66-4CA0-B564-64350B6915A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookMyShow.Core", "BookMyShow.Core\BookMyShow.Core.csproj", "{0EAFF33B-87C1-4CEB-9FD2-3721F5BBDC80}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookMyShow.Core", "BookMyShow.Core\BookMyShow.Core.csproj", "{0EAFF33B-87C1-4CEB-9FD2-3721F5BBDC80}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookMyShow.Infrastructure", "BookMyShow.Infrastructure\BookMyShow.Infrastructure.csproj", "{0AAB9A1A-10F2-4154-9C0B-E9CA578ADEC9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookMyShow.Infrastructure", "BookMyShow.Infrastructure\BookMyShow.Infrastructure.csproj", "{0AAB9A1A-10F2-4154-9C0B-E9CA578ADEC9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

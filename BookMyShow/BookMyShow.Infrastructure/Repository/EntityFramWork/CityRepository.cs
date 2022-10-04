@@ -53,7 +53,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         // Update city using id
         public async Task<City> UpdateCityAsynce( City city)
         {
-          
+            _bookMyShowContext.Cities.Update(city);
             await _bookMyShowContext.SaveChangesAsync();
             return city;
 
@@ -65,11 +65,12 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
             _bookMyShowContext.Cities.Remove(city);
             await _bookMyShowContext.SaveChangesAsync();
         }
-        public async Task<IEnumerable<MovieDto>> GetMovieInCity(string cityName)
+        public async Task<IEnumerable<MovieDto>> GetMovieInCity(string cityName, string? language = null, string? genre = null)
         {
             
-            var cityMovieQuery = "execute GetCityMovie @cityName";
-            var cityMovieresult = await _dbConnection.QueryAsync<MovieDto>(cityMovieQuery,new {cityName});
+            var cityMovieQuery = "execute GetCityMovie @cityName , @language, @genre";
+
+            var cityMovieresult = await _dbConnection.QueryAsync<MovieDto>(cityMovieQuery,new {cityName, language , genre });
 
             return cityMovieresult;
 

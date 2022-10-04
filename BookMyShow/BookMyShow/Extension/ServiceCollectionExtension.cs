@@ -4,10 +4,15 @@ using BookMyShow.Infrastructure.Configuration;
 using BookMyShow.Infrastructure.Data;
 using BookMyShow.Infrastructure.Repository.EntityFramWork;
 using BookMyShow.Infrastructure.Service;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 using System.Data;
+using System.Text;
 
 namespace BookMyShow.Extension
 {
@@ -15,6 +20,39 @@ namespace BookMyShow.Extension
     {
         public static void RegisterSystemServices(this IServiceCollection service, IConfiguration configuration)
         {
+            #region Authentication 
+            service.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.RequireHttpsMetadata = false;
+                    options.SaveToken = false;
+                    options.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = configuration["Jwt:Issuer"],
+                        ValidAudience = configuration["Jwt:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"])),
+                        ClockSkew = TimeSpan.FromHours(2)
+                    };
+                });
+            #endregion
+
+            #region Swagger
+
+            service.AddSwaggerGen(option =>
+            {
+                option.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+                {
+                    Type = SecuritySchemeType.ApiKey,
+                    In = ParameterLocation.Header,
+                    Name = "Authorization",
+                    Description = "Jwt Authentication"
+                });
+                option.OperationFilter<SecurityRequirementsOperationFilter>();
+            });
+            #endregion
             service.AddDbContext<BookMyShowContext>(data =>
             {
                 data.UseSqlServer(configuration.GetConnectionString("BookMyShowConnection"));
@@ -28,12 +66,16 @@ namespace BookMyShow.Extension
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
             service.AddEndpointsApiExplorer();
+            service.AddCors();
+
+            service.AddHttpClient();
+
             service.AddVersionedApiExplorer(setup =>
             {
                 setup.GroupNameFormat = "'v'VVV";
                 setup.SubstituteApiVersionInUrl = true;
             });
-            service.AddSwaggerGen();
+
             service.ConfigureOptions<ConfigureSwaggerOptions>();
 
             service.AddApiVersioning(options =>
@@ -43,7 +85,15 @@ namespace BookMyShow.Extension
                 options.ReportApiVersions = true;
             });
 
+            service.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
+
         }
+        
         public static void RegisterApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
             //Repository
@@ -74,6 +124,7 @@ namespace BookMyShow.Extension
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<ISeatTypePriceService, SeatTypePriceService>();
             services.AddTransient<IExceptionService, ExceptionService>();   
+            services.AddTransient<IAuthService, AuthService>();
             
         }
     }

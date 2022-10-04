@@ -1,7 +1,6 @@
 ﻿using BookMyShow.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using static Dapper.SqlMapper;
 
 namespace BookMyShow.Infrastructure.EntityConfiguration
 {

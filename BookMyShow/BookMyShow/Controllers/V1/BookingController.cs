@@ -4,13 +4,16 @@ using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
 using BookMyShow.Infrastructure.Specs;
 using BookMyShow.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace BookMyShow.Controllers.V1
 {
     [ApiVersion("1.0")]
+    [Authorize]
     [Route("booking")]
     [ApiConventionType(typeof(DefaultApiConventions))]
     public class BookingController : ApiControllerBase
@@ -31,8 +34,9 @@ namespace BookMyShow.Controllers.V1
 
         // GET: <BookingController>
         [MapToApiVersion("1.0")]
-        [Route("")]
+        [Route(""), AllowAnonymous]
         [HttpGet]
+        
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult<IEnumerable<BookingDto>>> GetBookings()
         {
@@ -43,10 +47,10 @@ namespace BookMyShow.Controllers.V1
 
         // GET <BookingController>
         [MapToApiVersion("1.0")]
-        [Route("{id}")]
+        [Route("{id}"), AllowAnonymous]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult> GetBookinfById(int id)
+        public async Task<ActionResult<BookingDto>> GetBookinfById(int id)
         {
             if (id <= 0)
             {
@@ -66,12 +70,12 @@ namespace BookMyShow.Controllers.V1
 
         // POST <BookingController>
         [MapToApiVersion("1.0")]
-        [Route("")]
+        [Route(""), AllowAnonymous]
         [HttpPost]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
-        public async Task<ActionResult<Booking>> Post([FromBody] BookingUserVm bokkingUserVm)
+        public async Task<ActionResult<BookingDto>> Post([FromBody] BookingUserVm bookingUserVm)
         {
-            var bookingUser = _mapper.Map<BookingUserVm, BookingUser>(bokkingUserVm);
+            var bookingUser = _mapper.Map<BookingUserVm, BookingUser>(bookingUserVm);
             var booking = await _bookingService.CreateBookingAsync(bookingUser);
             var result = _mapper.Map<Booking, BookingDto>(booking);
             if (result is null)
@@ -82,10 +86,10 @@ namespace BookMyShow.Controllers.V1
 
         // PUT <BookingController>
         [MapToApiVersion("1.0")]
-        [Route("{id}")]
+        [Route("{id}"), AllowAnonymous]
         [HttpPut]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
-        public async Task<ActionResult> PutBooking(int id, [FromBody] BookingVm bookingVm)
+        public async Task<ActionResult<BookingDto>> PutBooking(int id, [FromBody] BookingVm bookingVm)
         {
             if (id <= 0)
             {
@@ -105,7 +109,7 @@ namespace BookMyShow.Controllers.V1
 
         // DELETE <BookingController>
         [MapToApiVersion("1.0")]
-        [Route("{id}")]
+        [Route("{id}"), AllowAnonymous]
         [HttpDelete]
         [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
         public async Task DeleteBooking(int id)

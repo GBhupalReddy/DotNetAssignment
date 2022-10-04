@@ -1,6 +1,7 @@
 ﻿using BookMyShow.Middleware;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Serilog;
+using System.Text;
 
 namespace BookMyShow.Extension
 {
@@ -23,14 +24,27 @@ namespace BookMyShow.Extension
                     }
                 });
             }
+
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
+
+
             //Register Exception handler Middleware
+            app.UseCors("MyPolicy");
             app.UseMiddleware<ExceptionMiddleware>();
             app.UseHttpsRedirection();
             app.UseSerilogRequestLogging();
 
+            app.UseAuthentication();
+
             app.UseAuthorization();
+
 
             app.MapControllers();
         }
+        
     }
 }

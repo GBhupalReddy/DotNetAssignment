@@ -11,7 +11,7 @@ namespace BookMyShow.Core.Contracts.Infrastructure.Repository
         Task<IEnumerable<CinemaDto>> GetCinemaInCityAsync(string cityName);
         Task<IEnumerable<CityDto>> GetCitysAsync();
         Task<City> UpdateCityAsynce( City city);
-        Task<IEnumerable<MovieDto>> GetMovieInCity(string cityName);
+        Task<IEnumerable<MovieDto>> GetMovieInCity(string cityName,string? laguage = null, string? genre = null);
         Task<IEnumerable<MovieDetailes>> GetCityCinemaMovieAsync(string cityName, string? cinemaName = null);
     }
 }

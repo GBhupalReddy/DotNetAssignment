@@ -73,6 +73,11 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
             var UserExit = await _dbConnection.QueryFirstOrDefaultAsync<User>(UserExitQuery, new { email });
             return UserExit;
         }
-
+        public async Task<bool> CreateUserAsync(User user)
+        {
+            _bookMyShowContext.Users.Add(user);
+            await _bookMyShowContext.SaveChangesAsync();
+            return true;    
+        }
     }
 }

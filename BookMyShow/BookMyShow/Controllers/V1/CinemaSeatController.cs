@@ -4,6 +4,7 @@ using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
 using BookMyShow.Infrastructure.Specs;
 using BookMyShow.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookMyShow.Controllers.V1
 {
     [ApiVersion("1.0")]
+    [Authorize]
     [Route("cinemaseat")]
     [ApiConventionType(typeof(DefaultApiConventions))]
     public class CinemaSeatController : ApiControllerBase
@@ -31,7 +33,7 @@ namespace BookMyShow.Controllers.V1
 
         // GET: <ValuesController>
         [ApiVersion("1.0")]
-        [Route("")]
+        [Route(""), AllowAnonymous]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult<IEnumerable<CinemaSeatDto>>> GetCinemaSeats()
@@ -43,10 +45,10 @@ namespace BookMyShow.Controllers.V1
 
         // GET <ValuesController>/5
         [ApiVersion("1.0")]
-        [Route("{id}")]
+        [Route("{id}"), AllowAnonymous]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult> GetCinemaSeat(int id)
+        public async Task<ActionResult<CinemaSeatDto>> GetCinemaSeat(int id)
         {
             if (id <= 0)
             {
@@ -67,8 +69,9 @@ namespace BookMyShow.Controllers.V1
         [ApiVersion("1.0")]
         [Route("")]
         [HttpPost]
+        [Authorize(Roles = "admin")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
-        public async Task<ActionResult> PostCinemaSeat([FromBody] CinemaSeatVm cinemaSeatVm)
+        public async Task<ActionResult<CinemaSeatDto>> PostCinemaSeat([FromBody] CinemaSeatVm cinemaSeatVm)
         {
             _logger.LogInformation("add new CinemaSeat");
             var cinemaSeat = _mapper.Map<CinemaSeatVm, CinemaSeat>(cinemaSeatVm);
@@ -81,8 +84,9 @@ namespace BookMyShow.Controllers.V1
         [ApiVersion("1.0")]
         [Route("{id}")]
         [HttpPut]
+        [Authorize(Roles = "admin")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
-        public async Task<ActionResult> PutCinemaSeat(int id, [FromBody] CinemaSeatVm cinemaSeatVm)
+        public async Task<ActionResult<CinemaSeatDto>> PutCinemaSeat(int id, [FromBody] CinemaSeatVm cinemaSeatVm)
         {
             if (id <= 0)
             {
@@ -104,6 +108,7 @@ namespace BookMyShow.Controllers.V1
         [ApiVersion("1.0")]
         [Route("{id}")]
         [HttpDelete]
+        [Authorize(Roles = "admin")]
         [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
         public async Task DeleteCinemaSeat(int id)
         {

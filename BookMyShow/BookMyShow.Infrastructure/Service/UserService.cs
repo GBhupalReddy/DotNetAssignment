@@ -2,7 +2,7 @@
 using BookMyShow.Core.Contracts.Infrastructure.Service;
 using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
-using BookMyShow.Core.Exceptions;
+
 
 namespace BookMyShow.Infrastructure.Service
 {
@@ -32,6 +32,7 @@ namespace BookMyShow.Infrastructure.Service
         // Add user
         public async Task<User> AddUserAsync(User user)
         {
+
             var userResult = await _userRepository.AddUserAsync(user);
             return userResult;
         }
@@ -61,18 +62,24 @@ namespace BookMyShow.Infrastructure.Service
             return result;
         }
 
-        public async Task UserExitByEmail(string email)
+        public async Task<User> UserExitByEmail(string email)
         {
             var userExit = await _userRepository.UserExitByEmail(email);
-            if(userExit != null)
-            {
-                throw email switch
-                {
-
-                    _ => new DuplicateException("User exits ", new Exception($"User already existed with this  {email} mail"))
-                };
-            }
+           
+            return userExit;
           
+        }
+
+        public async Task<bool> CreateUserAsync(User user)
+        {
+            var userResult = await _userRepository.CreateUserAsync(user);
+            return userResult;  
+        }
+        public async Task<bool> Login(string email, string password)
+        {
+            var user = await _userRepository.UserExitByEmail(email);
+
+            return true;
         }
     }
 }

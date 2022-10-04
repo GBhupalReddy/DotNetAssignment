@@ -4,6 +4,7 @@ using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
 using BookMyShow.Infrastructure.Specs;
 using BookMyShow.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookMyShow.Controllers.V1
 {
     [ApiVersion("1.0")]
+    [Authorize]
     [Route("city")]
     [ApiConventionType(typeof(DefaultApiConventions))]
     public class CityController : ApiControllerBase
@@ -30,7 +32,7 @@ namespace BookMyShow.Controllers.V1
 
         // GET: <CityController>
         [ApiVersion("1.0")]
-        [Route("")]
+        [Route(""), AllowAnonymous]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult<IEnumerable<CityDto>>> GetCities()
@@ -42,9 +44,9 @@ namespace BookMyShow.Controllers.V1
 
         //GET<CityController>/
         [ApiVersion("1.0")]
-        [HttpGet("{id}")]
+        [HttpGet("{id}"), AllowAnonymous]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult> GetCity(int id)
+        public async Task<ActionResult<CityDto>> GetCity(int id)
         {
             if (id <= 0)
             {
@@ -63,8 +65,9 @@ namespace BookMyShow.Controllers.V1
         [ApiVersion("1.0")]
         [Route("")]
         [HttpPost]
+        [Authorize(Roles = "admin")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
-        public async Task<ActionResult> PostCity([FromBody] CityVm cityVm)
+        public async Task<ActionResult<CityDto>> PostCity([FromBody] CityVm cityVm)
         {
             _logger.LogInformation("add new City");
             var city = _mapper.Map<CityVm, City>(cityVm);
@@ -78,8 +81,9 @@ namespace BookMyShow.Controllers.V1
         [ApiVersion("1.0")]
         [Route("{id}")]
         [HttpPut]
+        [Authorize(Roles = "admin")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
-        public async Task<ActionResult> PutCity(int id, [FromBody] CityVm cityVm)
+        public async Task<ActionResult<CityDto>> PutCity(int id, [FromBody] CityVm cityVm)
         {
             if (id <= 0)
             {
@@ -102,6 +106,7 @@ namespace BookMyShow.Controllers.V1
         [ApiVersion("1.0")]
         [Route("{id}")]
         [HttpDelete]
+        [Authorize(Roles = "admin")]
         [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
         public async Task DeleteCity(int id)
         {
@@ -114,10 +119,10 @@ namespace BookMyShow.Controllers.V1
             await _cityService.DeleteCityAsync(id);
         }
         [ApiVersion("1.0")]
-        [Route("cinema/{cityName}")]
+        [Route("cinema/{cityName}"), AllowAnonymous]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult> GetCinemaInCity(string cityName)
+        public async Task<ActionResult<IEnumerable<CinemaDto>>> GetCinemaInCity(string cityName)
         {
 
             var result = await _cityService.GetCinemaInCityAsync(cityName);
@@ -131,12 +136,12 @@ namespace BookMyShow.Controllers.V1
 
 
         [ApiVersion("1.0")]
-        [Route("movies/{cityName}")]
+        [Route("movies/{cityName}"), AllowAnonymous]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult> GetMovieInCity(string cityName)
+        public async Task<ActionResult<IEnumerable<MovieDto>>> GetMovieInCity(string cityName,string? language = null,string? genre = null)
         {
-            var result = await _cityService.GetMovieInCity(cityName);
+            var result = await _cityService.GetMovieInCity(cityName, language, genre);
             if (!result.Any())
             {
                 return NotFound("data not found");
@@ -146,10 +151,10 @@ namespace BookMyShow.Controllers.V1
         }
 
         [ApiVersion("1.0")]
-        [Route("movie-{cityName}")]
+        [Route("movie-{cityName}"), AllowAnonymous]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult> GetCityCinemaMovie(string cityName, string? cinemaName = null)
+        public async Task<ActionResult<IEnumerable<MovieDetailes>>> GetCityCinemaMovie(string cityName, string? cinemaName = null)
         {
             var result = await _cityService.GetCityCinemaMovieAsync(cityName, cinemaName);
             if(!result.Any())

@@ -5,6 +5,7 @@ using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
 using BookMyShow.Infrastructure.Specs;
 using BookMyShow.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -12,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookMyShow.Controllers.V1
 {
     [ApiVersion("1.0")]
+    [Authorize]
     [Route("cinema")]
     [ApiConventionType(typeof(DefaultApiConventions))]
     public class CinemaController : ApiControllerBase
@@ -31,7 +33,7 @@ namespace BookMyShow.Controllers.V1
         // GET: <CinemaController>
         [ApiVersion("1.0")]
 
-        [Route("")]
+        [Route(""), AllowAnonymous]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult<IEnumerable<CinemaDto>>> GetCinemas()
@@ -43,10 +45,10 @@ namespace BookMyShow.Controllers.V1
 
         // GET <CinemaController>/
         [ApiVersion("1.0")]
-        [Route("{id}")]
+        [Route("{id}"), AllowAnonymous]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult> GetCinema(int id)
+        public async Task<ActionResult<CinemaDto>> GetCinema(int id)
         {
             if (id <= 0)
             {
@@ -65,8 +67,9 @@ namespace BookMyShow.Controllers.V1
         [ApiVersion("1.0")]
         [Route("")]
         [HttpPost]
+        [Authorize(Roles = "admin")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
-        public async Task<ActionResult> PostCinema([FromBody] CinemaVm cinemaVm)
+        public async Task<ActionResult<CinemaDto>> PostCinema([FromBody] CinemaVm cinemaVm)
         {
             _logger.LogInformation("add new Cinema");
             var cinema = _mapper.Map<CinemaVm, Cinema>(cinemaVm);
@@ -79,8 +82,9 @@ namespace BookMyShow.Controllers.V1
         [ApiVersion("1.0")]
         [Route("{id}")]
         [HttpPut]
+        [Authorize(Roles = "admin")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
-        public async Task<ActionResult> PutCinema(int id, [FromBody] CinemaVm cinemaVm)
+        public async Task<ActionResult<CinemaDto>> PutCinema(int id, [FromBody] CinemaVm cinemaVm)
         {
             if (id <= 0)
             {
@@ -102,6 +106,7 @@ namespace BookMyShow.Controllers.V1
         [ApiVersion("1.0")]
         [Route("{id}")]
         [HttpDelete]
+        [Authorize(Roles = "admin")]
         [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
         public async Task DeleteCinema(int id)
         {
