@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookMyShow.Core", "BookMySh
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookMyShow.Infrastructure", "BookMyShow.Infrastructure\BookMyShow.Infrastructure.csproj", "{0AAB9A1A-10F2-4154-9C0B-E9CA578ADEC9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookMyShow.UnitTest", "BookMyShow.UnitTest\BookMyShow.UnitTest.csproj", "{6ED3E555-3BFF-46C6-AF7D-B233DB37BF7D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{0AAB9A1A-10F2-4154-9C0B-E9CA578ADEC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0AAB9A1A-10F2-4154-9C0B-E9CA578ADEC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0AAB9A1A-10F2-4154-9C0B-E9CA578ADEC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6ED3E555-3BFF-46C6-AF7D-B233DB37BF7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6ED3E555-3BFF-46C6-AF7D-B233DB37BF7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6ED3E555-3BFF-46C6-AF7D-B233DB37BF7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6ED3E555-3BFF-46C6-AF7D-B233DB37BF7D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

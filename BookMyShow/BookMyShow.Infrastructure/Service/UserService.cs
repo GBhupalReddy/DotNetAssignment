@@ -2,7 +2,7 @@
 using BookMyShow.Core.Contracts.Infrastructure.Service;
 using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
-
+using System.Text.Json;
 
 namespace BookMyShow.Infrastructure.Service
 {
@@ -30,11 +30,21 @@ namespace BookMyShow.Infrastructure.Service
         }
 
         // Add user
-        public async Task<User> AddUserAsync(User user)
+        public async Task<string> AddUserAsync(User user)
         {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("https://localhost:7281/");
+                var content = new StringContent(JsonSerializer.Serialize(user), System.Text.Encoding.UTF8, "application/json");
+                var result = await client.PostAsync("/auth/register", content);
+                //if(!result.IsSuccessStatusCode)
 
-            var userResult = await _userRepository.AddUserAsync(user);
-            return userResult;
+                string resultContent = await result.Content.ReadAsStringAsync();
+                return resultContent;
+            }
+
+            //var userResult = await _userRepository.AddUserAsync(user);
+            //return userResult;
         }
 
         //Update user using id

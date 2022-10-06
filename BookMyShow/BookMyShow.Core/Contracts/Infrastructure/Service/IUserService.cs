@@ -5,7 +5,7 @@ namespace BookMyShow.Core.Contracts.Infrastructure.Service
 {
     public interface IUserService
     {
-        Task<User> AddUserAsync(User user);
+        Task<string> AddUserAsync(User user);
         Task DeleteUserAsync(int id);
         Task<User> GetUserByIdAsync(int id);
         Task<IEnumerable<UserDto>> GetUsersAsync();

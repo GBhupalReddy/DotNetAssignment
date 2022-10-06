@@ -33,7 +33,7 @@ namespace BookMyShow.Controllers.V1
 
         // GET: <PaymentController>
         [ApiVersion("1.0")]
-        [Route(""), AllowAnonymous]
+        [Route("")]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult<IEnumerable<PaymentDto>>> GetPayments()
@@ -45,7 +45,7 @@ namespace BookMyShow.Controllers.V1
 
         // GET <PaymentController>/5
         [ApiVersion("1.0")]
-        [Route("{id}"), AllowAnonymous]
+        [Route("{id}")]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult<PaymentDto>> GetPayment(int id)
@@ -65,7 +65,7 @@ namespace BookMyShow.Controllers.V1
 
         // POST <PaymentController>
         [ApiVersion("1.0")]
-        [Route(""), AllowAnonymous]
+        [Route("")]
         [HttpPost]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
         public async Task<ActionResult<PaymentDto>> PostPayment([FromBody] PaymentVm paymentVm)
@@ -84,7 +84,7 @@ namespace BookMyShow.Controllers.V1
 
         // PUT <PaymentController>/5
         [ApiVersion("1.0")]
-        [Route("{id}"), AllowAnonymous]
+        [Route("{id}")]
         [HttpPut]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
         public async Task<ActionResult<PaymentDto>> PutPayment(int id, [FromBody] PaymentVm paymentVm)
@@ -105,7 +105,7 @@ namespace BookMyShow.Controllers.V1
 
         // DELETE <PaymentController>/5
         [ApiVersion("1.0")]
-        [Route("{id}"), AllowAnonymous]
+        [Route("{id}")]
         [HttpDelete]
         [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
         public async Task DeletePayment(int id)

@@ -34,7 +34,7 @@ namespace BookMyShow.Controllers.V1
 
         // GET: <BookingController>
         [MapToApiVersion("1.0")]
-        [Route(""), AllowAnonymous]
+        [Route("")]
         [HttpGet]
         
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
@@ -47,7 +47,7 @@ namespace BookMyShow.Controllers.V1
 
         // GET <BookingController>
         [MapToApiVersion("1.0")]
-        [Route("{id}"), AllowAnonymous]
+        [Route("{id}")]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult<BookingDto>> GetBookinfById(int id)
@@ -86,7 +86,7 @@ namespace BookMyShow.Controllers.V1
 
         // PUT <BookingController>
         [MapToApiVersion("1.0")]
-        [Route("{id}"), AllowAnonymous]
+        [Route("{id}")]
         [HttpPut]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
         public async Task<ActionResult<BookingDto>> PutBooking(int id, [FromBody] BookingVm bookingVm)
@@ -109,7 +109,7 @@ namespace BookMyShow.Controllers.V1
 
         // DELETE <BookingController>
         [MapToApiVersion("1.0")]
-        [Route("{id}"), AllowAnonymous]
+        [Route("{id}")]
         [HttpDelete]
         [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
         public async Task DeleteBooking(int id)

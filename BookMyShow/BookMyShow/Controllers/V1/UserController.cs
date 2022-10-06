@@ -35,7 +35,7 @@ namespace BookMyShow.Controllers.V1
 
         // GET: 
         [ApiVersion("1.0")]
-        [Route(""), AllowAnonymous]
+        [Route("")]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult<IEnumerable<UserDto>>> Get()
@@ -47,7 +47,7 @@ namespace BookMyShow.Controllers.V1
 
         // GET 
         [ApiVersion("1.0")]
-        [Route("{id}"), AllowAnonymous]
+        [Route("{id}")]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
 
@@ -114,7 +114,7 @@ namespace BookMyShow.Controllers.V1
 
         // PUT 
         [ApiVersion("1.0")]
-        [Route("{id}"), AllowAnonymous]
+        [Route("{id}")]
         [HttpPut]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
         public async Task<ActionResult<UserDto>> Put(int id, [FromBody] UserVm userVm)
@@ -134,7 +134,7 @@ namespace BookMyShow.Controllers.V1
 
         // DELETE <UserController>/5
         [ApiVersion("1.0")]
-        [Route("{id}"), AllowAnonymous]
+        [Route("{id}")]
         [HttpDelete]
         [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
         public async Task Delete(int id)
@@ -151,7 +151,7 @@ namespace BookMyShow.Controllers.V1
         // GET UserBokingDetails
 
         [ApiVersion("1.0")]
-        [Route("userbokingdetails/{id}"), AllowAnonymous]
+        [Route("userbokingdetails/{id}")]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
 
