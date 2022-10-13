@@ -127,12 +127,21 @@ namespace BookMyShow.Controllers.V1
         [Route("movies-{cityName}"), AllowAnonymous]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult<IEnumerable<MovieDetailes>>> GetCityMovies(string cityName, string? language = null, string? genres = null, string? movieName = null)
+        public async Task<ActionResult<IEnumerable<MovieDetailes>>> GetCityMovies(string cityName, string? date = null, string? movieName = null)
         {
-            _logger.LogInformation($"Get list of{cityName} {language}{genres} {movieName} ");
-            var result = await _movieService.GetMovieLanguageGenreAsync(cityName, language, genres, movieName);
+            _logger.LogInformation($"Get list of{cityName} {date} {movieName} ");
+            var result = await _movieService.GetMovieLanguageGenreAsync(cityName, date, movieName);
             if (!result.Any())
                 return NotFound("Please Enter Valid Data");
+            return Ok(result);
+        }
+        [ApiVersion("1.0")]
+        [Route("seatstatus"), AllowAnonymous]
+        [HttpGet]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        public async Task<ActionResult<IEnumerable<SeatStatus>>> GetSeatStatus(int showId)
+        {
+            var result = await _movieService.GetSeatstatus(showId);
             return Ok(result);
         }
     }

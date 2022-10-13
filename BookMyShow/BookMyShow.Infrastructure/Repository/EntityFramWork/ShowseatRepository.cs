@@ -63,5 +63,19 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
             _bookMyShowContext.ShowSeats.Remove(showSeat);
             await _bookMyShowContext.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<ShowSeat>> GetShowSeatsByBookinId(int bookingid)
+        {
+            var query = "select * from ShowSeat where BookingId =@bookingid";
+            var showSeats = await _dbConnection.QueryAsync<ShowSeat>(query, new { bookingid });
+            return showSeats;
+        }
+
+        public async Task<IEnumerable<ShowSeat>> GetShowSeatsByShowId(int showId)
+        {
+            var query = "select * from ShowSeat where ShowId =@showId and Status = 1";
+            var showSeats = await _dbConnection.QueryAsync<ShowSeat>(query, new { showId });
+            return showSeats;
+        }
     }
 }

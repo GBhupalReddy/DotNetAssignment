@@ -37,6 +37,7 @@ namespace BookMyShow.Controllers.V1
         [ApiVersion("1.0")]
         [Route("")]
         [HttpGet]
+        [Authorize(Roles = "admin")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult<IEnumerable<UserDto>>> Get()
         {

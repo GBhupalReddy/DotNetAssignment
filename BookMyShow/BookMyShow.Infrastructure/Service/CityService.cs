@@ -60,10 +60,22 @@ namespace BookMyShow.Infrastructure.Service
             await _cityRepository.DeleteCityAsync(city);
         }
 
-        public async Task<IEnumerable<MovieDto>> GetMovieInCity(string cityName, string? language = null, string? genre = null)
+        public async Task<IEnumerable<movieVDto>> GetMovieInCity(string cityName, string? language = null, string? genre = null)
         {
             var cityMovie = await _cityRepository.GetMovieInCity(cityName,language, genre);
-            return cityMovie;
+            var moviedata = from movie in cityMovie
+                            select new movieVDto()
+                            {
+                               Tittle=movie.Tittle,
+                               Description=movie.Description,
+                               Language=movie.Language,
+                               Genre=movie.Genre,
+                               ImgPath=movie.ImgPath,
+                               Country=movie.Country,
+                               Duration=movie.Duration,
+                               ReleaseDate=movie.ReleaseDate.ToString("yyyy-MM-dd"),
+                            };
+            return moviedata;
         }
         public async Task<IEnumerable<MovieDetailes>> GetCityCinemaMovieAsync(string cityName, string? cinemaName = null)
         {

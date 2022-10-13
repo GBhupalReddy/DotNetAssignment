@@ -14,5 +14,6 @@ namespace BookMyShow.Core.Contracts.Infrastructure.Repository
         Task<Show> GetUpdateShow(int bookingId);
         Task DeleteShowSeatAsync(int bookingId);
         Task<Payment> GetPaymentByBookinId(int bookingId);
+        Task<IEnumerable<CinemaSeat>> GetCinemaSeatAsync(int hallId, int seatType);
     }
 }

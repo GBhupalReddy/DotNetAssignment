@@ -98,6 +98,13 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
 
             return Price;
         }
+
+        public async Task<Show> GetAvailableSeats(int showid)
+        {
+            var Query = "select * from Show where ShowId = @showId ";
+            var showresult = await _dbConnection.QueryFirstOrDefaultAsync<Show>(Query, new {showid});
+            return showresult;
+        }
         
     }
 }

@@ -33,8 +33,9 @@ namespace BookMyShow.Controllers.V1
 
         // GET: <ValuesController>
         [ApiVersion("1.0")]
-        [Route(""), AllowAnonymous]
+        [Route("")]
         [HttpGet]
+        [Authorize(Roles = "admin")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult<IEnumerable<CinemaSeatDto>>> GetCinemaSeats()
         {
@@ -45,8 +46,9 @@ namespace BookMyShow.Controllers.V1
 
         // GET <ValuesController>/5
         [ApiVersion("1.0")]
-        [Route("{id}"), AllowAnonymous]
+        [Route("{id}")]
         [HttpGet]
+        [Authorize(Roles = "admin")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult<CinemaSeatDto>> GetCinemaSeat(int id)
         {

@@ -3,7 +3,6 @@ using BookMyShow.Core.Contracts.Infrastructure.Repository;
 using BookMyShow.Core.Contracts.Infrastructure.Service;
 using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
-using BookMyShow.Core.Exceptions;
 
 namespace BookMyShow.Infrastructure.Service
 {
@@ -11,13 +10,11 @@ namespace BookMyShow.Infrastructure.Service
     {
         private readonly IBookingRepository _bookingRepository;
         private readonly IMapper _mapper;
-        private readonly IShowSeatRepository _showSeatRepository;
 
-        public BookingService( IBookingRepository bookingRepository, IMapper mapper, IShowSeatRepository showSeatRepository)
+        public BookingService( IBookingRepository bookingRepository, IMapper mapper)
         {
             _bookingRepository = bookingRepository;
             _mapper = mapper;
-            _showSeatRepository = showSeatRepository;
         }
 
         // Get All Bookings
@@ -36,8 +33,11 @@ namespace BookMyShow.Infrastructure.Service
         }
 
         // Add booking
-        public async Task<Booking> AddBookingAsync(Booking booking)
+        public async Task<Booking> AddBookingAsync(BookingUser bookingUser)
         {
+            var booking = _mapper.Map<BookingUser, Booking>(bookingUser);
+            booking.Timestamp = DateTime.Now;
+            booking.Status = 0;
             var reusult = await _bookingRepository.AddBookingAsync(booking);
             return reusult;
         }
@@ -68,82 +68,36 @@ namespace BookMyShow.Infrastructure.Service
 
         public async Task<Booking> CreateBookingAsync(BookingUser bookingUser)
         {
+            var availableSeats = await _bookingRepository.GetAvailableSeats(bookingUser.ShowId);
+            int availableSeatscount = 0;
+
+            //check seats are available are not
+
+            if (bookingUser.SeatType == 1)
+            {
+                availableSeatscount = availableSeats.Firstclass;
+            }
+            else if (bookingUser.SeatType == 2)
+            {
+                availableSeatscount = availableSeats.SecondClass;
+            }
+            else if (bookingUser.SeatType == 3)
+            {
+                availableSeatscount = availableSeats.ThirdClass;
+            }
+
+            if(availableSeatscount >= bookingUser.NumberOfSeats)
+            {
+              var result =  await AddBookingAsync(bookingUser);
+               
+
+                return result;
+            }
             
-             int seatType = bookingUser.SeatType;
-             var seatNumbers = await _bookingRepository.GetCinemaSeatsAsync(seatType, bookingUser.ShowId);
-             int cinemaHallId = await _bookingRepository.GetcinemaHallIdAsync(bookingUser.ShowId);
-
-             List<int> thirdClass = new List<int> { 1, 2 };
-             List<int> secondClass = new List<int> { 3, 4 };
-             List<int> firstClass = new List<int> { 5, 6 };
-
-             if (seatType == 1)
-             {
-                var price = await _bookingRepository.GetSeatPrice(seatType);
-                 foreach (var ab in seatNumbers)
-                 {
-                         thirdClass.Remove((int)ab);
-                 }
-                 if(thirdClass.Count() >= bookingUser.NumberOfSeats)
-                  {
-                   var result =   await  CreateBookingShowSeatAsync(bookingUser, thirdClass, price, cinemaHallId);
-                    return result;
-                  }
-                 
-             }
-              if (seatType == 2)
-              {
-                var price = await _bookingRepository.GetSeatPrice(seatType);
-                foreach (var ab in seatNumbers)
-                  {
-                  secondClass.Remove((int)ab);
-                  }
-                  if (secondClass.Count() >= bookingUser.NumberOfSeats)
-                  {
-                    var result = await CreateBookingShowSeatAsync(bookingUser, secondClass, price, cinemaHallId);
-                    return result;
-                   }
-               }
-              if (seatType == 3)
-              {
-                var price = await _bookingRepository.GetSeatPrice(seatType);
-                foreach (var ab in seatNumbers)
-                  {
-                      firstClass.Remove((int)ab);
-                  }
-                  if (firstClass.Count() >= bookingUser.NumberOfSeats)
-                  {
-                    var result =  await CreateBookingShowSeatAsync(bookingUser, firstClass, price, cinemaHallId);
-                    return result;
-                   }
-               }
              
             return null;
         }
-        public async Task<Booking> CreateBookingShowSeatAsync(BookingUser bookingUser,List<int> list,decimal price,int cinemaHallId)
-        {
-            var booking = _mapper.Map<BookingUser, Booking>(bookingUser);
-            var data = await AddBookingAsync(booking);
-
-            if (data != null)
-            {
-                for (int i = 0; i < bookingUser.NumberOfSeats; i++)
-                {
-                    var cinemaseaid = await _bookingRepository.GetCinemaSeatIdAsync(list[i], cinemaHallId);
-                    ShowSeat showSeat1 = new()
-                    {
-                        Status = 1,
-                        Price = price,
-                        CinemaSeatId = cinemaseaid,
-                        ShowId = bookingUser.ShowId,
-                        BookingId = data.BookingId,
-                    };
-
-                    await _showSeatRepository.AddShowSeatAsync(showSeat1);
-                }
-            }
-            return booking;
-        }
+      
 
     }
 }

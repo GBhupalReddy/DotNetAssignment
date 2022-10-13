@@ -41,7 +41,9 @@ namespace BookMyShow.Infrastructure.Service
             showToBeUpdated.EndTime = show.EndTime;
             showToBeUpdated.CinemaHallId = show.CinemaHallId;
             showToBeUpdated.MovieId = show.MovieId;
-            showToBeUpdated.AvailableSeats = show.AvailableSeats;
+            showToBeUpdated.Firstclass = show.Firstclass;
+            showToBeUpdated.SecondClass = show.SecondClass;
+            showToBeUpdated.ThirdClass = show.ThirdClass;
 
             var showResult = await _showRepository.UpdateShowAsynce(showToBeUpdated);
             return showResult;

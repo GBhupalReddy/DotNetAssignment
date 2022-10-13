@@ -13,7 +13,8 @@
         public DateTime Timestamp { get; set; }
         public int? Status { get; set; }
         public int? UserId { get; set; }
-        public int? ShowId { get; set; }
+        public int ShowId { get; set; }
+        public int SeatType { get; set; }   
 
         public virtual Show? Show { get; set; }
         public virtual User? User { get; set; }

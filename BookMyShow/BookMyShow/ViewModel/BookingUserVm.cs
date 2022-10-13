@@ -7,9 +7,6 @@ namespace BookMyShow.ViewModel
     {
         [Required]
         public int NumberOfSeats { get; set; }
-        public DateTime Timestamp { get; set; }
-
-        public int Status { get; set; }
 
         [Required]
         public int? UserId { get; set; }

@@ -5,8 +5,6 @@ namespace BookMyShow.ViewModel
     public  class PaymentVm
     {
        
-       [Required]
-        public DateTime TimeStamp { get; set; }
         [Required]
         public int RemoteTransactionId { get; set; }
         [Required]

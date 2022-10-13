@@ -90,5 +90,12 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
             return PaymentByBookinId;
         }
 
+        public async Task<IEnumerable<CinemaSeat>> GetCinemaSeatAsync(int hallId,int seatType)
+        {
+            var Query = " select * from cinemaSeat where SeatType = @seatType and CinemaHallId= @HallId";
+            var result = await _dbConnection.QueryAsync<CinemaSeat>(Query, new { seatType , hallId });
+            return result;
+        }
+
     }
 }

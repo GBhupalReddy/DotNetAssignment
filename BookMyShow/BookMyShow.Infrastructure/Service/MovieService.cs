@@ -2,6 +2,7 @@
 using BookMyShow.Core.Contracts.Infrastructure.Service;
 using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
+using NPOI.SS.Formula.Functions;
 
 namespace BookMyShow.Infrastructure.Service
 {
@@ -62,10 +63,19 @@ namespace BookMyShow.Infrastructure.Service
 
 
 
-        public async Task<IEnumerable<MovieDetailes>> GetMovieLanguageGenreAsync(string cityName, string? language = null, string? genre = null, string? movieName = null)
+        public async Task<IEnumerable<MovieDetailes>> GetMovieLanguageGenreAsync(string cityName, string? date = null, string? movieName = null)
         {
-            var result = await _movieRepository.GetMovieLanguageGenreAsync(cityName, language: language, genre: genre, movieName: movieName);
+            if (date == null)
+                date = DateTime.Now.ToString("yyyy-MM-dd");
+            var result = await _movieRepository.GetMovieLanguageGenreAsync(cityName, date, movieName: movieName);
             return result;
+        }
+
+        public async Task<IEnumerable<SeatStatus>> GetSeatstatus(int showid)
+        {
+            var searStatus = await _movieRepository.GetSeatstatus(showid);
+            return searStatus;
+
         }
     }
 }

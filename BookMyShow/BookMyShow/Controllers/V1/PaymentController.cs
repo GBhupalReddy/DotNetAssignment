@@ -78,6 +78,10 @@ namespace BookMyShow.Controllers.V1
             }
             var payment = _mapper.Map<PaymentVm, Payment>(paymentVm);
             var paymentResult = await _paymentService.AddPaymentAsync(payment);
+            if(paymentResult is null)
+            {
+                return BadRequest("Sorry for late the Tickets are Booked");
+            }
             var result = _mapper.Map<Payment, PaymentDto>(paymentResult);
             return Ok(result);
         }
@@ -86,6 +90,7 @@ namespace BookMyShow.Controllers.V1
         [ApiVersion("1.0")]
         [Route("{id}")]
         [HttpPut]
+        [Authorize(Roles = "admin")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
         public async Task<ActionResult<PaymentDto>> PutPayment(int id, [FromBody] PaymentVm paymentVm)
         {

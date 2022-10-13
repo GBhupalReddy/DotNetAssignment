@@ -36,7 +36,7 @@ namespace BookMyShow.Controllers.V1
         [MapToApiVersion("1.0")]
         [Route("")]
         [HttpGet]
-        
+        [Authorize(Roles = "admin")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult<IEnumerable<BookingDto>>> GetBookings()
         {
@@ -88,6 +88,7 @@ namespace BookMyShow.Controllers.V1
         [MapToApiVersion("1.0")]
         [Route("{id}")]
         [HttpPut]
+        [Authorize(Roles = "admin")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
         public async Task<ActionResult<BookingDto>> PutBooking(int id, [FromBody] BookingVm bookingVm)
         {

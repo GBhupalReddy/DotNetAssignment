@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookMyShow</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://kit.fontawesome.com/85882fcf77.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <header>
+         <div class="logo">
+             <img src="https://m.economictimes.com/thumb/msid-78623207,width-1200,height-900,resizemode-4,imgsize-18418/bookmyshow.jpg" alt="image not found" height="80px">
+         </div>
+         <div class="searchfilter">
+            <input type="text" id="gsearch" name="gsearch"   placeholder="search  for Movie, Eevent, Plays, sports and Activities" size="80">
+        </div>
+  
+        <div class="citylist">
+            <select name="CityFilter"  id="citySelect" onchange="getmovies()">  
+            <option>City Name</option>
+            <option value="Hyderabad" > Hyderabad </option>  
+            <option value="Vijayawada"> Vijayawada </option>
+            <option value="Bangalore"> Bangalore </option>  
+          </select>  
+             
+        </div>
+        <button class="loginbutton">Sign in</i></button>
+        <div class="list-menu" id="menu-icon">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+    </header>
+    <nav>
+        <ul class="Entertainment">
+            <li>Movie</li>
+            <li>Stream</li>
+            <li>Eevnts</li>
+            <li>Plays</li>
+            <li>Sport</li>
+            <li>Activities</li>
+            <li>Buzz</li>            
+        </ul>
+        <ul class="Offer">
+            <li>ListYourShow</li>
+            <li>Corporates</li>
+            <li>Offers</li>
+            <li>Gift&nbsp;Cards</li>
+        </ul>
+    </nav>
+    <main class="Home">
+        <div class="Filter">
+            <h1>Filter</h1>
+            <div class="LanguageHeading">
+                <h2>Languages</h2>
+            </div>
+            <div class="Languages"  id = "Languages" onchange="getmovies()">
+               
+                <select name="LanguagesFilter"  id="LanguagesSelect">  
+                    <option value="">Languages</option>
+                       <option value="Telugu" > Telugu </option>  
+                       <option value="Hindi"> Hindi </option>
+                       <option value="Tamil"> Tamil </option>  
+                       <option value="English"> English </option>
+                       <option value="Malayalam"> Malayalam </option>
+                    </select> 
+
+              
+    
+            </div>
+            <div class="GenresHeading">
+                <h2>Genres</h2>
+            </div>
+            <div class="Genres" id = "Genres" onchange="getmovies()">
+               
+                <select name="GenresFilter"  id="GenresSelect">  
+                    <option value="">Genres</option>
+                       <option value="Drama" > Drama </option>  
+                       <option value="Action"> Action </option>
+                       <option value="Romantic"> Romantic </option>  
+                       <option value="Thriller"> Thriller </option>
+                       <option value="Crime"> Crime </option>
+                       <option value="Comedy"> Comedy </option>
+                    </select> 
+                
+               
+              
+            </div>
+
+        </div>
+        <div class="moviedetails">
+            <div class="movies">
+
+            </div>
+            <div class="HomeMovie">
+           
+            </div>
+      
+        </div>
+        
+    </main>
+    <table class="table" id="tab">
+        <thead class="showheading">
+
+        </thead>
+        <tbody id="showtimeings">
+
+        </tbody>
+
+    </table>
+
+    <table class="oktable" >
+        <thead class="showseat">
+
+        </thead>
+        <tbody id="showseats">
+
+        </tbody>
+
+    </table>
+
+
+    <script src="./script.js"></script>
+   
+   
+</body>
+</html>

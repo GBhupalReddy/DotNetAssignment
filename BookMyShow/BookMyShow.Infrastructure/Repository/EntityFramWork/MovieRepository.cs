@@ -63,13 +63,21 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         
         
         
-        public async Task<IEnumerable<MovieDetailes>> GetMovieLanguageGenreAsync(string cityName,string? language=null,string? genre=null, string? movieName = null)
+        public async Task<IEnumerable<MovieDetailes>> GetMovieLanguageGenreAsync(string cityName,string date, string? movieName = null)
         {
 
            
-            var MovieLanguageGenreQuery = "execute  GetMovieLanguageGenre @cityName, @language, @genre, @movieName";
-            var MovieLanguageGenre = await _dbConnection.QueryAsync<MovieDetailes>(MovieLanguageGenreQuery, new {cityName, language, genre, movieName});
+            var MovieLanguageGenreQuery = "execute  GetMovieLanguageGenre @cityName, @date, @movieName";
+            var MovieLanguageGenre = await _dbConnection.QueryAsync<MovieDetailes>(MovieLanguageGenreQuery, new {cityName, date, movieName});
             return MovieLanguageGenre;
+        }
+
+        public async Task<IEnumerable<SeatStatus>> GetSeatstatus(int showid)
+        {
+            var seatStatusQuery = " execute getSeatfiles @showid";
+            var searStatus = await _dbConnection.QueryAsync<SeatStatus>(seatStatusQuery, new { showid});
+            return searStatus;
+
         }
     }
 }

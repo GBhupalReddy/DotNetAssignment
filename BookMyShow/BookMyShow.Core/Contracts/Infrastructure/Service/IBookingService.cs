@@ -5,7 +5,7 @@ namespace BookMyShow.Core.Contracts.Infrastructure.Service
 {
     public interface IBookingService
     {
-        Task<Booking> AddBookingAsync(Booking user);
+        Task<Booking> AddBookingAsync(BookingUser user);
         Task DeleteBookingAsync(int id);
         Task<IEnumerable<BookingDto>> GetBookingsAsync();
         Task<Booking> GetBookingByIdAsync(int id);
