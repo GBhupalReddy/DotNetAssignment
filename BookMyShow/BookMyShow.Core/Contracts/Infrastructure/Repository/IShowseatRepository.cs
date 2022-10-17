@@ -10,5 +10,7 @@ namespace BookMyShow.Core.Contracts.Infrastructure.Repository
         Task<ShowSeat> GetShowSaetAsync(int id);
         Task<IEnumerable<ShowSeatDto>> GetShowSeatsAsync();
         Task<ShowSeat> UpdateShowSeatAsynce( ShowSeat showSeat);
+        Task<IEnumerable<ShowSeat>> GetShowSeatsByBookinId(int bookingid);
+        Task<IEnumerable<ShowSeat>> GetShowSeatsByShowId(int showId);
     }
 }

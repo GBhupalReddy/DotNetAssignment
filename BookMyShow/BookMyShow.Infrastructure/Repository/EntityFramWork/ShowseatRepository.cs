@@ -23,7 +23,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         // Get all show seat seats
         public async Task<IEnumerable<ShowSeatDto>> GetShowSeatsAsync()
         {
-            var query = "execute GetShowSeats";
+            var query = "select * from ShowSeat";
             var result = await _dbConnection.QueryAsync<ShowSeatDto>(query);
             return result;
 
@@ -32,7 +32,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         //Get show seat using id
         public async Task<ShowSeat> GetShowSaetAsync(int id)
         {
-            var query = "execute GetShowSeatById @id";
+            var query = "select * from ShowSeat where ShowSeatId =  @id";
             var result = (await _dbConnection.QueryFirstOrDefaultAsync<ShowSeat>(query, new { id }));
             return result;
         }
@@ -62,6 +62,20 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         {
             _bookMyShowContext.ShowSeats.Remove(showSeat);
             await _bookMyShowContext.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<ShowSeat>> GetShowSeatsByBookinId(int bookingid)
+        {
+            var query = "select * from ShowSeat where BookingId =@bookingid";
+            var showSeats = await _dbConnection.QueryAsync<ShowSeat>(query, new { bookingid });
+            return showSeats;
+        }
+
+        public async Task<IEnumerable<ShowSeat>> GetShowSeatsByShowId(int showId)
+        {
+            var query = "select * from ShowSeat where ShowId =@showId and Status = 1";
+            var showSeats = await _dbConnection.QueryAsync<ShowSeat>(query, new { showId });
+            return showSeats;
         }
     }
 }

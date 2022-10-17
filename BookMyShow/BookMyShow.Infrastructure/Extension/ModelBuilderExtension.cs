@@ -17,6 +17,7 @@ namespace BookMyShow.Infrastructure.Extension
             modelBuilder.ApplyConfiguration(new ShowEntityTypeConfiguarction());
             modelBuilder.ApplyConfiguration(new ShowSeatEntityTypeConfiguarction());
             modelBuilder.ApplyConfiguration(new UserEntityTypeConfiguarction());
+            modelBuilder.ApplyConfiguration(new SeatTypePriceEntityTypeConfiguarction());
         }
     }
 }

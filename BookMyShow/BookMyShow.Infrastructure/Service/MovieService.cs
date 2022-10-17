@@ -2,6 +2,7 @@
 using BookMyShow.Core.Contracts.Infrastructure.Service;
 using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
+using NPOI.SS.Formula.Functions;
 
 namespace BookMyShow.Infrastructure.Service
 {
@@ -16,7 +17,7 @@ namespace BookMyShow.Infrastructure.Service
         // Get Movies
         public async Task<IEnumerable<MovieDto>> GetMoviesAsync()
         {
-           var movies = await _movieRepository.GetMoviesAsync();
+            var movies = await _movieRepository.GetMoviesAsync();
             return movies;
         }
 
@@ -60,23 +61,21 @@ namespace BookMyShow.Infrastructure.Service
             await _movieRepository.DeleteMovieAsync(movie);
         }
 
-        public async Task<IEnumerable<MovieDetailes>> GetMovieByCityNameAsync(string cityName)
+
+
+        public async Task<IEnumerable<MovieDetailes>> GetMovieLanguageGenreAsync(string cityName, string? date = null, string? movieName = null)
         {
-            var result =await _movieRepository.GetMovieCityAsync(cityName);
+            if (date == null)
+                date = DateTime.Now.ToString("yyyy-MM-dd");
+            var result = await _movieRepository.GetMovieLanguageGenreAsync(cityName, date, movieName: movieName);
             return result;
         }
-        public async Task<IEnumerable<MovieDetailes>> GetMovieCityAsync(string cityName, string movieName)
-        {
-            var result = await _movieRepository.GetMovieCityAsync(cityName, movieName);
-            return result;
 
-        }
-
-        
-        public async Task<IEnumerable<MovieDetailes>> GetMovieLanguageGenreAsync(string cityName, string? language=null, string? genre=null,string? movieName=null)
+        public async Task<IEnumerable<SeatStatus>> GetSeatstatus(int showid)
         {
-            var result = await _movieRepository.GetMovieLanguageGenreAsync(cityName, language: language, genre: genre, movieName: movieName);
-            return result;
+            var searStatus = await _movieRepository.GetSeatstatus(showid);
+            return searStatus;
+
         }
     }
 }

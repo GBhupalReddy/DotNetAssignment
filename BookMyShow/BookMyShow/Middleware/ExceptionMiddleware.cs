@@ -68,12 +68,14 @@ namespace BookMyShow.Middleware
                 case HttpRequestException e:
                     problemDetails.Status = (int)HttpStatusCode.ServiceUnavailable;
                     break;
+              
                 default:
                     // unhandled error 
                     problemDetails.Status = (int)HttpStatusCode.InternalServerError;
                     break;
             }
             var result = JsonSerializer.Serialize(problemDetails);
+            context.Response.StatusCode = (int)problemDetails.Status;
             await response.WriteAsync(result);
         }
     }

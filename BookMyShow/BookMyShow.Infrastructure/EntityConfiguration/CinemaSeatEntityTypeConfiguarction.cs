@@ -16,6 +16,13 @@ namespace BookMyShow.Infrastructure.EntityConfiguration
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__CinemaSea__Cinem__47DBAE45");
 
+
+            builder.HasOne(d => d.SeatTypePrice)
+                .WithMany(p => p.CinemaSeats)
+                .HasForeignKey(d => d.SeatType)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_seatType");
+
         }
     }
 }

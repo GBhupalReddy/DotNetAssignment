@@ -13,7 +13,9 @@
         public TimeSpan? StartTime { get; set; }
         public TimeSpan? EndTime { get; set; }
         public int CinemaHallId { get; set; }
-        public int AvailableSeats { get; set; }
+        public int Firstclass { get; set; }
+        public int SecondClass { get; set; }
+        public int ThirdClass { get; set; }
         public int? MovieId { get; set; }
 
         public virtual CinemaHall CinemaHall { get; set; } = null!;

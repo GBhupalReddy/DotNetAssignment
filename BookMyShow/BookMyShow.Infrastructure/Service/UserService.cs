@@ -2,7 +2,7 @@
 using BookMyShow.Core.Contracts.Infrastructure.Service;
 using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
-using System.Data;
+using System.Text.Json;
 
 namespace BookMyShow.Infrastructure.Service
 {
@@ -30,10 +30,23 @@ namespace BookMyShow.Infrastructure.Service
         }
 
         // Add user
-        public async Task<User> AddUserAsync(User user)
+        public async Task<string> AddUserAsync(User user)
         {
-            var result= await _userRepository.AddUserAsync(user);
-            return result;
+            //using (var client = new HttpClient())
+            //{
+            //    client.BaseAddress = new Uri("https://localhost:7281/");
+            //    var content = new StringContent(JsonSerializer.Serialize(user), System.Text.Encoding.UTF8, "application/json");
+            //    var result = await client.PostAsync("/auth/register", content);
+            //    //if(!result.IsSuccessStatusCode)
+
+            //    string resultContent = await result.Content.ReadAsStringAsync();
+            //    return resultContent;
+            //}
+
+            var userResult = await _userRepository.AddUserAsync(user);
+            if (userResult != null)
+                return "true";
+            return "false";
         }
 
         //Update user using id
@@ -44,8 +57,8 @@ namespace BookMyShow.Infrastructure.Service
             userToBeUpdated.Email = user.Email;
             userToBeUpdated.Password = user.Password;
             userToBeUpdated.Phone = user.Phone;
-            var result = await _userRepository.UpdateUserAsynce(userToBeUpdated);
-            return result;
+            var userResult = await _userRepository.UpdateUserAsynce(userToBeUpdated);
+            return userResult;
 
         }
 
@@ -59,6 +72,26 @@ namespace BookMyShow.Infrastructure.Service
         {
             var result=await _userRepository.GetUserBookingDetalisAsync(id);
             return result;
+        }
+
+        public async Task<User> UserExitByEmail(string email)
+        {
+            var userExit = await _userRepository.UserExitByEmail(email);
+           
+            return userExit;
+          
+        }
+
+        public async Task<bool> CreateUserAsync(User user)
+        {
+            var userResult = await _userRepository.CreateUserAsync(user);
+            return userResult;  
+        }
+        public async Task<bool> Login(string email, string password)
+        {
+            var user = await _userRepository.UserExitByEmail(email);
+
+            return true;
         }
     }
 }

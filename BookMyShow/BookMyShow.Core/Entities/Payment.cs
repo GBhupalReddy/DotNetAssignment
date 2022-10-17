@@ -10,6 +10,6 @@
         public int PeyementMethod { get; set; }
         public int BookingId { get; set; }
 
-        public virtual Booking Booking { get; set; } = null!;
+        public virtual Booking? Booking { get; set; } 
     }
 }

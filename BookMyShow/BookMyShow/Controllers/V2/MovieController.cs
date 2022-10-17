@@ -27,22 +27,11 @@ namespace BookMyShow.Controllers.V2
         }
 
 
-        
-
-        [ApiVersion("2.0")]
-        [Route("{cityName}")]
-        [HttpGet]
-        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult> Getmovies(string cityName, string? language = null, string? genre = null, string? movieName=null)
-        {
-            _logger.LogInformation($"Get list of{cityName} {language}{genre} Movies ");
-            var result = await _movieService.GetMovieLanguageGenreAsync(cityName, language, genre, movieName);
-            if (result is null)
-                return NotFound("Please Enter Valid Data");
-            return Ok(result);
-        }
-
       
-        
+
+
+
+
+
     }
 }

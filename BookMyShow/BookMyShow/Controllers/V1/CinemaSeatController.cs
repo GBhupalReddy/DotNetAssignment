@@ -4,6 +4,7 @@ using BookMyShow.Core.Dto;
 using BookMyShow.Core.Entities;
 using BookMyShow.Infrastructure.Specs;
 using BookMyShow.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -11,18 +12,21 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookMyShow.Controllers.V1
 {
     [ApiVersion("1.0")]
-    [ApiVersion("1.1")]
+    [Authorize]
+    [Route("cinemaseat")]
     [ApiConventionType(typeof(DefaultApiConventions))]
     public class CinemaSeatController : ApiControllerBase
     {
 
         private readonly ICinemaSeatService _cinemaSeatService;
+        private readonly IExceptionService _exceptionService;
         private readonly ILogger<CinemaSeatController> _logger;
         private readonly IMapper _mapper;
-        public CinemaSeatController(ICinemaSeatService cinemaSeatService, ILogger<CinemaSeatController> logger, IMapper mapper)
+        public CinemaSeatController(ICinemaSeatService cinemaSeatService,IExceptionService exceptionService, ILogger<CinemaSeatController> logger, IMapper mapper)
         {
 
             _cinemaSeatService = cinemaSeatService;
+            _exceptionService = exceptionService;   
             _logger = logger;
             _mapper = mapper;
         }
@@ -31,8 +35,9 @@ namespace BookMyShow.Controllers.V1
         [ApiVersion("1.0")]
         [Route("")]
         [HttpGet]
+        [Authorize(Roles = "admin")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult<IEnumerable<CinemaSeatDto>>> Get()
+        public async Task<ActionResult<IEnumerable<CinemaSeatDto>>> GetCinemaSeats()
         {
             _logger.LogInformation("Getting list of all CinemaSeats");
             var result = await _cinemaSeatService.GetCinemaSeatsAsync();
@@ -43,19 +48,22 @@ namespace BookMyShow.Controllers.V1
         [ApiVersion("1.0")]
         [Route("{id}")]
         [HttpGet]
+        [Authorize(Roles = "admin")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult> Get(int id)
+        public async Task<ActionResult<CinemaSeatDto>> GetCinemaSeat(int id)
         {
             if (id <= 0)
             {
-                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
-                return BadRequest("Please Enter Valid Data");
+                _logger.LogWarning("Id field can't be <= zero OR it doesn't match with model's {Id}", id);
+                await _exceptionService.VerifyIdExist(id);
             }
             _logger.LogInformation("Getting Id {id} CinemaSeat", id);
             var cinemaSeat = await _cinemaSeatService.GetCinemaSeatByIdAsync(id);
             var result = _mapper.Map<CinemaSeat, CinemaSeatDto>(cinemaSeat);
             if (result is null)
-                return NotFound("Please Enter Valid Data");
+            {
+                await _exceptionService.VerifyIdExist(id, "Cinema Seat");
+            }
             return Ok(result);
         }
 
@@ -63,8 +71,9 @@ namespace BookMyShow.Controllers.V1
         [ApiVersion("1.0")]
         [Route("")]
         [HttpPost]
+        [Authorize(Roles = "admin")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
-        public async Task<ActionResult> Post([FromBody] CinemaSeatVm cinemaSeatVm)
+        public async Task<ActionResult<CinemaSeatDto>> PostCinemaSeat([FromBody] CinemaSeatVm cinemaSeatVm)
         {
             _logger.LogInformation("add new CinemaSeat");
             var cinemaSeat = _mapper.Map<CinemaSeatVm, CinemaSeat>(cinemaSeatVm);
@@ -77,18 +86,23 @@ namespace BookMyShow.Controllers.V1
         [ApiVersion("1.0")]
         [Route("{id}")]
         [HttpPut]
+        [Authorize(Roles = "admin")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
-        public async Task<ActionResult> Put(int id, [FromBody] CinemaSeatVm cinemaSeatVm)
+        public async Task<ActionResult<CinemaSeatDto>> PutCinemaSeat(int id, [FromBody] CinemaSeatVm cinemaSeatVm)
         {
             if (id <= 0)
             {
-                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
-                return BadRequest("Please Enter Valid Data");
+                _logger.LogWarning("Id field can't be <= zero OR it doesn't match with model's {Id}", id);
+                await _exceptionService.VerifyIdExist(id);
             }
             _logger.LogInformation("Update Id: {id} CinemaSeat", id);
             var cinemaSeat = _mapper.Map<CinemaSeatVm, CinemaSeat>(cinemaSeatVm);
             var cinemaSeatResult = await _cinemaSeatService.UpdateCinemaSeatAsynce(id, cinemaSeat);
-            var result = _mapper.Map<CinemaSeat, CinemaSeatDto>(cinemaSeat);
+            var result = _mapper.Map<CinemaSeat, CinemaSeatDto>(cinemaSeatResult);
+            if(result is null)
+            {
+                await _exceptionService.VerifyIdExist(id,"Cinema Seat");
+            }
             return Ok(result);
         }
 
@@ -96,13 +110,14 @@ namespace BookMyShow.Controllers.V1
         [ApiVersion("1.0")]
         [Route("{id}")]
         [HttpDelete]
+        [Authorize(Roles = "admin")]
         [ApiConventionMethod(typeof(CustomApiConventions), nameof(CustomApiConventions.Delete))]
-        public async Task Delete(int id)
+        public async Task DeleteCinemaSeat(int id)
         {
             if (id <= 0)
             {
-                _logger.LogError(new ArgumentOutOfRangeException(nameof(id)), "Id field can't be <= zero OR it doesn't match with model's {Id}", id);
-                BadRequest("Please Enter Valid Data");
+                _logger.LogWarning("Id field can't be <= zero OR it doesn't match with model's {Id}", id);
+                await _exceptionService.VerifyIdExist(id);
             }
             _logger.LogInformation("Deleted  {id}  CinemaSeat", id);
             await _cinemaSeatService.DeleteCinemaSeatAsync(id);

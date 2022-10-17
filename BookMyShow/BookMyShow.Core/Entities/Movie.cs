@@ -15,6 +15,7 @@
         public DateTime ReleaseDate { get; set; }
         public string Country { get; set; } = null!;
         public string Genre { get; set; } = null!;
+        public string ImgPath { get; set; } = null!;
 
         public virtual ICollection<Show> Shows { get; set; }
     }

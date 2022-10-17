@@ -27,18 +27,18 @@ namespace BookMyShow.Infrastructure.Service
             return city;
 
         }
-        public async Task<IEnumerable<CinemaDto>> GetCinemaCitysync(string cityName)
+        public async Task<IEnumerable<CinemaDto>> GetCinemaInCityAsync(string cityName)
         {
 
-            var city = await _cityRepository.GetCinemaCityAsync(cityName);
-            return city;
+            var cityCinema = await _cityRepository.GetCinemaInCityAsync(cityName);
+            return cityCinema;
         }
 
         // Add city
         public async Task<City> AddCityAsync(City city)
         {
-            var reusult = await _cityRepository.AddCityAsync(city);
-            return reusult;
+            var cityresult = await _cityRepository.AddCityAsync(city);
+            return cityresult;
         }
 
         // Update city using id
@@ -49,8 +49,8 @@ namespace BookMyShow.Infrastructure.Service
             cityToBeUpdated.State = city.State;
             cityToBeUpdated.ZipCode = city.ZipCode;
 
-            var result = await _cityRepository.UpdateCityAsynce(cityToBeUpdated);
-            return result;
+            var cityresult = await _cityRepository.UpdateCityAsynce(cityToBeUpdated);
+            return cityresult;
         }
 
         //Delete city using id
@@ -60,10 +60,22 @@ namespace BookMyShow.Infrastructure.Service
             await _cityRepository.DeleteCityAsync(city);
         }
 
-        public async Task<IEnumerable<MovieDto>> GetCityMovie(string cityName)
+        public async Task<IEnumerable<movieVDto>> GetMovieInCity(string cityName, string? language = null, string? genre = null)
         {
-            var result = await _cityRepository.GetCityMovie(cityName);
-            return result;
+            var cityMovie = await _cityRepository.GetMovieInCity(cityName,language, genre);
+            var moviedata = from movie in cityMovie
+                            select new movieVDto()
+                            {
+                               Tittle=movie.Tittle,
+                               Description=movie.Description,
+                               Language=movie.Language,
+                               Genre=movie.Genre,
+                               ImgPath=movie.ImgPath,
+                               Country=movie.Country,
+                               Duration=movie.Duration,
+                               ReleaseDate=movie.ReleaseDate.ToString("yyyy-MM-dd"),
+                            };
+            return moviedata;
         }
         public async Task<IEnumerable<MovieDetailes>> GetCityCinemaMovieAsync(string cityName, string? cinemaName = null)
         {
