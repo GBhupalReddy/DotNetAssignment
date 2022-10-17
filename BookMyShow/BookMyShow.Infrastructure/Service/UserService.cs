@@ -70,22 +70,22 @@ namespace BookMyShow.Infrastructure.Service
         }
         public async Task<IEnumerable<UserBookingDto>> GetUserBookingDetalisAsync(int id)
         {
-            var result=await _userRepository.GetUserBookingDetalisAsync(id);
+            var result = await _userRepository.GetUserBookingDetalisAsync(id);
             return result;
         }
 
         public async Task<User> UserExitByEmail(string email)
         {
             var userExit = await _userRepository.UserExitByEmail(email);
-           
+
             return userExit;
-          
+
         }
 
         public async Task<bool> CreateUserAsync(User user)
         {
             var userResult = await _userRepository.CreateUserAsync(user);
-            return userResult;  
+            return userResult;
         }
         public async Task<bool> Login(string email, string password)
         {

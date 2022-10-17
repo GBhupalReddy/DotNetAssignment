@@ -23,7 +23,7 @@ namespace BookMyShow.Controllers.V1
         private readonly IAuthService _authService;
         private readonly ILogger<UserController> _logger;
         private readonly IMapper _mapper;
-        public UserController(IUserService userService, IExceptionService exceptionService,IAuthService authService, ILogger<UserController> logger, IMapper mapper)
+        public UserController(IUserService userService, IExceptionService exceptionService, IAuthService authService, ILogger<UserController> logger, IMapper mapper)
         {
             _userService = userService;
             _exceptionService = exceptionService;
@@ -75,19 +75,19 @@ namespace BookMyShow.Controllers.V1
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
         public async Task<ActionResult> Pos([FromBody] UserVm userVm)
         {
-             var userexit =   await _userService.UserExitByEmail(userVm.Email);
-            if(userexit is not null)
+            var userexit = await _userService.UserExitByEmail(userVm.Email);
+            if (userexit is not null)
             {
                 return BadRequest("this mail is already exit please try another mail");
             }
             _logger.LogInformation("add new user");
-      
+
             var user = _mapper.Map<UserVm, User>(userVm);
             var result = _authService.PasswordEncryption(user.Password);
             user.Password = result.password;
             user.PasswordSalt = result.passwordSalt;
             var userresult = await _userService.AddUserAsync(user);
-           // var result = _mapper.Map<User, UserDto>(userresult);
+            // var result = _mapper.Map<User, UserDto>(userresult);
             return Ok(userresult);
         }
 
@@ -103,7 +103,7 @@ namespace BookMyShow.Controllers.V1
             {
                 return BadRequest("Invalid Email address or Password");
             }
-            var result = _authService.PasswordEncryption(password,user.PasswordSalt);
+            var result = _authService.PasswordEncryption(password, user.PasswordSalt);
 
             if (result.password == user.Password)
             {

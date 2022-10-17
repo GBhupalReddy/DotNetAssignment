@@ -40,16 +40,16 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         // add show seat
         public async Task<ShowSeat> AddShowSeatAsync(ShowSeat showSeat)
         {
-                _bookMyShowContext.ShowSeats.Add(showSeat);
-                await _bookMyShowContext.SaveChangesAsync();
+            _bookMyShowContext.ShowSeats.Add(showSeat);
+            await _bookMyShowContext.SaveChangesAsync();
 
-                return showSeat;
-            
+            return showSeat;
+
         }
 
         // Update show seat using id
         public async Task<ShowSeat> UpdateShowSeatAsynce(ShowSeat showSeat)
-        { 
+        {
 
             _bookMyShowContext.ShowSeats.Update(showSeat);
             await _bookMyShowContext.SaveChangesAsync();

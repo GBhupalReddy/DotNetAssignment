@@ -5,7 +5,7 @@ namespace BookMyShow.Infrastructure.Service
 {
     public class ExceptionService : IExceptionService
     {
-        public Task<int> VerifyIdExist(int id,string? name = null)
+        public Task<int> VerifyIdExist(int id, string? name = null)
         {
             if (id <= 0)
             {
@@ -20,6 +20,6 @@ namespace BookMyShow.Infrastructure.Service
                 _ => new DuplicateException($"{name} exits ", new Exception($"{name} not existed with this  Id :  {id} "))
             };
         }
-        
+
     }
 }

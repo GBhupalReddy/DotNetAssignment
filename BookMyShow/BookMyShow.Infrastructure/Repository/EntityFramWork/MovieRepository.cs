@@ -23,7 +23,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
             var query = "select * from Movie";
             var result = await _dbConnection.QueryAsync<MovieDto>(query);
             return result;
-            
+
         }
 
         // Get movie using id
@@ -34,7 +34,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
             return result;
         }
 
-       
+
 
         // Add movie
         public async Task<Movie> AddMovieAsync(Movie movie)
@@ -45,7 +45,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         }
 
         // Update movie using id
-        public async Task<Movie> UpdateMovieAsynce( Movie movie)
+        public async Task<Movie> UpdateMovieAsynce(Movie movie)
         {
             _bookMyShowContext.Movies.Update(movie);
             await _bookMyShowContext.SaveChangesAsync();
@@ -60,22 +60,19 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
             await _bookMyShowContext.SaveChangesAsync();
         }
 
-        
-        
-        
-        public async Task<IEnumerable<MovieDetailes>> GetMovieLanguageGenreAsync(string cityName,string date, string? movieName = null)
+        public async Task<IEnumerable<MovieDetailes>> GetMovieLanguageGenreAsync(string cityName, string movieName, string date)
         {
 
-           
+
             var MovieLanguageGenreQuery = "execute  GetMovieLanguageGenre @cityName, @date, @movieName";
-            var MovieLanguageGenre = await _dbConnection.QueryAsync<MovieDetailes>(MovieLanguageGenreQuery, new {cityName, date, movieName});
+            var MovieLanguageGenre = await _dbConnection.QueryAsync<MovieDetailes>(MovieLanguageGenreQuery, new { cityName, date, movieName });
             return MovieLanguageGenre;
         }
 
         public async Task<IEnumerable<SeatStatus>> GetSeatstatus(int showid)
         {
             var seatStatusQuery = " execute getSeatfiles @showid";
-            var searStatus = await _dbConnection.QueryAsync<SeatStatus>(seatStatusQuery, new { showid});
+            var searStatus = await _dbConnection.QueryAsync<SeatStatus>(seatStatusQuery, new { showid });
             return searStatus;
 
         }

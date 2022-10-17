@@ -11,7 +11,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
     {
         private readonly BookMyShowContext _bookMyShowContext;
         private readonly IDbConnection _dbConnection;
-        public CinemaSeatRepository(BookMyShowContext bookMyShowContext,IDbConnection dbConnection)
+        public CinemaSeatRepository(BookMyShowContext bookMyShowContext, IDbConnection dbConnection)
         {
             _bookMyShowContext = bookMyShowContext;
             _dbConnection = dbConnection;
@@ -36,7 +36,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         // Add cinema seat
         public async Task<CinemaSeat> AddCinemaSeatAsync(CinemaSeat cinemaSeat)
         {
-     
+
             _bookMyShowContext.CinemaSeats.Add(cinemaSeat);
             await _bookMyShowContext.SaveChangesAsync();
             return cinemaSeat;
@@ -44,7 +44,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
 
         //Update cinema seat using id
         public async Task<CinemaSeat> UpdateCinemaSeatAsynce(CinemaSeat cinemaSeat)
-        { 
+        {
             _bookMyShowContext.CinemaSeats.Update(cinemaSeat);
             await _bookMyShowContext.SaveChangesAsync();
             return cinemaSeat;

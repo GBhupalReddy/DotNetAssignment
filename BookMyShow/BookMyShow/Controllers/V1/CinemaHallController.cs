@@ -22,7 +22,7 @@ namespace BookMyShow.Controllers.V1
         private readonly IExceptionService _exceptionService;
         private readonly ILogger<CinemaHallController> _logger;
         private readonly IMapper _mapper;
-        public CinemaHallController(ICinemaHallService cinemaHallService,IExceptionService exceptionService, ILogger<CinemaHallController> logger, IMapper mapper)
+        public CinemaHallController(ICinemaHallService cinemaHallService, IExceptionService exceptionService, ILogger<CinemaHallController> logger, IMapper mapper)
         {
             _cinemaHallService = cinemaHallService;
             _exceptionService = exceptionService;
@@ -58,7 +58,7 @@ namespace BookMyShow.Controllers.V1
             var cinemaHall = await _cinemaHallService.GetCinemaHallByIdAsync(id);
             var result = _mapper.Map<CinemaHall, CinemaHallDto>(cinemaHall);
             if (result is null)
-                await _exceptionService.VerifyIdExist(id,"CinemaHall");
+                await _exceptionService.VerifyIdExist(id, "CinemaHall");
             return Ok(result);
         }
 
@@ -96,9 +96,9 @@ namespace BookMyShow.Controllers.V1
             var cinemaHall = _mapper.Map<CinemaHallVm, CinemaHall>(cinemaHallVm);
             var cinemaHallResult = await _cinemaHallService.UpdateCinemaHallAsynce(id, cinemaHall);
             var result = _mapper.Map<CinemaHall, CinemaHallDto>(cinemaHallResult);
-            if(result is null)
+            if (result is null)
             {
-                await _exceptionService.VerifyIdExist(id,"CinemaHall");
+                await _exceptionService.VerifyIdExist(id, "CinemaHall");
             }
             return Ok(result);
 

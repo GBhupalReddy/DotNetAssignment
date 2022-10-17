@@ -22,11 +22,11 @@ namespace BookMyShow.Controllers.V1
         private readonly IExceptionService _exceptionService;
         private readonly ILogger<CinemaSeatController> _logger;
         private readonly IMapper _mapper;
-        public CinemaSeatController(ICinemaSeatService cinemaSeatService,IExceptionService exceptionService, ILogger<CinemaSeatController> logger, IMapper mapper)
+        public CinemaSeatController(ICinemaSeatService cinemaSeatService, IExceptionService exceptionService, ILogger<CinemaSeatController> logger, IMapper mapper)
         {
 
             _cinemaSeatService = cinemaSeatService;
-            _exceptionService = exceptionService;   
+            _exceptionService = exceptionService;
             _logger = logger;
             _mapper = mapper;
         }
@@ -99,9 +99,9 @@ namespace BookMyShow.Controllers.V1
             var cinemaSeat = _mapper.Map<CinemaSeatVm, CinemaSeat>(cinemaSeatVm);
             var cinemaSeatResult = await _cinemaSeatService.UpdateCinemaSeatAsynce(id, cinemaSeat);
             var result = _mapper.Map<CinemaSeat, CinemaSeatDto>(cinemaSeatResult);
-            if(result is null)
+            if (result is null)
             {
-                await _exceptionService.VerifyIdExist(id,"Cinema Seat");
+                await _exceptionService.VerifyIdExist(id, "Cinema Seat");
             }
             return Ok(result);
         }

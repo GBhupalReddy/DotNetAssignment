@@ -10,6 +10,6 @@ namespace BookMyShow.Core.Contracts.Infrastructure.Service
         Task<IEnumerable<BookingDto>> GetBookingsAsync();
         Task<Booking> GetBookingByIdAsync(int id);
         Task<Booking> UpdateBookingAsynce(int id, Booking booking);
-        Task<Booking> CreateBookingAsync(BookingUser bookingUser);
+        Task<Booking?> CreateBookingAsync(BookingUser bookingUser);
     }
 }

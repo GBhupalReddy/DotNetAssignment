@@ -59,7 +59,7 @@ namespace BookMyShow.Controllers.V1
             var paymentResult = await _paymentService.GetPaymentByIdAsync(id);
             var result = _mapper.Map<Payment, PaymentDto>(paymentResult);
             if (result is null)
-                await _exceptionService.VerifyIdExist(id,"Payment");
+                await _exceptionService.VerifyIdExist(id, "Payment");
             return Ok(result);
         }
 
@@ -78,7 +78,7 @@ namespace BookMyShow.Controllers.V1
             }
             var payment = _mapper.Map<PaymentVm, Payment>(paymentVm);
             var paymentResult = await _paymentService.AddPaymentAsync(payment);
-            if(paymentResult is null)
+            if (paymentResult is null)
             {
                 return BadRequest("Sorry for late the Tickets are Booked");
             }
@@ -104,7 +104,7 @@ namespace BookMyShow.Controllers.V1
             var paymentResult = await _paymentService.UpdatePaymentAsynce(id, payment);
             var result = _mapper.Map<Payment, PaymentDto>(paymentResult);
             if (result.Equals(null))
-                await _exceptionService.VerifyIdExist(id,"Payment");
+                await _exceptionService.VerifyIdExist(id, "Payment");
             return Ok(result);
         }
 

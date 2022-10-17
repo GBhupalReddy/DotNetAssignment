@@ -12,7 +12,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
     {
         private readonly BookMyShowContext _bookMyShowContext;
         private readonly IDbConnection _dbConnection;
-        public BookingRepository(BookMyShowContext bookMyShowContext,IDbConnection dbConnection)
+        public BookingRepository(BookMyShowContext bookMyShowContext, IDbConnection dbConnection)
         {
             _bookMyShowContext = bookMyShowContext;
             _dbConnection = dbConnection;
@@ -26,7 +26,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
             var result = await _dbConnection.QueryAsync<BookingDto>(query);
             return result;
         }
-        
+
         // Get  Booking using booking id
         public async Task<Booking> GetBookingAsync(int id)
         {
@@ -39,17 +39,17 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         // Add booking
         public async Task<Booking> AddBookingAsync(Booking booking)
         {
-           
-                _bookMyShowContext.Bookings.Add(booking);
-                await _bookMyShowContext.SaveChangesAsync();
-                return booking;
-          
+
+            _bookMyShowContext.Bookings.Add(booking);
+            await _bookMyShowContext.SaveChangesAsync();
+            return booking;
+
         }
 
         // Update booking using id
         public async Task<Booking> UpdateBookingAsynce(Booking booking)
         {
-            
+
             _bookMyShowContext.Bookings.Update(booking);
             await _bookMyShowContext.SaveChangesAsync();
             return booking;
@@ -64,7 +64,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         }
 
 
-      
+
         public async Task<int> GetcinemaHallIdAsync(int showId)
         {
             var cinemaHallIdQuery = "select cinemaHallId from Show where ShowId = @showId";
@@ -74,27 +74,27 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
             return cinemaHallId;
         }
 
-        public async Task<IEnumerable<int>> GetCinemaSeatsAsync(int seatType,int showId)
+        public async Task<IEnumerable<int>> GetCinemaSeatsAsync(int seatType, int showId)
         {
-            
+
             var seatNumbersQery = "execute GetBookedSeats @seatType, @showId";
-            var seatNumbers = await _dbConnection.QueryAsync<int>(seatNumbersQery ,new { seatType , showId});
-           
+            var seatNumbers = await _dbConnection.QueryAsync<int>(seatNumbersQery, new { seatType, showId });
+
             return seatNumbers;
         }
 
-        public async Task<int> GetCinemaSeatIdAsync(int id,int cinemaHallId)
+        public async Task<int> GetCinemaSeatIdAsync(int id, int cinemaHallId)
         {
             var cinemaseatid = await (from cinemaSeat in _bookMyShowContext.CinemaSeats
-                                     where cinemaSeat.SeatNumber == id && cinemaSeat.CinemaHallId == cinemaHallId
-                                     select cinemaSeat.CinemaSeatId).FirstAsync();
+                                      where cinemaSeat.SeatNumber == id && cinemaSeat.CinemaHallId == cinemaHallId
+                                      select cinemaSeat.CinemaSeatId).FirstAsync();
             return cinemaseatid;
         }
 
         public async Task<decimal> GetSeatPrice(int seatType)
         {
             var Query = "select Price from SeatTypePrice where SeatType = @seatType";
-            var Price = await _dbConnection.QueryFirstOrDefaultAsync<decimal>(Query, new {seatType});
+            var Price = await _dbConnection.QueryFirstOrDefaultAsync<decimal>(Query, new { seatType });
 
             return Price;
         }
@@ -102,9 +102,9 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         public async Task<Show> GetAvailableSeats(int showid)
         {
             var Query = "select * from Show where ShowId = @showId ";
-            var showresult = await _dbConnection.QueryFirstOrDefaultAsync<Show>(Query, new {showid});
+            var showresult = await _dbConnection.QueryFirstOrDefaultAsync<Show>(Query, new { showid });
             return showresult;
         }
-        
+
     }
 }

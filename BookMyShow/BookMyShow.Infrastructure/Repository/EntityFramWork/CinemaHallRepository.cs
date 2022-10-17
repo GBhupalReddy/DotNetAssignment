@@ -11,7 +11,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
     {
         private readonly BookMyShowContext _bookMyShowContext;
         private readonly IDbConnection _dbConnection;
-        public CinemaHallRepository(BookMyShowContext bookMyShowContext , IDbConnection dbConnection)
+        public CinemaHallRepository(BookMyShowContext bookMyShowContext, IDbConnection dbConnection)
         {
             _bookMyShowContext = bookMyShowContext;
             _dbConnection = dbConnection;
@@ -21,7 +21,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         public async Task<IEnumerable<CinemaHallDto>> GetCinemaHallsAsync()
         {
             var query = "select * from CinemaHall";
-            var result =await _dbConnection.QueryAsync<CinemaHallDto>(query);
+            var result = await _dbConnection.QueryAsync<CinemaHallDto>(query);
             return result;
         }
 
@@ -30,7 +30,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         {
             var query = "select * from CinemaHall where CinemaId = @id";
             var result = await _dbConnection.QueryFirstOrDefaultAsync<CinemaHall>(query, new { id });
-         
+
             return result;
         }
 
@@ -43,9 +43,9 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         }
 
         // update cinema hall using id
-        public async Task<CinemaHall> UpdateCinemaHallAsynce( CinemaHall cinemaHall)
+        public async Task<CinemaHall> UpdateCinemaHallAsynce(CinemaHall cinemaHall)
         {
-           
+
             _bookMyShowContext.CinemaHalls.Update(cinemaHall);
             await _bookMyShowContext.SaveChangesAsync();
             return cinemaHall;

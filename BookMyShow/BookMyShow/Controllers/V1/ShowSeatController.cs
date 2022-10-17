@@ -25,7 +25,7 @@ namespace BookMyShow.Controllers.V1
         public ShowSeatController(IShowSeatService showSeatService, IExceptionService exceptionService, ILogger<ShowSeatController> logger, IMapper mapper)
         {
             _showSeatService = showSeatService;
-            _exceptionService = exceptionService;   
+            _exceptionService = exceptionService;
             _logger = logger;
             _mapper = mapper;
         }
@@ -60,7 +60,7 @@ namespace BookMyShow.Controllers.V1
             var showSeaRtesult = await _showSeatService.GetShowSaetByIdAsync(id);
             var result = _mapper.Map<ShowSeat, ShowSeatDto>(showSeaRtesult);
             if (result is null)
-                await _exceptionService.VerifyIdExist(id,"ShowSeat");
+                await _exceptionService.VerifyIdExist(id, "ShowSeat");
             return Ok(result);
         }
 
@@ -96,8 +96,8 @@ namespace BookMyShow.Controllers.V1
             var showSeat = _mapper.Map<ShowSeatVm, ShowSeat>(showSeatVm);
             var showSeaRtesult = await _showSeatService.UpdateShowSeatAsynce(id, showSeat);
             var result = _mapper.Map<ShowSeat, ShowSeatDto>(showSeaRtesult);
-            if(result is null)
-                await _exceptionService.VerifyIdExist(id,"ShowSeat");
+            if (result is null)
+                await _exceptionService.VerifyIdExist(id, "ShowSeat");
             return Ok(result);
         }
 

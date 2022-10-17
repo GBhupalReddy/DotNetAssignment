@@ -29,7 +29,7 @@ namespace BookMyShow.Infrastructure.Service
         public async Task<Show> AddShowAsync(Show show)
         {
             var showResult = await _showRepository.AddShowAsync(show);
-            return showResult;  
+            return showResult;
         }
 
         // Update show using id

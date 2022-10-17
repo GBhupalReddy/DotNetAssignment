@@ -46,7 +46,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
         // update cinema using id
         public async Task<Cinema> UpdateCinemaAsynce(Cinema cinema)
         {
-     
+
             _bookMyShowContext.Cinemas.Update(cinema);
             await _bookMyShowContext.SaveChangesAsync();
             return cinema;

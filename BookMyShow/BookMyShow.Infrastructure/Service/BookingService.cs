@@ -11,7 +11,7 @@ namespace BookMyShow.Infrastructure.Service
         private readonly IBookingRepository _bookingRepository;
         private readonly IMapper _mapper;
 
-        public BookingService( IBookingRepository bookingRepository, IMapper mapper)
+        public BookingService(IBookingRepository bookingRepository, IMapper mapper)
         {
             _bookingRepository = bookingRepository;
             _mapper = mapper;
@@ -66,7 +66,7 @@ namespace BookMyShow.Infrastructure.Service
 
         }
 
-        public async Task<Booking> CreateBookingAsync(BookingUser bookingUser)
+        public async Task<Booking?> CreateBookingAsync(BookingUser bookingUser)
         {
             var availableSeats = await _bookingRepository.GetAvailableSeats(bookingUser.ShowId);
             int availableSeatscount = 0;
@@ -86,18 +86,17 @@ namespace BookMyShow.Infrastructure.Service
                 availableSeatscount = availableSeats.ThirdClass;
             }
 
-            if(availableSeatscount >= bookingUser.NumberOfSeats)
+            if (availableSeatscount >= bookingUser.NumberOfSeats)
             {
-              var result =  await AddBookingAsync(bookingUser);
-               
+                var result = await AddBookingAsync(bookingUser);
 
                 return result;
             }
-            
-             
+
+
             return null;
         }
-      
+
 
     }
 }

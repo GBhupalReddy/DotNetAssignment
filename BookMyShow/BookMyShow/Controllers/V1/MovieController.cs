@@ -22,8 +22,7 @@ namespace BookMyShow.Controllers.V1
         private readonly IExceptionService _exceptionService;
         private readonly ILogger<MovieController> _logger;
         private readonly IMapper _mapper;
-
-        public MovieController(IMovieService movieService,IExceptionService exceptionService, ILogger<MovieController> logger, IMapper mapper)
+        public MovieController(IMovieService movieService, IExceptionService exceptionService, ILogger<MovieController> logger, IMapper mapper)
         {
             _movieService = movieService;
             _exceptionService = exceptionService;
@@ -60,12 +59,9 @@ namespace BookMyShow.Controllers.V1
             var movie = await _movieService.GetMovieByIdAsync(id);
             var result = _mapper.Map<Movie, MovieDto>(movie);
             if (result is null)
-                await _exceptionService.VerifyIdExist(id,"Movie");
+                await _exceptionService.VerifyIdExist(id, "Movie");
             return Ok(result);
         }
-
-
-
 
         // POST <MovieController>
         [ApiVersion("1.0")]
@@ -127,16 +123,17 @@ namespace BookMyShow.Controllers.V1
         [Route("movies-{cityName}"), AllowAnonymous]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult<IEnumerable<MovieDetailes>>> GetCityMovies(string cityName, string? date = null, string? movieName = null)
+        public async Task<ActionResult<IEnumerable<MovieDetailes>>> GetCityMovies(string cityName, string movieName, string? date = null)
         {
             _logger.LogInformation($"Get list of{cityName} {date} {movieName} ");
-            var result = await _movieService.GetMovieLanguageGenreAsync(cityName, date, movieName);
+            var result = await _movieService.GetMovieLanguageGenreAsync(cityName, movieName, date);
             if (!result.Any())
                 return NotFound("Please Enter Valid Data");
             return Ok(result);
         }
+
         [ApiVersion("1.0")]
-        [Route("seatstatus"), AllowAnonymous]
+        [Route("seatstatus-{showId}"), AllowAnonymous]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult<IEnumerable<SeatStatus>>> GetSeatStatus(int showId)

@@ -3,8 +3,7 @@
     public class MovieDetailes
     {
         public int ShowId { get; set; }
-        public string MovieName { get; set; } = null!;
-        public TimeSpan? ShowTiming { get; set; }
+        public string ShowTiming { get; set; } = null!;
         public string CinemaName { get; set; } = null!;
         public string Language { get; set; } = null!;
         public string Genre { get; set; } = null!;
