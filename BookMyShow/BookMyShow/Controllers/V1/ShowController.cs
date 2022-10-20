@@ -57,7 +57,7 @@ namespace BookMyShow.Controllers.V1
             var ShowResult = await _showService.GetShowByIdAsync(id);
             var result = _mapper.Map<Show, ShowDto>(ShowResult);
             if (result is null)
-                await _exceptionService.VerifyIdExist(id,"Show");
+                await _exceptionService.VerifyIdExist(id, "Show");
             return Ok(result);
         }
 
@@ -93,9 +93,9 @@ namespace BookMyShow.Controllers.V1
             var show = _mapper.Map<ShowVm, Show>(showVm);
             var ShowResult = await _showService.UpdateShowAsynce(id, show);
             var result = _mapper.Map<Show, ShowDto>(ShowResult);
-            if(result is null)
+            if (result is null)
             {
-                await _exceptionService.VerifyIdExist(id,"Payment");
+                await _exceptionService.VerifyIdExist(id, "Payment");
             }
             return Ok(result);
         }

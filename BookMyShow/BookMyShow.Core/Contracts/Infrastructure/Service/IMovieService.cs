@@ -8,7 +8,7 @@ namespace BookMyShow.Core.Contracts.Infrastructure.Service
         Task<Movie> AddMovieAsync(Movie movie);
         Task DeleteMovieAsync(int id);
         Task<Movie> GetMovieByIdAsync(int id);
-        Task<IEnumerable<MovieDetailes>> GetMovieLanguageGenreAsync(string cityName, string? date=null,string ? movieName = null);
+        Task<IEnumerable<MovieDetailes>> GetMovieLanguageGenreAsync(string cityName, string movieName, string date);
         Task<IEnumerable<MovieDto>> GetMoviesAsync();
         Task<Movie> UpdateMovieAsynce(int id, Movie movie);
         Task<IEnumerable<SeatStatus>> GetSeatstatus(int showid);

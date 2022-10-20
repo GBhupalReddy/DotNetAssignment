@@ -57,7 +57,7 @@ namespace BookMyShow.Controllers.V1
             var city = await _cityService.GetCityByIdAsync(id);
             var result = _mapper.Map<City, CityDto>(city);
             if (result is null)
-                await _exceptionService.VerifyIdExist(id,"City");
+                await _exceptionService.VerifyIdExist(id, "City");
             return Ok(result);
         }
 
@@ -94,9 +94,9 @@ namespace BookMyShow.Controllers.V1
             var city = _mapper.Map<CityVm, City>(cityVm);
             var cityResult = await _cityService.UpdateCityAsynce(id, city);
             var result = _mapper.Map<City, CityDto>(cityResult);
-            if(result is null)
+            if (result is null)
             {
-                await _exceptionService.VerifyIdExist(id,"City");
+                await _exceptionService.VerifyIdExist(id, "City");
             }
             return Ok(result);
         }
@@ -139,7 +139,7 @@ namespace BookMyShow.Controllers.V1
         [Route("movies/{cityName}"), AllowAnonymous]
         [HttpGet]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult<IEnumerable<MovieDto>>> GetMovieInCity(string cityName,string? language = null,string? genre = null)
+        public async Task<ActionResult<IEnumerable<MovieDto>>> GetMovieInCity(string cityName, string? language = null, string? genre = null)
         {
             var result = await _cityService.GetMovieInCity(cityName, language, genre);
             if (!result.Any())
@@ -157,7 +157,7 @@ namespace BookMyShow.Controllers.V1
         public async Task<ActionResult<IEnumerable<MovieDetailes>>> GetCityCinemaMovie(string cityName, string? cinemaName = null)
         {
             var result = await _cityService.GetCityCinemaMovieAsync(cityName, cinemaName);
-            if(!result.Any())
+            if (!result.Any())
             {
                 return NotFound("data not found");
             }

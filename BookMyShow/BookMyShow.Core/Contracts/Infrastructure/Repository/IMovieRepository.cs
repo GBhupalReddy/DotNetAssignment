@@ -9,7 +9,7 @@ namespace BookMyShow.Core.Contracts.Infrastructure.Repository
         Task DeleteMovieAsync(Movie movie);
         Task<IEnumerable<MovieDto>> GetMoviesAsync();
         Task<Movie> GetMovieAsync(int id);
-        Task<IEnumerable<MovieDetailes>> GetMovieLanguageGenreAsync(string city,string date, string ? movieName = null);
+        Task<IEnumerable<MovieDetailes>> GetMovieLanguageGenreAsync(string city, string movieName,string date);
         Task<Movie> UpdateMovieAsynce (Movie movie);
         Task<IEnumerable<SeatStatus>> GetSeatstatus(int showid);
     }

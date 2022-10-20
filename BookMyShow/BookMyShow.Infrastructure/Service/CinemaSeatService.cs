@@ -15,7 +15,7 @@ namespace BookMyShow.Infrastructure.Service
         // Get all cinema seats
         public async Task<IEnumerable<CinemaSeatDto>> GetCinemaSeatsAsync()
         {
-            var cinemaSeats =await _cinemaSeatRepository.GetCinemaSeatsAsync();
+            var cinemaSeats = await _cinemaSeatRepository.GetCinemaSeatsAsync();
             return cinemaSeats;
         }
 
@@ -29,7 +29,7 @@ namespace BookMyShow.Infrastructure.Service
         // Add cinema seat
         public async Task<CinemaSeat> AddCinemaSeatAsync(CinemaSeat cinemaSeat)
         {
-            
+
             var cinemaseatResult = await _cinemaSeatRepository.AddCinemaSeatAsync(cinemaSeat);
             return cinemaseatResult;
         }
@@ -42,7 +42,7 @@ namespace BookMyShow.Infrastructure.Service
             cinemaSeatToBeUpdated.SeatType = cinemaSeat.SeatType;
             cinemaSeatToBeUpdated.CinemaHallId = cinemaSeat.CinemaHallId;
 
-            var cinemaseatResult = await _cinemaSeatRepository.UpdateCinemaSeatAsynce( cinemaSeatToBeUpdated);
+            var cinemaseatResult = await _cinemaSeatRepository.UpdateCinemaSeatAsynce(cinemaSeatToBeUpdated);
             return cinemaseatResult;
 
         }

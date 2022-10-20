@@ -63,7 +63,7 @@ namespace BookMyShow.Controllers.V1
             var result = _mapper.Map<Booking, BookingDto>(booking);
             if (result is null)
             {
-                await _exceptionService.VerifyIdExist(id,"Booking");
+                await _exceptionService.VerifyIdExist(id, "Booking");
             }
             return Ok(result);
         }

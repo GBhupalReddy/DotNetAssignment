@@ -7,6 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text;
 
 namespace BookMyShow.Infrastructure.Service
 {
@@ -18,16 +19,16 @@ namespace BookMyShow.Infrastructure.Service
             _configuration = configuration;
         }
 
-        public (string password, string passwordSalt) PasswordEncryption(string password,string? passwordSalt=null)
+        public (string password, string passwordSalt) PasswordEncryption(string password, string? passwordSalt = null)
         {
             if (passwordSalt == null)
                 passwordSalt = GenerateSalt();
-              password +=passwordSalt;
-              password = GenerateHashPassword(password);
-              return (password, passwordSalt);
-            
+            password += passwordSalt;
+            password = GenerateHashPassword(password);
+            return (password, passwordSalt);
+
         }
-      
+
         private string GenerateHashPassword(string password)
         {
             string machineKey = _configuration["MachineKey"].ToString();

@@ -61,7 +61,7 @@ namespace BookMyShow.Infrastructure.Service
             else if (booking.SeatType == 3)
             {
                 numberofSeat = updateShow.ThirdClass;
-            } 
+            }
 
             // check tickets are available are not
 
@@ -106,7 +106,7 @@ namespace BookMyShow.Infrastructure.Service
                             BookingId = paymentresult.BookingId,
                         };
 
-                        await _showSeatRepository.AddShowSeatAsync(showSeat1); 
+                        await _showSeatRepository.AddShowSeatAsync(showSeat1);
                     }
 
                     booking.Status = 1;
@@ -133,19 +133,19 @@ namespace BookMyShow.Infrastructure.Service
 
                 }
             }
-           
+
             return null;
         }
         // Update payment using id
         public async Task<Payment> UpdatePaymentAsynce(int id, Payment payment)
         {
-            
+
             var paymentToBeUpdated = await GetPaymentByIdAsync(id);
             paymentToBeUpdated.TimeStamp = payment.TimeStamp;
-            paymentToBeUpdated.DicountCoupon=payment.DicountCoupon;
-            paymentToBeUpdated.PeyementMethod=payment.PeyementMethod;
-            paymentToBeUpdated.BookingId=payment.BookingId;
-            paymentToBeUpdated.RemoteTransactionId=payment.RemoteTransactionId;
+            paymentToBeUpdated.DicountCoupon = payment.DicountCoupon;
+            paymentToBeUpdated.PeyementMethod = payment.PeyementMethod;
+            paymentToBeUpdated.BookingId = payment.BookingId;
+            paymentToBeUpdated.RemoteTransactionId = payment.RemoteTransactionId;
 
             var bookinagAmount = await _paymentRepository.GetBookingAmount(paymentToBeUpdated.BookingId);
 
@@ -192,14 +192,14 @@ namespace BookMyShow.Infrastructure.Service
 
             var showSeats = await _showSeatRepository.GetShowSeatsByBookinId(booking.BookingId);
 
-            foreach(var showSeat in showSeats)
+            foreach (var showSeat in showSeats)
             {
                 await _showSeatRepository.DeleteShowSeatAsync(showSeat);
             }
 
 
         }
-        public  async Task<Payment> GetPaymentByBookinId(int bookingId)
+        public async Task<Payment> GetPaymentByBookinId(int bookingId)
         {
             var PaymentByBookinId = await _paymentRepository.GetPaymentByBookinId(bookingId);
             return PaymentByBookinId;

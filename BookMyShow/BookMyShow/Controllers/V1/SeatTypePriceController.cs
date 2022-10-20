@@ -17,10 +17,10 @@ namespace BookMyShow.Controllers.V1
     {
         private readonly ISeatTypePriceService _seatTypePriceService;
         private readonly IExceptionService _exceptionService;
-        private readonly ILogger<SeatTypePriceController> _logger;  
+        private readonly ILogger<SeatTypePriceController> _logger;
         private readonly IMapper _mapper;
 
-        public SeatTypePriceController(ISeatTypePriceService seatTypePriceService,IExceptionService exceptionService, IMapper mapper, ILogger<SeatTypePriceController> logger)
+        public SeatTypePriceController(ISeatTypePriceService seatTypePriceService, IExceptionService exceptionService, IMapper mapper, ILogger<SeatTypePriceController> logger)
         {
             _seatTypePriceService = seatTypePriceService;
             _exceptionService = exceptionService;
@@ -47,13 +47,13 @@ namespace BookMyShow.Controllers.V1
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult<SeatTypePrice>> Get(int seatType)
         {
-            if(seatType <=0 )
+            if (seatType <= 0)
             {
                 _logger.LogWarning($"Id field can't be <= zero OR it doesn't match with model's {seatType}");
                 await _exceptionService.VerifyIdExist(seatType);
             }
             var seatTypePrice = await _seatTypePriceService.GetSeatTypePriceBYTypeAsync(seatType);
-            if(seatTypePrice is null)
+            if (seatTypePrice is null)
             {
                 await _exceptionService.VerifyIdExist(seatType);
             }
@@ -88,7 +88,7 @@ namespace BookMyShow.Controllers.V1
                 await _exceptionService.VerifyIdExist(seatType);
             }
             var seatTypePrice = _mapper.Map<SeatTypePriceVm, SeatTypePrice>(seatTypePriceVm);
-            var result = await _seatTypePriceService.UpdateSeatTypePrice(seatType,seatTypePrice);
+            var result = await _seatTypePriceService.UpdateSeatTypePrice(seatType, seatTypePrice);
             return Ok(result);
         }
 

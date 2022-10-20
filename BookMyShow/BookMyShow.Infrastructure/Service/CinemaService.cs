@@ -43,7 +43,7 @@ namespace BookMyShow.Infrastructure.Service
             CinemaToBeUpdated.TotalCinemaHalls = cinema.TotalCinemaHalls;
             CinemaToBeUpdated.CityId = cinema.CityId;
 
-            var cinemaResult =  await _cinemaRepository.UpdateCinemaAsynce(CinemaToBeUpdated);
+            var cinemaResult = await _cinemaRepository.UpdateCinemaAsynce(CinemaToBeUpdated);
             return cinemaResult;
 
         }

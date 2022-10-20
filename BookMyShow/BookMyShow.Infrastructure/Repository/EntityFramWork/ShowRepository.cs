@@ -15,7 +15,7 @@ namespace BookMyShow.Infrastructure.Repository.EntityFramWork
 
         public ShowRepository(BookMyShowContext bookMyShowContext, IDbConnection dbConnection)
         {
-            _bookMyShowContext =bookMyShowContext;
+            _bookMyShowContext = bookMyShowContext;
             _dbConnection = dbConnection;
         }
 

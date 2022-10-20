@@ -46,9 +46,5 @@ namespace BookMyShow.Infrastructure.Service
         }
 
 
-
-
-
-
     }
 }

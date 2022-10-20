@@ -1,3 +1,35 @@
+var date = new Date();
+
+var day = date.getDate();
+var month = date.getMonth() + 1;
+var year = date.getFullYear();
+var todaydate = day;
+if (month < 10) month = "0" + month;
+if (day < 10) day = "0" + day;
+
+var today = year + "-" + month + "-" + day;
+
+if(todaydate < 3) todaydate = "0" + todaydate+6;
+if(day < 32 && day > 2) todaydate = todaydate+6;
+
+var maxdate = year + "-" + month + "-" + todaydate;
+
+document.getElementById('selectedDate').value = today;
+
+document.getElementById('selectedDate').setAttribute("min", today)
+document.getElementById('selectedDate').setAttribute("max", maxdate)
+
+var dataselected='';
+function dateseletedr()
+{
+   
+
+    dataselected = document.getElementById("selectedDate").value
+
+
+}
+
+
 
 function getmovies(){
     
@@ -51,7 +83,8 @@ function getmovies(){
 
 function onimageclick(moviename,imagepath,language,description)
 {
-    
+
+     dataselected = document.getElementById("selectedDate").value
         document.querySelector(".Home").innerHTML = '';
         let div = document.createElement('div');
             div.className = "movedetails";
@@ -65,10 +98,10 @@ function onimageclick(moviename,imagepath,language,description)
                     <div class="booking">
                         <h1>${moviename}</h1>
                         <h3>${language}</h3>
-                        <button class="Book" onclick="showtimes('${moviename}')">Booking</button>
+                        <button class="Book" onclick="showtimes('${moviename}','${dataselected}')">Booking</button>
                     </div>
                 </div>
-                <div class="aboutnovie" >
+                <div class="aboutmovie" >
                     <h2>About the movie</h2>
                    <p>${description}</p>
                 </div>
@@ -79,7 +112,7 @@ function onimageclick(moviename,imagepath,language,description)
     
 }
 
-function showtimes(movieName)
+function showtimes(movieName,date)
 {
     row=' '
     // table1 = 
@@ -90,6 +123,9 @@ function showtimes(movieName)
     
         var url = 'https://localhost:7119/movie/movies-'+ city;
         url += '?movieName='+ movieName;
+           
+        if(date)
+          url +='&date='+date;
 
         console.log(url);
 
@@ -99,6 +135,7 @@ function showtimes(movieName)
             <td><h3>cinemaName</h3></td>
             <td><h3>cinemaHallName</h3></td>
             <td><h3>showTiming</h3></td>
+            <td><h3>Date</h3></td>
             </tr>`
     table.innerHTML +=row;
             for(let i=0;i<data.length;i++)
@@ -107,6 +144,7 @@ function showtimes(movieName)
                 <td><h3>${data[i].cinemaName}</h3></td>
                 <td><h3>${data[i].cinemaHallName}</h3></td>
                 <td><h3>${data[i].showTiming}</h3></td>
+                <td><h3>${date}</h3></td>
                 <td><button onclick="selectseat('${data[i].showId}')">Book</button></td>
                 </tr>`
         table.innerHTML +=row;
@@ -118,8 +156,54 @@ function showtimes(movieName)
 }
 function selectseat(showid)
 {
+    document.querySelector(".table").innerHTML = '';
+
+     
     console.log(showid);
-    window.location.assign("selectseat.html")
+    document.querySelector(".selectseat").innerHTML = '';
+    let div = document.createElement('div');
+        div.className = "movedetails";
+
+        div.innerHTML = `
+        <ul class="showcase">
+    <li>
+      <div class="seat"></div>
+      <small>N/A</small>
+    </li>
+
+    <li>
+      <div class="seat selected"></div>
+      <small>Selected</small>
+    </li>
+
+    <li>
+      <div class="seat occupied"></div>
+      <small>Occupied</small>
+    </li>
+  </ul>
+  <div class="container">
+    <div class="row">
+      <div class="seat" id="1">1</div>
+      <div class="seat" id="2">2</div>
+    </div>
+    <div class="row">
+      <div class="seat" id="4">3</div>
+      <div class="seat" id="4">4</div>
+    </div>
+    <div class="row">
+      <div class="seat" id="5">5</div>
+      <div class="seat" id="6">6</div>
+    </div>
+    </div>
+    <p class="text">
+      You have selected <span id="count">0</span> seats for a price of $<span id="total">0</span>
+    </p>
+    `;
+      
+        $('.selectseat').append(div);
+   // window.location.assign("selectseat.html")
+    console.log(showid);
+    
 }
 
 
